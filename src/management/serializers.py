@@ -16,7 +16,8 @@ class WarehouseSerializer(serializers.ModelSerializer):
 class TransferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transfer
-        fields = ['product', 'quantity', 'sent_date', 'received_date', 'from_warehouse', 'to_warehouse', 'created_at', 'updated_at']
+        fields = ['product', 'quantity', 'sent_date', 'received_date', 'from_warehouse', 
+                  'to_warehouse', 'created_at', 'updated_at']
 
 
 class ProviderSerializer(serializers.ModelSerializer):

@@ -2,6 +2,7 @@ const pages = [ ["overview", window.Overview()],
     ["sales", window.SalesPage()],
 ]
 
+
 const tabs = ["overview", "sales"]
 
 function LoadPage() {
@@ -16,6 +17,7 @@ function LoadPage() {
 
     for (const page of pages) {
         if (page[0] === last_page) {
+            console.log(page[0])
             root.innerHTML = page[1];
         }
     }

@@ -21,3 +21,4 @@ drf-spectacular-sidecar
 django-storages
 boto3
 drf-extensions
+weasyprint

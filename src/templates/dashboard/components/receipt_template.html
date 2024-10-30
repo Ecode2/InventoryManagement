@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8">
+        <title>Inventory Management Receipt</title>
+        {% include 'base/css.html' %}
+    </head>
+    <body class="p-10">
+        <div class="max-w-2xl mx-auto p-6 border border-gray-300 rounded-lg">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold">Receipt</h1>
+                <div class="w-16 h-16 bg-gray-200 flex items-center justify-center rounded-full">
+                    <span class="text-lg font-semibold">LOGO</span>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                    <h2 class="text-xl font-bold">FROM</h2>
+                    <p>John Smith</p>
+                    <p>4490 Oak Drive</p>
+                    <p>Albany, NY 12210</p>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold">RECEIPT #</h2>
+                    <p>INT-001</p>
+                    <h2 class="text-xl font-bold">RECEIPT DATE</h2>
+                    <p>11/02/2019</p>
+                    <h2 class="text-xl font-bold">P.O.#</h2>
+                    <p>2412/2019</p>
+                    <h2 class="text-xl font-bold">DUE DATE</h2>
+                    <p>26/02/2019</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                    <h2 class="text-xl font-bold">BILL TO</h2>
+                    <p>Jessie M Horne</p>
+                    <p>4312 Wood Road</p>
+                    <p>New York, NY 10031</p>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold">SHIP TO</h2>
+                    <p>Jessie M Horne</p>
+                    <p>2019 Redbud Drive</p>
+                    <p>New York, NY 10011</p>
+                </div>
+            </div>
+            <table class="min-w-full bg-white border border-gray-300 mb-6">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 border-b border-gray-300">QTY</th>
+                        <th class="py-2 px-4 border-b border-gray-300">DESCRIPTION</th>
+                        <th class="py-2 px-4 border-b border-gray-300">UNIT PRICE</th>
+                        <th class="py-2 px-4 border-b border-gray-300">AMOUNT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b border-gray-300">1</td>
+                        <td class="py-2 px-4 border-b border-gray-300">Front and rear brake cables</td>
+                        <td class="py-2 px-4 border-b border-gray-300">100.00</td>
+                        <td class="py-2 px-4 border-b border-gray-300">100.00</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b border-gray-300">2</td>
+                        <td class="py-2 px-4 border-b border-gray-300">New set of pedal arms</td>
+                        <td class="py-2 px-4 border-b border-gray-300">25.00</td>
+                        <td class="py-2 px-4 border-b border-gray-300">50.00</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b border-gray-300">3</td>
+                        <td class="py-2 px-4 border-b border-gray-300">Labor 3hrs</td>
+                        <td class="py-2 px-4 border-b border-gray-300">15.00</td>
+                        <td class="py-2 px-4 border-b border-gray-300">45.00</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="text-right mb-6">
+                <p>Subtotal: 195.00</p>
+                <p>Sales Tax 5.0%: 9.75</p>
+                <h2 class="text-2xl font-bold mt-4">TOTAL: $204.75</h2>
+            </div>
+            <div class="mt-6">
+                <h2 class="text-xl font-bold">TERMS & CONDITIONS</h2>
+                <p>Payment is due within 15 days</p>
+                <p>Name of Bank</p>
+                <p>Account number: 1234567890</p>
+                <p>Routing: 098765432</p>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <p class="font-semibold">John Smith</p>
+            </div>
+        </div>
+
+        {% include 'base/js.html' %}
+    </body>
+</html>

@@ -12,10 +12,22 @@ attrs==24.2.0
     # via
     #   jsonschema
     #   referencing
+boto3==1.35.52
+    # via -r src/requirements/requirements.in
+botocore==1.35.52
+    # via
+    #   boto3
+    #   s3transfer
+brotli==1.1.0
+    # via fonttools
 certifi==2024.8.30
     # via requests
+cffi==1.17.1
+    # via weasyprint
 charset-normalizer==3.4.0
     # via requests
+cssselect2==0.7.0
+    # via weasyprint
 dj-database-url==2.3.0
     # via -r src/requirements/requirements.in
 django==5.1.2
@@ -27,6 +39,7 @@ django==5.1.2
     #   django-filter
     #   django-pwa
     #   django-redis
+    #   django-storages
     #   djangorestframework
     #   drf-spectacular
     #   drf-spectacular-sidecar
@@ -47,6 +60,8 @@ django-pwa==2.0.1
     # via -r src/requirements/requirements.in
 django-redis==5.4.0
     # via -r src/requirements/requirements.in
+django-storages==1.14.4
+    # via -r src/requirements/requirements.in
 django-widget-tweaks==1.5.0
     # via
     #   -r src/requirements/requirements.in
@@ -54,17 +69,28 @@ django-widget-tweaks==1.5.0
 djangorestframework==3.15.2
     # via
     #   -r src/requirements/requirements.in
+    #   drf-extensions
     #   drf-spectacular
+drf-extensions==0.7.1
+    # via -r src/requirements/requirements.in
 drf-spectacular==0.27.2
     # via -r src/requirements/requirements.in
 drf-spectacular-sidecar==2024.7.1
     # via -r src/requirements/requirements.in
+fonttools[woff]==4.54.1
+    # via weasyprint
 gunicorn==23.0.0
     # via -r src/requirements/requirements.in
+html5lib==1.1
+    # via weasyprint
 idna==3.10
     # via requests
 inflection==0.5.1
     # via drf-spectacular
+jmespath==1.0.1
+    # via
+    #   boto3
+    #   botocore
 jsonschema==4.23.0
     # via drf-spectacular
 jsonschema-specifications==2024.10.1
@@ -75,8 +101,17 @@ pillow==11.0.0
     # via
     #   -r src/requirements/requirements.in
     #   django-colorfield
+    #   weasyprint
 psycopg2-binary==2.9.10
     # via -r src/requirements/requirements.in
+pycparser==2.22
+    # via cffi
+pydyf==0.11.0
+    # via weasyprint
+pyphen==0.17.0
+    # via weasyprint
+python-dateutil==2.9.0.post0
+    # via botocore
 python-decouple==3.8
     # via -r src/requirements/requirements.in
 python-slugify==8.0.4
@@ -97,6 +132,12 @@ rpds-py==0.20.0
     # via
     #   jsonschema
     #   referencing
+s3transfer==0.10.3
+    # via boto3
+six==1.16.0
+    # via
+    #   html5lib
+    #   python-dateutil
 slippers==0.6.2
     # via
     #   -r src/requirements/requirements.in
@@ -105,6 +146,10 @@ sqlparse==0.5.1
     # via django
 text-unidecode==1.3
     # via python-slugify
+tinycss2==1.4.0
+    # via
+    #   cssselect2
+    #   weasyprint
 typeguard==2.13.3
     # via slippers
 typing-extensions==4.12.2
@@ -114,6 +159,17 @@ typing-extensions==4.12.2
 uritemplate==4.1.1
     # via drf-spectacular
 urllib3==2.2.3
-    # via requests
+    # via
+    #   botocore
+    #   requests
+weasyprint==62.3
+    # via -r src/requirements/requirements.in
+webencodings==0.5.1
+    # via
+    #   cssselect2
+    #   html5lib
+    #   tinycss2
 whitenoise==6.7.0
     # via -r src/requirements/requirements.in
+zopfli==0.2.3.post1
+    # via fonttools

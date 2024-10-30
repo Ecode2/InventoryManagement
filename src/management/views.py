@@ -1,4 +1,5 @@
 from rest_framework import viewsets, pagination
+
 from core.permissions import IsAdminUser, IsAdminOrStaff
 from core.mixins import CacheResponseMixin
 from .models import Location, Warehouse, Transfer, Provider
@@ -12,14 +13,8 @@ class LocationViewSet(CacheResponseMixin, viewsets.ModelViewSet):
     pagination_class = pagination.PageNumberPagination
 
     def get_permissions(self):
-        if self.action == 'list':
+        if self.action in ['list', 'retrieve']:
             permission_classes = [IsAdminOrStaff]
-        elif self.action == 'retrieve':
-            permission_classes = [IsAdminOrStaff]
-        elif self.action in ['create', 'update', 'partial_update']:
-            permission_classes = [IsAdminUser]
-        elif self.action == 'destroy':
-            permission_classes = [IsAdminUser]
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
@@ -30,14 +25,8 @@ class WarehouseViewSet(CacheResponseMixin, viewsets.ModelViewSet):
     pagination_class = pagination.PageNumberPagination
 
     def get_permissions(self):
-        if self.action == 'list':
+        if self.action in ['list', 'retrieve']:
             permission_classes = [IsAdminOrStaff]
-        elif self.action == 'retrieve':
-            permission_classes = [IsAdminOrStaff]
-        elif self.action in ['create', 'update', 'partial_update']:
-            permission_classes = [IsAdminUser]
-        elif self.action == 'destroy':
-            permission_classes = [IsAdminUser]
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
@@ -48,14 +37,8 @@ class TransferViewSet(CacheResponseMixin, viewsets.ModelViewSet):
     pagination_class = pagination.PageNumberPagination
 
     def get_permissions(self):
-        if self.action == 'list':
+        if self.action in ['list', 'retrieve']:
             permission_classes = [IsAdminOrStaff]
-        elif self.action == 'retrieve':
-            permission_classes = [IsAdminOrStaff]
-        elif self.action in ['create', 'update', 'partial_update']:
-            permission_classes = [IsAdminUser]
-        elif self.action == 'destroy':
-            permission_classes = [IsAdminUser]
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
@@ -66,14 +49,8 @@ class ProviderViewSet(CacheResponseMixin, viewsets.ModelViewSet):
     pagination_class = pagination.PageNumberPagination
 
     def get_permissions(self):
-        if self.action == 'list':
+        if self.action in ['list', 'retrieve', "create", "update", "partial_update"]:
             permission_classes = [IsAdminOrStaff]
-        elif self.action == 'retrieve':
-            permission_classes = [IsAdminOrStaff]
-        elif self.action in ['create', 'update', 'partial_update']:
-            permission_classes = [IsAdminUser]
-        elif self.action == 'destroy':
-            permission_classes = [IsAdminUser]
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]

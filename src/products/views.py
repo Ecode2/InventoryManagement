@@ -1,8 +1,8 @@
-from rest_framework import viewsets, permissions, generics, pagination
+from rest_framework import viewsets, permissions, pagination
 from django.utils.decorators import method_decorator
 
 from core.permissions import IsAdminUser, IsAdminOrStaff
-from core.mixins import CachedViewSetMixin,  AdminStaffRequiredMixin, CacheResponseMixin
+from core.mixins import CacheResponseMixin
 
 from .models import Category, Product, ProductFile, Inventory
 from .serializers import CategorySerializer, ProductSerializer, ProductFileSerializer, InventorySerializer
@@ -15,20 +15,11 @@ class CategoryViewSet(CacheResponseMixin, viewsets.ModelViewSet):
     pagination_class = pagination.PageNumberPagination
 
     def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = [IsAdminOrStaff]
-        elif self.action == 'retrieve':
-            permission_classes = [IsAdminOrStaff]
-        elif self.action in ['create', 'update', 'partial_update']:
-            permission_classes = [IsAdminUser]
-        elif self.action == 'destroy':
-            permission_classes = [IsAdminUser]
-        elif self.action == 'custom_method':
+        if self.action in ['list', 'retrieve']:
             permission_classes = [IsAdminOrStaff]
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
-
 
 
 class ProductViewSet(CacheResponseMixin, viewsets.ModelViewSet):
@@ -37,19 +28,12 @@ class ProductViewSet(CacheResponseMixin, viewsets.ModelViewSet):
     pagination_class = pagination.PageNumberPagination
 
     def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = [IsAdminOrStaff]
-        elif self.action == 'retrieve':
-            permission_classes = [IsAdminOrStaff]
-        elif self.action in ['create', 'update', 'partial_update']:
-            permission_classes = [IsAdminUser]
-        elif self.action == 'destroy':
-            permission_classes = [IsAdminUser]
-        elif self.action == 'custom_method':
+        if self.action in ['list', 'retrieve']:
             permission_classes = [IsAdminOrStaff]
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
+
 
 class ProductFileViewSet(CacheResponseMixin, viewsets.ModelViewSet):
     queryset = ProductFile.objects.all()
@@ -57,15 +41,7 @@ class ProductFileViewSet(CacheResponseMixin, viewsets.ModelViewSet):
     pagination_class = pagination.PageNumberPagination
 
     def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = [IsAdminOrStaff]
-        elif self.action == 'retrieve':
-            permission_classes = [IsAdminOrStaff]
-        elif self.action in ['create', 'update', 'partial_update']:
-            permission_classes = [IsAdminUser]
-        elif self.action == 'destroy':
-            permission_classes = [IsAdminUser]
-        elif self.action == 'custom_method':
+        if self.action in ['list', 'retrieve']:
             permission_classes = [IsAdminOrStaff]
         else:
             permission_classes = [IsAdminUser]
@@ -78,15 +54,7 @@ class InventoryViewSet(CacheResponseMixin, viewsets.ModelViewSet):
     pagination_class = pagination.PageNumberPagination
 
     def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = [IsAdminOrStaff]
-        elif self.action == 'retrieve':
-            permission_classes = [IsAdminOrStaff]
-        elif self.action in ['create', 'update', 'partial_update']:
-            permission_classes = [IsAdminUser]
-        elif self.action == 'destroy':
-            permission_classes = [IsAdminUser]
-        elif self.action == 'custom_method':
+        if self.action in ['list', 'retrieve']:
             permission_classes = [IsAdminOrStaff]
         else:
             permission_classes = [IsAdminUser]

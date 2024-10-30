@@ -38,6 +38,7 @@ urlpatterns = [
     path('no_permission/', views.no_permission, name='no_permission'),
     path("api/shelf/", include("products.urls")),
     path("api/manage/", include("management.urls")),
+    path("api/sale/", include("sales.urls")),
     path("api/role/", views.user_role, name="role"),
     path('', include("dashboard.urls")),
     #path('', include('pwa.urls')),
