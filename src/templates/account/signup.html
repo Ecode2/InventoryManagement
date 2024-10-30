@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load allauth i18n %}
+
+{% block head_title %}
+    {% trans "Signup" %}
+{% endblock head_title %}
+
+{% block content %}
+    {% if not SOCIALACCOUNT_ONLY %}
+
+
+    <section class="bg-gray-50 dark:bg-gray-900">
+        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+                <img class="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo">
+                Flowbite    
+            </a>
+            <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                        Create an account
+                    </h1>
+                    <form class="space-y-4 md:space-y-6" method="post" action="{% url 'account_signup' %}">
+                        {% csrf_token %}
+                        <div>
+                            <label for="id_email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {% trans "Your email" %}</label>
+                            <input type="email" name="email" id="id_email" value="{{ form.email.value }}"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                            placeholder="name@company.com" required="" autocomplete="email" maxlength="320">
+                            {% if form.email.errors %}
+                                <div class="error">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="id_password1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{% trans "Password" %}</label>
+                            <input type="password" name="password1" id="id_password1" placeholder="••••••••" {% comment %} value="{{ form.password1.value }}" {% endcomment %}
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                            required="" autocomplete="new-password" >
+                            {% if form.password1.errors %}
+                                <div class="error">{{ form.password1.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="id_password2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
+                            <input type="confirm-password" name="password2" id="id_password2" placeholder="••••••••" {% comment %} value="{{ form.password2.value }}" {% endcomment %}
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                            required="" autocomplete="new-password">
+                            {% if form.password2.errors %}
+                                <div class="error">{{ form.password2.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">{% trans "Create an account" %}</button>
+                        <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                            {% blocktranslate %}
+                            Already have an account? <a href="{{ login_url }}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Login here</a>
+                            {% endblocktranslate %}
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </section>
+
+
+
+    {% comment %} <section class="bg-gray-50 dark:bg-gray-900">
+        <div class="flex flex-col items-center justify-start px-6 gap-y-5 py-8 mx-auto md:h-screen lg:py-0">
+            <br>
+            <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+                <img class="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo">
+                Flowbite    
+            </a>
+            <div class="w-full max-w-md bg-white rounded-lg h-4/5 shadow dark:border md:mt-0 xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                <div class="p-4 space-y-2 md:space-y-4 sm:p-6">
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                        Sign Up
+                    </h1>
+                    <form class="space-y-2 md:space-y-4" method="post" action="{% url 'account_signup' %}">
+                        {% csrf_token %}
+                        
+                        <div>
+                            <label for="id_username" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">{% trans "Username" %} </label>
+                            <input type="text" id="id_username" placeholder="Username" name="username" value="{{ form.username.value }}"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                            required="" autocomplete="username" maxlength="150" minlength="3">
+                            {% if form.username.errors %}
+                                <div class="error">{{ form.username.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            <label for="id_email" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">{% trans "Email" %}</label>
+                            <input type="email" id="id_email" name="email" value="{{ form.email.value }}"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                            placeholder="name@company.com" required="" autocomplete="email" maxlength="320">
+                            {% if form.email.errors %}
+                                <div class="error">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="id_password1" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">{% trans "Password" %}</label>
+                            <input type="password" id="id_password1" name="password1" placeholder="••••••••"  value="{{ form.password1.value }}"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                            required="" autocomplete="new-password">
+                            {% if form.password1.errors %}
+                                <div class="error">{{ form.password1.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            <label for="id_password2" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">{% trans "Confirm Password" %}</label>
+                            <input type="password" id="id_password2" name="password2" placeholder="••••••••" value="{{ form.password2.value }}"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                            required="" autocomplete="new-password">
+                            {% if form.password2.errors %}
+                                <div class="error">{{ form.password2.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">{% trans "Sign Up" %}</button>
+                        </div>
+
+                        <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                            {% blocktranslate %}
+                            Already have an account? <a href="{{ login_url }}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign In</a>
+                            {% endblocktranslate %}
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section> {% endcomment %}
+
+      {% endif %}
+
+      {% if PASSKEY_SIGNUP_ENABLED %}
+        {% element hr %}
+        {% endelement %}
+        {% element button href=signup_by_passkey_url tags="prominent,signup,outline,primary" %}
+            {% trans "Sign up using a passkey" %}
+        {% endelement %}
+        {% endif %}
+        {% if SOCIALACCOUNT_ENABLED %}
+            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+        {% endif %}
+
+{% endblock content %}
