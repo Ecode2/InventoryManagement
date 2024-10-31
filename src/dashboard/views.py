@@ -1,6 +1,6 @@
 from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
-from django.contrib.auth.decorators import login_required
+#from django.views.decorators.cache import cache_page
+#from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from core.decorators import admin_staff_role
 

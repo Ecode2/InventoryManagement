@@ -1,26 +1,26 @@
 from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
+#from django.views.decorators.cache import cache_page
 from django.conf import settings
 from rest_framework import permissions, mixins, decorators, status
 from rest_framework.response import Response
-from .utils import cache_response, get_cached_response, delete_cache, get_cache_key
+#from .utils import cache_response, get_cached_response, delete_cache, get_cache_key
 
 from .permissions import IsAdminOrStaff
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-CACHE_TTL = settings.CACHE_TTL
+""" CACHE_TTL = settings.CACHE_TTL
 
 class CachedViewSetMixin:
     @method_decorator(cache_page(CACHE_TTL))
     def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs) """
     
 
 class AdminStaffRequiredMixin:
         permission_classes = [IsAdminOrStaff,]
 
 
-class CacheResponseMixin:
+""" class CacheResponseMixin:
     def list(self, request, *args, **kwargs):
         cache_key = get_cache_key(self.__class__.__name__, 'list')
         cached_response = get_cached_response(cache_key)
@@ -85,4 +85,4 @@ class CacheResponseMixin:
             return response
         else:
             self.clear_cache()
-            return super().custom_method(request, *args, **kwargs)  # Replace `custom_method` with actual method name
+            return super().custom_method(request, *args, **kwargs)  # Replace `custom_method` with actual method name """

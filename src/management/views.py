@@ -1,13 +1,13 @@
 from rest_framework import viewsets, pagination
 
 from core.permissions import IsAdminUser, IsAdminOrStaff
-from core.mixins import CacheResponseMixin
+#from core.mixins import CacheResponseMixin
 from .models import Location, Warehouse, Transfer, Provider
 from .serializers import LocationSerializer, WarehouseSerializer, TransferSerializer, ProviderSerializer
 
 # Create your views here.
 
-class LocationViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class LocationViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
     pagination_class = pagination.PageNumberPagination
@@ -19,7 +19,7 @@ class LocationViewSet(CacheResponseMixin, viewsets.ModelViewSet):
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
 
-class WarehouseViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class WarehouseViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Warehouse.objects.all()
     serializer_class = WarehouseSerializer
     pagination_class = pagination.PageNumberPagination
@@ -31,7 +31,7 @@ class WarehouseViewSet(CacheResponseMixin, viewsets.ModelViewSet):
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
 
-class TransferViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class TransferViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Transfer.objects.all()
     serializer_class = TransferSerializer
     pagination_class = pagination.PageNumberPagination
@@ -43,7 +43,7 @@ class TransferViewSet(CacheResponseMixin, viewsets.ModelViewSet):
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
 
-class ProviderViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class ProviderViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Provider.objects.all()
     serializer_class = ProviderSerializer
     pagination_class = pagination.PageNumberPagination

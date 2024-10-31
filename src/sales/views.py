@@ -5,7 +5,7 @@ from rest_framework import viewsets, permissions, pagination
 from weasyprint import HTML
 
 from core.permissions import IsAdminUser, IsAdminOrStaff
-from core.mixins import CacheResponseMixin
+#from core.mixins import CacheResponseMixin
 
 from .models import (Delivery, DeliveryDetail, Order, OrderDetail, 
                       SalesDetail, Sale, SalesReceipt, DeliveryReceipt)
@@ -17,7 +17,7 @@ from .serializers import (DeliverySerializer, DeliveryDetailSerializer,
 
 
 # Create your views here.
-class SalesDetailViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class SalesDetailViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = SalesDetail.objects.all()
     serializer_class = SalesDetailSerializer
     pagination_class = pagination.PageNumberPagination
@@ -30,7 +30,7 @@ class SalesDetailViewSet(CacheResponseMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class SaleViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class SaleViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Sale.objects.all()
     serializer_class = SaleSerializer
     pagination_class = pagination.PageNumberPagination
@@ -42,7 +42,7 @@ class SaleViewSet(CacheResponseMixin, viewsets.ModelViewSet):
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
 
-class DeliveryDetailViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class DeliveryDetailViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = DeliveryDetail.objects.all()
     serializer_class = DeliveryDetailSerializer
     pagination_class = pagination.PageNumberPagination
@@ -54,7 +54,7 @@ class DeliveryDetailViewSet(CacheResponseMixin, viewsets.ModelViewSet):
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
 
-class DeliveryViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class DeliveryViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Delivery.objects.all()
     serializer_class = DeliverySerializer
     pagination_class = pagination.PageNumberPagination
@@ -66,7 +66,7 @@ class DeliveryViewSet(CacheResponseMixin, viewsets.ModelViewSet):
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
 
-class OrderDetailViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class OrderDetailViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = OrderDetail.objects.all()
     serializer_class = OrderDetailSerializer
     pagination_class = pagination.PageNumberPagination
@@ -78,7 +78,7 @@ class OrderDetailViewSet(CacheResponseMixin, viewsets.ModelViewSet):
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
 
-class OrderViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class OrderViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     pagination_class = pagination.PageNumberPagination
@@ -93,7 +93,7 @@ class OrderViewSet(CacheResponseMixin, viewsets.ModelViewSet):
 
 ## TODO: integrate the GeneratePDF class to the post request of the receipt viewset
 
-class SalesReceiptViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class SalesReceiptViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = SalesReceipt.objects.all()
     serializer_class = SalesReceiptSerializer
     pagination_class = pagination.PageNumberPagination
@@ -123,7 +123,7 @@ class SalesReceiptViewSet(CacheResponseMixin, viewsets.ModelViewSet):
         response['Content-Disposition'] = f'attachment; filename="sales_receipt_{receipt.receipt_id}.pdf"'
         return response
 
-class DeliveryReceiptViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class DeliveryReceiptViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = DeliveryReceipt.objects.all()
     serializer_class = DeliveryReceiptSerializer
     pagination_class = pagination.PageNumberPagination

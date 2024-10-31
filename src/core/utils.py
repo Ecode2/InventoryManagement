@@ -1,10 +1,10 @@
 
-from django.core.cache import cache
+#from django.core.cache import cache
 from django.conf import settings
 
 
 # cache_utils
-CACHE_TTL = getattr(settings, 'CACHE_TTL', 60 * 15)
+""" CACHE_TTL = getattr(settings, 'CACHE_TTL', 60 * 15)
 
 def get_cache_key(view_name, *args):
     return f'{view_name}-{"-".join(map(str, args))}'
@@ -17,3 +17,4 @@ def get_cached_response(key):
 
 def delete_cache(key):
     cache.delete(key)
+ """

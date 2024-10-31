@@ -11,7 +11,7 @@ class SaleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Delivery
-        fields = ["warehouse", "customer", "customer_name", "sales_details"]
+        fields = ['id', "warehouse", "customer", "customer_name", "sales_details"]
 
 class DeliveryDetailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,7 +23,7 @@ class DeliverySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Delivery
-        fields = ["warehouse", "customer", "customer_name", "expected_delivery_date", "actual_delivery_date", "delivery_details"]
+        fields = ['id', "warehouse", "customer", "customer_name", "expected_delivery_date", "actual_delivery_date", "delivery_details"]
 
 class OrderDetailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,7 +35,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = fields = ["warehouse", "provider", "expected_delivery_date", "actual_delivery_date", "order_details"]
+        fields = fields = ['id', "warehouse", "provider", "expected_delivery_date", "actual_delivery_date", "order_details"]
 
 class SalesReceiptSerializer(serializers.ModelSerializer):
     class Meta:

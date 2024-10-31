@@ -2,14 +2,14 @@ from rest_framework import viewsets, permissions, pagination
 from django.utils.decorators import method_decorator
 
 from core.permissions import IsAdminUser, IsAdminOrStaff
-from core.mixins import CacheResponseMixin
+#from core.mixins import CacheResponseMixin
 
 from .models import Category, Product, ProductFile, Inventory
 from .serializers import CategorySerializer, ProductSerializer, ProductFileSerializer, InventorySerializer
 
 
 # Create your views here.
-class CategoryViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class CategoryViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     pagination_class = pagination.PageNumberPagination
@@ -22,7 +22,7 @@ class CategoryViewSet(CacheResponseMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class ProductViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class ProductViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = pagination.PageNumberPagination
@@ -35,7 +35,7 @@ class ProductViewSet(CacheResponseMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class ProductFileViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class ProductFileViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = ProductFile.objects.all()
     serializer_class = ProductFileSerializer
     pagination_class = pagination.PageNumberPagination
@@ -48,7 +48,7 @@ class ProductFileViewSet(CacheResponseMixin, viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class InventoryViewSet(CacheResponseMixin, viewsets.ModelViewSet):
+class InventoryViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Inventory.objects.all()
     serializer_class = InventorySerializer
     pagination_class = pagination.PageNumberPagination

@@ -1,14 +1,17 @@
 const pages = [ ["overview", window.Overview()],
     ["sales", window.SalesPage()],
+    ["inventory", window.InventoryPage()],
+    ["orders", window.OrderPage()],
+    ["products", window.ProductPage()],
+    ["profile",  window.ProfilePage()],
 ]
 
 
-const tabs = ["overview", "sales"]
+const tabs = ["overview", "sales", "inventory", "orders", "products", "profile"]
 
 function LoadPage() {
     const root = document.getElementById('root');
     let last_page = localStorage.getItem("last_page");
-
 
     if (!last_page || !tabs.includes(last_page)) {
         localStorage.setItem("last_page", "overview");
@@ -23,12 +26,34 @@ function LoadPage() {
     }
 }
 
+const GetRole = () => {
+    fetch("/api/role/")
+        .then(response => { 
+            if (!response.ok) {
+                window.location.href = "/home";
+            }
+            return response.json();
+        })
+        .then(data => {
+            const role = data;
+            return role["role"];
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+console.log(GetRole());
+
+const GetWarehouse = () => {}
+
 const LoadTab = (tab) => {
     localStorage.setItem("last_page", tab.toLowerCase());
     LoadPage();
 }
 
-document.addEventListener('DOMContentLoaded', LoadPage());
+document.addEventListener('DOMContentLoaded', function() {
+    LoadPage()
+});
 
 
 

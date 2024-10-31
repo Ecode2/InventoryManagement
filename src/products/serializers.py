@@ -4,13 +4,13 @@ from .models import Category, Product, ProductFile, Inventory
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['name']
+        fields = ['id', 'name']
 
 
 class ProductFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductFile
-        fields = ['product', 'file']
+        fields = ['id', 'product', 'file']
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = [
+        fields = ['id',
             'sku', 'bar_code', 'name', 'description', 'categories', 
             'recorder_quantity', 'recorder_quantity_name', 'cost_price', 
             'selling_price', 'weight', 'height', 'width', 'depth', 
@@ -30,7 +30,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class InventorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Inventory
-        fields = [
+        fields = ['id',
             'product', 'warehouse', 'stock', 'min_stock', 
             'max_stock', 'alert_level'
         ]
