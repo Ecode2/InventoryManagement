@@ -21,14 +21,14 @@ class Product(models.Model):
     recorder_quantity = models.IntegerField(blank=True, default=1)
     recorder_quantity_name = models.CharField(max_length=100, null=True, default=None)
 
-    cost_price = models.DecimalField(max_digits=1000, decimal_places=2, default=0.00)
-    selling_price  = models.DecimalField(max_digits=1000, decimal_places=2, default=0.00)
+    cost_price = models.DecimalField(max_digits=100, decimal_places=2, default=0.00)
+    selling_price  = models.DecimalField(max_digits=100, decimal_places=2, default=0.00)
 
-    weight = models.DecimalField(max_digits=1000, decimal_places=2, null=True, default=None)
-    height = models.DecimalField(max_digits=1000, decimal_places=2, null=True, default=None)
-    width = models.DecimalField(max_digits=1000, decimal_places=2, null=True, default=None)
-    depth = models.DecimalField(max_digits=1000, decimal_places=2, null=True, default=None)
-    refriderated = models.DecimalField(max_digits=1000, decimal_places=2, null=True, default=None)
+    weight = models.DecimalField(max_digits=100, decimal_places=2, null=True, default=None)
+    height = models.DecimalField(max_digits=100, decimal_places=2, null=True, default=None)
+    width = models.DecimalField(max_digits=100, decimal_places=2, null=True, default=None)
+    depth = models.DecimalField(max_digits=100, decimal_places=2, null=True, default=None)
+    refriderated = models.DecimalField(max_digits=100, decimal_places=2, null=True, default=None)
 
     is_active = models.BooleanField(default=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -1,13 +1,31 @@
-const pages = [ ["overview", window.Overview()],
-    ["sales", window.SalesPage()],
-    ["inventory", window.InventoryPage()],
-    ["orders", window.OrderPage()],
-    ["products", window.ProductPage()],
-    ["profile",  window.ProfilePage()],
+const pages = [ ["overview", window.Overview],
+    ["sales", window.SalesPage],
+    ["inventory", window.InventoryPage],
+    ["orders", window.OrderPage],
+    ["products", window.ProductPage],
+    ["profile",  window.ProfilePage],
 ]
 
 
 const tabs = ["overview", "sales", "inventory", "orders", "products", "profile"]
+
+const GetRole = () => {
+    return fetch("/api/role/")
+        .then(response => { 
+            if (!response.ok) {
+                window.location.href = "/home";
+            }
+            return response.json();
+        })
+        .then(data => {
+            return data.role;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+const GetWarehouse = () => {}
 
 function LoadPage() {
     const root = document.getElementById('root');
@@ -20,31 +38,17 @@ function LoadPage() {
 
     for (const page of pages) {
         if (page[0] === last_page) {
-            console.log(page[0])
-            root.innerHTML = page[1];
+            const current_page = page[1];
+
+            GetRole().then(role => {
+                current_page(role).then((html) => {
+                    root.innerHTML = html;
+                });
+                //root.innerHTML = current_page(role);
+            });
         }
     }
 }
-
-const GetRole = () => {
-    fetch("/api/role/")
-        .then(response => { 
-            if (!response.ok) {
-                window.location.href = "/home";
-            }
-            return response.json();
-        })
-        .then(data => {
-            const role = data;
-            return role["role"];
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-console.log(GetRole());
-
-const GetWarehouse = () => {}
 
 const LoadTab = (tab) => {
     localStorage.setItem("last_page", tab.toLowerCase());

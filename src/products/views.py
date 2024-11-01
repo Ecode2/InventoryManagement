@@ -1,9 +1,11 @@
-from rest_framework import viewsets, permissions, pagination
+from rest_framework import viewsets, permissions, pagination, filters, parsers
+from django_filters.rest_framework import DjangoFilterBackend
 from django.utils.decorators import method_decorator
 
 from core.permissions import IsAdminUser, IsAdminOrStaff
 #from core.mixins import CacheResponseMixin
 
+from .filters import ProductFileFilter
 from .models import Category, Product, ProductFile, Inventory
 from .serializers import CategorySerializer, ProductSerializer, ProductFileSerializer, InventorySerializer
 
@@ -13,6 +15,8 @@ class CategoryViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     pagination_class = pagination.PageNumberPagination
+    filterset_fields = ['name', 'created_at']
+    ordering_fields = ['name', 'created_at']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
@@ -26,6 +30,12 @@ class ProductViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = pagination.PageNumberPagination
+    filterset_fields = [
+        'sku', 'bar_code', 'name', 'category', 'recorder_quantity', 'recorder_quantity_name',
+        'cost_price', 'selling_price', 'weight', 'height', 'width', 'depth', 'refriderated', 
+        'is_active', 'created_at', 'updated_at'
+    ]
+    ordering_fields = ['name', 'cost_price', 'selling_price', 'created_at', 'updated_at']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
@@ -39,6 +49,10 @@ class ProductFileViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = ProductFile.objects.all()
     serializer_class = ProductFileSerializer
     pagination_class = pagination.PageNumberPagination
+    #parser_classes = (parsers.MultiPartParser, parsers.FormParser)
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = ProductFileFilter #, 'created_at', 'updated_at']
+    ordering_fields = ['product', 'file']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:

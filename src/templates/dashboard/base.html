@@ -90,14 +90,15 @@
                 }, 10000);
             }
         </script>
-        
-        <script src="{% static 'js/dashboard/overview.js'%}"></script>
-        <script src="{% static 'js/dashboard/sales.js'%}"></script>
-        <script src="{% static 'js/dashboard/inventory.js'%}"></script>
-        <script src="{% static 'js/dashboard/orders.js'%}"></script>
-        <script src="{% static 'js/dashboard/products.js'%}"></script>
-        <script src="{% static 'js/dashboard/profile.js'%}"></script>
-        <script src="{% static 'js/dashboard/app.js'%}"></script>
+        {% comment %} <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script> {% endcomment %}
+
+        <script src="{% static 'js/dashboard/overview.js' %}"></script>
+        <script src="{% static 'js/dashboard/sales.js' %}"></script>
+        <script src="{% static 'js/dashboard/inventory.js' %}"></script>
+        <script src="{% static 'js/dashboard/orders.js' %}"></script>
+        <script src="{% static 'js/dashboard/products.js' %}"></script>
+        <script src="{% static 'js/dashboard/profile.js' %}"></script>
+        <script src="{% static 'js/dashboard/app.js' %}"></script>
 
         {% block scripts %}{% endblock scripts %}
 
