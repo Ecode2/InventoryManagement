@@ -1,42 +1,48 @@
-const products = (category, order) => {
-  return fetch("/api/shelf/products/").then((response) => {
-        if (!response.ok) {
-          DisplayMessage("Couldn't get products. Try again", "error");
-          return null;
-        }
-        return response.json();
-      }).then(data => {
-        if (!data) return null;
+const products = (role, page) => {
+  if (!page) {
+    page = "/api/shelf/products/"
+  }
+  return fetch(page)
+    .then((response) => {
+      if (!response.ok) {
+        DisplayMessage("Couldn't get products. Try again", "error");
+        return null;
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (!data) return null;
 
-        const response = data;
-        if (response.count == 0) {
-          DisplayMessage("No Products Available", "warning");
-          return null;
-        }
-        const count = response.count;
-        const next = response.next;
-        const previous = response.previous;
-        const results = response.results;
-    
-        html = ``;
-        results.forEach((product) => {
-          const categories = product.category.map(category => category.name);
-          const files = product.files.map(file => file.file);
+      const response = data;
+      if (response.count == 0) {
+        DisplayMessage("No Products Available", "warning");
+        return null;
+      }
+      const count = response.count;
+      const next = response.next;
+      const previous = response.previous;
+      const results = response.results;
 
-          const cost = ""
-          cost_float = parseFloat(product.cost_price).toFixed(2);
-          selling_float = parseFloat(product.selling_price).toFixed(2);
+      html = ``;
+      results.forEach((product) => {
+        const categories = product.category.map((category) => category.name);
+        const files = product.files.map((file) => file.file);
 
-          if (window.role === "admin"){
-            cost += `<li class="flex items-center gap-2">
+        cost = ``;
+        cost_float = parseFloat(product.cost_price).toFixed(2);
+        selling_float = parseFloat(product.selling_price).toFixed(2);
+
+        console.log(role);
+        if (role === "admin") {
+          cost += `<li class="flex items-center gap-2">
                 <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M8 7V6c0-.6.4-1 1-1h11c.6 0 1 .4 1 1v7c0 .6-.4 1-1 1h-1M3 18v-7c0-.6.4-1 1-1h11c.6 0 1 .4 1 1v7c0 .6-.4 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
                 </svg>
                 <p class="text-sm font-medium text-gray-500 dark:text-gray-400">${cost_float}</p>
-              </li>`;}
-          
+              </li>`;
+        }
 
-          /* images = `
+        /* images = `
             <div id="controls-gallery" class="relative w-full" data-carousel="slide">
             <!-- Carousel wrapper -->
             <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
@@ -72,18 +78,19 @@ const products = (category, order) => {
               </div>
           </div>
           `; */
-          image = files[0]
-          console.log(image)
 
-          let category = ``;
-          if (categories) {
-            category += `<span class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300"> ${categories[0]} </span>`
-            if(categories.length > 1) {
-              category += `<span class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300"> ${categories[1]} </span>`
-            }
+        image = files[0];
+        console.log(image);
+
+        let category = ``;
+        if (categories) {
+          category += `<span class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300"> ${categories[0]} </span>`;
+          if (categories.length > 1) {
+            category += `<span class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300"> ${categories[1]} </span>`;
           }
+        }
 
-          html += `
+        html += `
             <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <span id="${product.id}" class="sr-only">${product.sku}</span>
             <div class="h-56 w-full">
@@ -134,71 +141,172 @@ const products = (category, order) => {
               </div>
             </div>
           </div>
-            `
-        });
-        return {html, count, next, previous, results};
+            `;
+      });
 
-      }).catch((error) => { 
-        console.error('Error:', error);
-        DisplayMessage("An error occurred", "error");
-        return null;
+      paginator = ``;
+      let prev = ""
+      let prev_url = previous
+      let nxt = ""
+      let nxt_url = next
+
+      if (previous) {
+        let prevRegex = /[?&]page=(\d+)/;
+        let match = url.match(prevRegex);
+        if (match) {
+            prev = match[1];
+        }
+      }else {
+        prev_url = null
+      }
+
+      if (next) {
+        let nxtRegex = /[?&]page=(\d+)/;
+        let match = url.match(nxtRegex);
+        if (match) {
+            nxt = match[1];
+        }
+      }else {
+        nxt_url = null
+      }
+
+      paginator += `<nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+                <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                    <span class="font-semibold text-gray-900 dark:text-white">${count}</span>
+                    Results
+                </span>
+                <ul class="inline-flex items-stretch -space-x-px">
+                    <li>
+                        <div onclick="load_products(${role || null}, ${prev_url})" class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Previous</span>
+                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </li>
+                    <li>
+                        <div onclick="load_products(${role || null}, ${prev_url})" class="flex items-center justify-center h-full text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${prev}</div>
+                    </li>
+                    <li>
+                        <div onclick="load_products(${role || null}, ${nxt_url})" class="flex items-center justify-center h-full text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${nxt}</div>
+                    </li>
+                    <li>
+                        <div onclick="load_products(${role || null}, ${nxt_url})" class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Next</span>
+                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </li>
+                </ul>
+            </nav>`;
+
+      return { html, count, next, previous, results, paginator };
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      DisplayMessage("An error occurred", "error");
+      return null;
     });
-}
+};
 
 const categories = () => {
-  return fetch("/api/shelf/categories/").then((response) => {
-        if (!response.ok) {
-            DisplayMessage("No Category Registered", "error");
-            return "";
-          }
+  return fetch("/api/shelf/categories/")
+    .then((response) => {
+      if (!response.ok) {
+        DisplayMessage("No Category Registered", "error");
+        return "";
+      }
 
-        response = response.json();
-          if (!response.results) {
-            DisplayMessage("No Category Registered", "error");
-            return "";
-          }
-        const count = response.count;
-        const next = response.next;
-        const previous = response.previous;
-        const results = response.results;
+      response = response.json();
+      if (!response.results) {
+        DisplayMessage("No Category Registered", "error");
+        return "";
+      }
+      const count = response.count;
+      const next = response.next;
+      const previous = response.previous;
+      const results = response.results;
 
-        html = ``;
-        results.forEach((category) => {
-          html += `
+      html = ``;
+      results.forEach((category) => {
+        html += `
             <li class="flex items
             `;
-        });
-        return html, count, next, previous, results;
-
-    }).catch((error) => { 
-        console.error('Error:', error);
-        DisplayMessage("An error occurred", "error");
-        return;
+      });
+      return html, count, next, previous, results;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      DisplayMessage("An error occurred", "error");
+      return;
     });
-}
+};
 
-const load_products = () => {
-  categories = "";
-  order = "popular";
+const load_products = (role, page) => {
+  let categories = "";
+  let order = "";
 
-  return products(category, order).then((response) => {
-    if (response && response.html) {
-      const { html, count, next, previous, results } = response;
-      const product_section = document.getElementById("product-section");
-      product_section.innerHTML = html;
-    }
-  });
-}
+  if (page && page != "") {
+    let new_page = page
+    // add categories and sorting querys to page
+    return products(role, new_page).then((response) => {
+      let html = "";
+      let count = "";
+      let next = "";
+      let previous = "";
+      let results = "";
+      let paginator = "";
 
-function ProductPage() {
+      if (response && response.html) {
+        html = response.html;
+        count = response.count;
+        next = response.next;
+        previous = response.previous;
+        results = response.results;
+        paginator = response.paginator
+      }
+      const product_section = document.getElementById("product-section")
+      const pagination_section = document.getElementById("inventory_pagination")
+      product_section.innerHTML = html
+      pagination_section.innerHTML = paginator
+    });
+  }else {
+    let new_page = "/api/shelf/products";
+    // add categories and sorting querys to new
+    return products(role, new_page).then((response) => {
+      let html = "";
+      let count = "";
+      let next = "";
+      let previous = "";
+      let results = "";
+      let paginator = "";
 
-  return products("", "").then(response => {
-    
-    let html = ""
-    let count = ""
-    let next = ""
-    let previous = ""
-    let results = ""
+      if (response && response.html) {
+        html = response.html;
+        count = response.count;
+        next = response.next;
+        previous = response.previous;
+        results = response.results;
+        paginator = response.paginator
+      }
+      const product_section = document.getElementById("product-section")
+      const pagination_section = document.getElementById("inventory_pagination")
+      product_section.innerHTML = html
+      pagination_section.innerHTML = paginator
+    });
+  }
+  
+};
+
+function ProductPage(role) {
+  return products("", "", role).then((response) => {
+    let html = "";
+    let count = "";
+    let next = "";
+    let previous = "";
+    let results = "";
+    let paginator = "";
 
     if (response && response.html) {
       html = response.html;
@@ -206,6 +314,7 @@ function ProductPage() {
       next = response.next;
       previous = response.previous;
       results = response.results;
+      paginator = response.paginator
     }
 
     return `<section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-12">
@@ -283,8 +392,8 @@ function ProductPage() {
           ${html}
         </div>
 
-        <div class="w-full text-center">
-          <button type="button" class="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">Show more</button>
+        <div id="inventory_pagination">
+          ${paginator}
         </div>
       </div>
       <!-- Filter modal -->
@@ -764,15 +873,13 @@ function ProductPage() {
       </form>
 
     </section>`;
-    
   });
-
 }
 
 window.ProductPage = ProductPage;
 
 function ProductDetail(product_info) {
-    return `<section class="py-6 bg-white md:py-14 dark:bg-gray-900 antialiased">
+  return `<section class="py-6 bg-white md:py-14 dark:bg-gray-900 antialiased">
     <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
       <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
         <div class="shrink-0 max-w-md lg:max-w-lg mx-auto">

@@ -26,11 +26,35 @@ const GetRole = () => {
 }
 
 const GetWarehouse = () => {
-    let warehouse = localStorage.getItem("warehouse")
-    if (!warehouse) {
-        return fetch("/api/")
+    let warehouse_id = localStorage.getItem("warehouse_id");
+    let warehouse_name = localStorage.getItem("warehouse_name")
+    let warehouse_address = localStorage.getItem("warehouse_address")
+    if (!warehouse_id) {
+        return fetch("/api/manage/warehouses/")
+        .then(response => { 
+            if (!response.ok) {
+                return null;
+            }
+            return response.json();
+        })
+
+        .then(data => {
+            if (!data || !data.results) {
+                return null;
+            }
+            let warehouse = data.results[0]
+            localStorage.setItem("warehouse_id", warehouse.id);
+            localStorage.setItem("warehouse_name", warehouse.name);
+            localStorage.setItem("warehouse_address", warehouse.address);
+            return warehouse.id;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            return null;
+        });
+    }else {
+        return Promise.resolve(warehouse_id);
     }
-    return warehouse
 }
 
 function LoadPage() {
@@ -48,14 +72,17 @@ function LoadPage() {
             const current_page = page[1];
 
             GetRole().then(role => {
-                const result = current_page(role);
-                if (result instanceof Promise) {
-                    result.then(html => {
-                        root.innerHTML = html;
-                    });
-                } else {
-                    root.innerHTML = result;
-                }
+                GetWarehouse().then(warehouse_id => {
+                    console.log(warehouse_id)
+                    const result = current_page(role);
+                    if (result instanceof Promise) {
+                        result.then(html => {
+                            root.innerHTML = html;
+                        });
+                    } else {
+                        root.innerHTML = result;
+                    }
+                });
                 //root.innerHTML = current_page(role);
             });
         }

@@ -161,6 +161,15 @@ ALLAUTH_UI_THEME = "light"
 from .helpers.db import database
 DATABASES = database
 
+# settings.py
+import logging
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s %(levelname)s %(message)s',
+)
+
+
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [

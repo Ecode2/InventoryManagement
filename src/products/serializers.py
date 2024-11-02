@@ -55,10 +55,43 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class InventorySerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=False, read_only=True)
+    sales_day = serializers.SerializerMethodField()
+    sales_month = serializers.SerializerMethodField()
+    total_sales = serializers.SerializerMethodField()
+    revenue = serializers.SerializerMethodField()
+    average_sales_day = serializers.SerializerMethodField()
+    average_sales_month = serializers.SerializerMethodField()
+
     class Meta:
         model = Inventory
         fields = ['id',
             'product', 'warehouse', 'stock', 'min_stock', 
-            'max_stock', 'alert_level'
+            'max_stock', 'alert_level', "products", 'sales_day', 
+            'sales_month', 'total_sales', 'revenue', 'average_sales_day',
+            'average_sales_month'
         ]
 
+    def get_sales_day(self, obj):
+        sales_data = obj.get_sales_data()
+        return sales_data.get('sales_day') or 0
+
+    def get_sales_month(self, obj):
+        sales_data = obj.get_sales_data()
+        return sales_data.get('sales_month') or 0
+
+    def get_total_sales(self, obj):
+        sales_data = obj.get_sales_data()
+        return sales_data.get('total_sales') or 0
+
+    def get_revenue(self, obj):
+        sales_data = obj.get_sales_data()
+        return sales_data.get('revenue') or 0.0
+
+    def get_average_sales_day(self, obj):
+        sales_data = obj.get_sales_data()
+        return sales_data.get('average_sales_day') or 0.0
+
+    def get_average_sales_month(self, obj):
+        sales_data = obj.get_sales_data()
+        return sales_data.get('average_sales_month') or 0.0

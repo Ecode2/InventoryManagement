@@ -1,6 +1,11 @@
 from django.db import models
-from django.conf import settings
+from django.db.models import Sum, F
+from django.utils.timezone import now, timedelta
+from django.db.models.functions import TruncMonth, TruncDay
 import uuid
+
+from sales.models import SalesDetail
+
 
 # Create your models here.
 class Category(models.Model):
@@ -63,8 +68,8 @@ class Inventory(models.Model):
     warehouse = models.ForeignKey('management.Warehouse', related_name='inventories', on_delete=models.CASCADE)
 
     stock = models.IntegerField(default=1)
-    min_stock = models.IntegerField(default=1)
-    max_stock = models.IntegerField(default=1)
+    min_stock = models.IntegerField(blank=True)
+    max_stock = models.IntegerField(blank=True)
 
     alert_level = models.IntegerField(default=0, blank=True)
 
@@ -75,8 +80,12 @@ class Inventory(models.Model):
         return f'{self.product.name} - {self.warehouse.name}'
     
     def save(self, *args, **kwargs):
+
+        self.min_stock = self.stock // 2 if not self.min_stock else self.min_stock
+        self.max_stock = int(self.stock * 1.5) if not self.max_stock else self.max_stock
+
         if self.alert_level == 0:
-            self.alert_level = int(self.min_stock + 0.25 * (self.max_stock - self.min_stock))
+            self.alert_level = int(((self.max_stock - self.min_stock) * 0.25) + self.min_stock)
 
         if self.stock < self.alert_level:
             # send email and notification
@@ -109,3 +118,42 @@ class Inventory(models.Model):
         self.max_stock = max_stock if max_stock and max_stock > min_stock else self.max_stock
         self.save()
         return self.min_stock, self.max_stock
+    
+    def get_sales_data(self):
+        today = now().date()
+        six_months_ago = today - timedelta(days=180)
+        start_of_month = today.replace(day=1)
+        
+        sales = SalesDetail.objects.filter(
+            product=self.product,
+            created_at__gte=six_months_ago
+        ).aggregate(
+            sales_day=Sum('quantity', filter=models.Q(created_at__date=today)),
+            sales_month=Sum('quantity', filter=models.Q(created_at__gte=start_of_month)),
+            total_sales=Sum('quantity'),
+            revenue=Sum(F('quantity') * F('unit_price'))
+        )
+        
+        # Calculate average sales per day and per month over the last six months
+        daily_sales = SalesDetail.objects.filter(
+            product=self.product,
+            created_at__gte=six_months_ago
+        ).annotate(day=TruncDay('created_at')).values('day').annotate(daily_total=Sum('quantity')).order_by()
+        
+        monthly_sales = SalesDetail.objects.filter(
+            product=self.product,
+            created_at__gte=six_months_ago
+        ).annotate(month=TruncMonth('created_at')).values('month').annotate(monthly_total=Sum('quantity')).order_by()
+        
+        total_days = (today - six_months_ago).days
+        total_months = 6
+        
+        average_sales_day = sum([sale['daily_total'] for sale in daily_sales]) / total_days if total_days > 0 else 0
+        average_sales_month = sum([sale['monthly_total'] for sale in monthly_sales]) / total_months if total_months > 0 else 0
+        
+        sales.update({
+            'average_sales_day': average_sales_day,
+            'average_sales_month': average_sales_month
+        })
+        
+        return sales

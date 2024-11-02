@@ -7,11 +7,18 @@ class SalesDetailSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class SaleSerializer(serializers.ModelSerializer):
-    sales_details = SalesDetailSerializer(many=True, read_only=True)
+    #sales_details = SalesDetailSerializer(many=True, read_only=True)
+    sales_details = serializers.SerializerMethodField()
 
     class Meta:
-        model = Delivery
-        fields = ['id', "warehouse", "customer", "customer_name", "sales_details"]
+        model = Sale
+        fields = ['id', "warehouse", "customer", "customer_name", "sales_details", "status", "created_at"]
+        read_only_fields = ["id", "created_at"]
+
+    def get_sales_details(self, obj):
+        sales_data = SalesDetail.objects.filter(sale=obj)
+        serialized_data = SalesDetailSerializer(sales_data, many=True).data
+        return serialized_data
 
 class DeliveryDetailSerializer(serializers.ModelSerializer):
     class Meta:

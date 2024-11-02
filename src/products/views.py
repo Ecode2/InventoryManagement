@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from core.permissions import IsAdminUser, IsAdminOrStaff
 #from core.mixins import CacheResponseMixin
 
-from .filters import ProductFileFilter
+from .filters import InventoryFilter, ProductFileFilter
 from .models import Category, Product, ProductFile, Inventory
 from .serializers import CategorySerializer, ProductSerializer, ProductFileSerializer, InventorySerializer
 
@@ -66,6 +66,8 @@ class InventoryViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Inventory.objects.all()
     serializer_class = InventorySerializer
     pagination_class = pagination.PageNumberPagination
+    filterset_class = InventoryFilter
+    ordering_fields = ['min_stock', 'max_stock', 'products__cost_price', 'products__selling_price', 'created_at', 'updated_at']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:

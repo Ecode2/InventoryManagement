@@ -1,6 +1,189 @@
+const inventories = (role, page, warehouse) => {
+    if (!page) {
+        if (role == "admin") {
+            page = "/api/shelf/inventories/"
+        }
+      let warehouse_id = localStorage.getItem("warehouse_id")
+      page = `/api/shelf/inventories?warehouse=${warehouse_id}`
+      /* http://api.example.org/inventories/?cost_price_range_min=100&cost_price_range_max=200
+      http://api.example.org/inventories/?min_stock_gte=10
+        http://api.example.org/inventories/?max_stock_lte=50
+        http://api.example.org/inventories/?created_at_range_after=2023-01-01&created_at_range_before=2023-12-31
+        http://api.example.org/inventories/?min_stock_gte=10&max_stock_lte=50&cost_price_range_min=100&cost_price_range_max=200
+     */
+    }
+    return fetch(page)
+      .then((response) => {
+        if (!response.ok) {
+          DisplayMessage("Couldn't get inventory. Try again", "error");
+          return null;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (!data) return null;
+  
+        const response = data;
+        if (response.count == 0) {
+          DisplayMessage("No Products Available", "warning");
+          return null;
+        }
+        const count = response.count;
+        const next = response.next;
+        const previous = response.previous;
+        const results = response.results;
+  
+        html = ``;
+        results.forEach((product) => {
+          const categories = product.category.map((category) => category.name);
+          const files = product.files.map((file) => file.file);
+  
+          cost = ``;
+          cost_float = parseFloat(product.cost_price).toFixed(2);
+          selling_float = parseFloat(product.selling_price).toFixed(2);
+  
+          console.log(role);
+          if (role === "admin") {
+            cost += `<li class="flex items-center gap-2">
+                  <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M8 7V6c0-.6.4-1 1-1h11c.6 0 1 .4 1 1v7c0 .6-.4 1-1 1h-1M3 18v-7c0-.6.4-1 1-1h11c.6 0 1 .4 1 1v7c0 .6-.4 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
+                  </svg>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">${cost_float}</p>
+                </li>`;
+          }
+  
+          image = files[0];
+          console.log(image);
+  
+          let category = ``;
+          if (categories) {
+            category += `<span class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300"> ${categories[0]} </span>`;
+            if (categories.length > 1) {
+              category += `<span class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300"> ${categories[1]} </span>`;
+            }
+          }
+  
+          html += `
+              <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+              <span id="${product.id}" class="sr-only">${product.sku}</span>
+              <div class="h-56 w-full">
+                  <img class="mx-auto h-full" src="${image}" alt="${product.id}-${product.name}" />
+              </div>
+              <div class="pt-6">
+                <div class="mb-4 flex items-center justify-between gap-4">
+                  ${category}
+                  <div class="flex items-center justify-end gap-1">
+                    <button type="button" data-tooltip-target="tooltip-quick-look" class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                      <span class="sr-only"> Quick look </span>
+                      <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z" />
+                        <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      </svg>
+                    </button>
+                    <div id="tooltip-quick-look" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700" data-popper-placement="top">
+                      Quick look
+                      <div class="tooltip-arrow" data-popper-arrow=""></div>
+                    </div>
+                  </div>
+                </div>
+  
+                <div onclick="ProductDetail('${product.id}')" class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white">${product.name}</div>
+  
+                <ul class="mt-2 flex items-center gap-4">
+                  <li class="flex items-center gap-2">
+                    <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
+                    </svg>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">${product.recorder_quantity} ${product.recorder_quantity_name}</p>
+                  </li>
+                  ${cost}
+                </ul>
+  
+                <div class="mt-4 flex items-center justify-between gap-4">
+                  <p class="text-2xl font-extrabold leading-tight text-gray-900 dark:text-white">NGN ${selling_float}</p>
+  
+                  <button type="button"
+                    onclick="ProductDetail('${product.id}')"
+                  class="inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                    <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z" />
+                        <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      </svg>
+                    Detail
+                  </button>
+                </div>
+              </div>
+            </div>
+              `;
+        });
+  
+        paginator = ``;
+        let prev = ""
+        let prev_url = previous
+        let nxt = ""
+        let nxt_url = next
+  
+        if (previous) {
+          let prevRegex = /[?&]page=(\d+)/;
+          let match = url.match(prevRegex);
+          if (match) {
+              prev = match[1];
+          }
+        }else {
+          prev_url = null
+        }
+  
+        if (next) {
+          let nxtRegex = /[?&]page=(\d+)/;
+          let match = url.match(nxtRegex);
+          if (match) {
+              nxt = match[1];
+          }
+        }else {
+          nxt_url = null
+        }
+  
+        paginator += `<nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+                  <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                      <span class="font-semibold text-gray-900 dark:text-white">${count}</span>
+                      Results
+                  </span>
+                  <ul class="inline-flex items-stretch -space-x-px">
+                      <li>
+                          <div onclick="load_products(${role || null}, ${prev_url})" class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                              <span class="sr-only">Previous</span>
+                              <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                              </svg>
+                          </div>
+                      </li>
+                      <li>
+                          <div onclick="load_products(${role || null}, ${prev_url})" class="flex items-center justify-center h-full text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${prev}</div>
+                      </li>
+                      <li>
+                          <div onclick="load_products(${role || null}, ${nxt_url})" class="flex items-center justify-center h-full text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${nxt}</div>
+                      </li>
+                      <li>
+                          <div onclick="load_products(${role || null}, ${nxt_url})" class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                              <span class="sr-only">Next</span>
+                              <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                              </svg>
+                          </div>
+                      </li>
+                  </ul>
+              </nav>`;
+  
+        return { html, count, next, previous, results, paginator };
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        DisplayMessage("An error occurred", "error");
+        return null;
+      });
+  };
 
 function InventoryPage() {
-    let bullocks = "a simple bulloks text";
     return `
 <!-- Start block -->
 <section class="bg-gray-50 dark:bg-gray-900 antialiased">
@@ -9,7 +192,7 @@ function InventoryPage() {
             <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                 <div class="flex-1 flex items-center space-x-2">
                     <h5>
-                        <span class="text-gray-500">All Products: ${bullocks} </span>
+                        <span class="text-gray-500">All Products:  </span>
                         <span class="dark:text-white">123456</span>
                     </h5>
                     <h5 class="text-gray-500 dark:text-gray-400 ml-1">1-100 (436)</h5>

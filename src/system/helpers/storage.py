@@ -23,3 +23,8 @@ MEDIA_ROOT = 'media/'
 
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 STATIC_ROOT = "static/"
+
+""" 
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+"""
