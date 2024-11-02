@@ -10,6 +10,6 @@ decorators = [admin_staff_role("staff")]#, cache_page(60 * 15)]
 class DashboardView(TemplateView):
     template_name = "dashboard/main.html"
 
-    @method_decorator(decorators)
+    @method_decorator(admin_staff_role("staff"))
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)

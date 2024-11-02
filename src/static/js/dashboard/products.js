@@ -72,11 +72,8 @@ const products = (category, order) => {
               </div>
           </div>
           `; */
-
-          images = `        
-              <a href="#">
-                <img class="mx-auto h-full src="${files[0]}" alt="${product.id}-${product.name}" />
-              </a>`;
+          image = files[0]
+          console.log(image)
 
           category = ``;
           if (categories) {
@@ -90,7 +87,7 @@ const products = (category, order) => {
             <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <span id="${product.id}" class="sr-only">${product.sku}</span>
             <div class="h-56 w-full">
-                ${images}
+                <img class="mx-auto h-full src="${image}" alt="${product.id}-${product.name}" />
             </div>
             <div class="pt-6">
               <div class="mb-4 flex items-center justify-between gap-4">
@@ -775,7 +772,7 @@ function ProductPage() {
 window.ProductPage = ProductPage;
 
 function ProductDetail(product_info) {
-    return `<section class="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased">
+    return `<section class="py-6 bg-white md:py-14 dark:bg-gray-900 antialiased">
     <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
       <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
         <div class="shrink-0 max-w-md lg:max-w-lg mx-auto">

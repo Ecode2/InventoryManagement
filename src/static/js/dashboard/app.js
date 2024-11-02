@@ -38,12 +38,18 @@ function LoadPage() {
 
     for (const page of pages) {
         if (page[0] === last_page) {
+
             const current_page = page[1];
 
             GetRole().then(role => {
-                current_page(role).then((html) => {
-                    root.innerHTML = html;
-                });
+                const result = current_page(role);
+                if (result instanceof Promise) {
+                    result.then(html => {
+                        root.innerHTML = html;
+                    });
+                } else {
+                    root.innerHTML = result;
+                }
                 //root.innerHTML = current_page(role);
             });
         }
