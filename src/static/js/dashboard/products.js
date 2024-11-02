@@ -75,7 +75,7 @@ const products = (category, order) => {
           image = files[0]
           console.log(image)
 
-          category = ``;
+          let category = ``;
           if (categories) {
             category += `<span class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300"> ${categories[0]} </span>`
             if(categories.length > 1) {
@@ -87,7 +87,7 @@ const products = (category, order) => {
             <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <span id="${product.id}" class="sr-only">${product.sku}</span>
             <div class="h-56 w-full">
-                <img class="mx-auto h-full src="${image}" alt="${product.id}-${product.name}" />
+                <img class="mx-auto h-full" src="${image}" alt="${product.id}-${product.name}" />
             </div>
             <div class="pt-6">
               <div class="mb-4 flex items-center justify-between gap-4">

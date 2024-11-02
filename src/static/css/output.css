@@ -3568,6 +3568,11 @@ input:checked + .toggle-bg {
     padding-bottom: 3rem;
   }
 
+  .md\:py-14 {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
   .md\:py-16 {
     padding-top: 4rem;
     padding-bottom: 4rem;

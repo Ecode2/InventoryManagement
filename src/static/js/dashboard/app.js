@@ -25,7 +25,13 @@ const GetRole = () => {
         });
 }
 
-const GetWarehouse = () => {}
+const GetWarehouse = () => {
+    let warehouse = localStorage.getItem("warehouse")
+    if (!warehouse) {
+        return fetch("/api/")
+    }
+    return warehouse
+}
 
 function LoadPage() {
     const root = document.getElementById('root');
