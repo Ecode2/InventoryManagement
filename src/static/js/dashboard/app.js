@@ -73,7 +73,7 @@ function LoadPage() {
 
             GetRole().then(role => {
                 GetWarehouse().then(warehouse_id => {
-                    console.log(warehouse_id)
+                    console.log(role)
                     const result = current_page(role);
                     if (result instanceof Promise) {
                         result.then(html => {

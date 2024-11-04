@@ -300,7 +300,7 @@ const load_products = (role, page) => {
 };
 
 function ProductPage(role) {
-  return products("", "", role).then((response) => {
+  return products(role).then((response) => {
     let html = "";
     let count = "";
     let next = "";

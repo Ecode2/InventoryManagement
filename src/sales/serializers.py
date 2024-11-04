@@ -45,13 +45,19 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = fields = ['id', "warehouse", "provider", "expected_delivery_date", "actual_delivery_date", "order_details"]
 
 class SalesReceiptSerializer(serializers.ModelSerializer):
+    #sales = serializers.SerializerMethodField()
+    sale = SaleSerializer(many=False, read_only=True)
     class Meta:
         model = SalesReceipt
-        fields = "__all__"
+        fields = ["id", "sale", "amount", "payment_method", "created_at"] #sales", 
+        read_only_fields = ["id", "created_at"]
+        
+    """ def get_sales(self, obj):
+        sales_data = Sale.objects.get(id=obj.sale.id)
+        serialized_data = SaleSerializer(sales_data).data
+        return serialized_data """
 
 class DeliveryReceiptSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeliveryReceipt
         fields = "__all__"
-
-
