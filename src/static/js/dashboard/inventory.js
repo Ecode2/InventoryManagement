@@ -7,7 +7,7 @@ const inventories = (role, page, warehouse) => {
         if (warehouse_id) {
             page = `/api/shelf/inventories?warehouse=${warehouse_id}`;
         } else {
-            page = `/api/shelf/inventories?warehouse=${warehouse_id}`;
+            page = `/api/shelf/inventories`;
         }
 
         /* http://api.example.org/inventories/?cost_price_range_min=100&cost_price_range_max=200
