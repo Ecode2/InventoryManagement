@@ -105,22 +105,22 @@ class SalesReceiptViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAdminOrStaff])
+    @action(detail=True, methods=['get'], permission_classes=[IsAdminOrStaff])
     def generate_pdf(self, request, pk=None):
         receipt = self.get_object()
-        template = get_template('sales_receipt_template.html')
+        template = get_template('dashboard/components/receipt_template.html')
         context = {
-            'receipt_id': receipt.receipt_id,
-            'date': receipt.date,
-            'customer_name': receipt.customer.name,
-            'amount': receipt.total_amount,
+            'receipt_id': receipt.id,
+            'date': receipt.created_at,
+            'customer_name': receipt.sale.customer_name,
+            'amount': receipt.amount,
             # Add more context variables as needed
         }
         html = template.render(context)
         pdf = HTML(string=html).write_pdf()
 
         response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="sales_receipt_{receipt.receipt_id}.pdf"'
+        response['Content-Disposition'] = f'attachment; filename="sales_receipt_{receipt.id}.pdf"'
         return response
 
 class DeliveryReceiptViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
@@ -135,10 +135,10 @@ class DeliveryReceiptViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAdminOrStaff])
+    @action(detail=True, methods=['get'], permission_classes=[IsAdminOrStaff])
     def generate_pdf(self, request, pk=None):
         receipt = self.get_object()
-        template = get_template('delivery_receipt_template.html')
+        template = get_template('dashboard/components/receipt_template.html')
         context = {
             'receipt_id': receipt.receipt_id,
             'date': receipt.date,
