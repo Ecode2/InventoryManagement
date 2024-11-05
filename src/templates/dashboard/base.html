@@ -1,14 +1,23 @@
+{% comment %} {% load compress %} {% endcomment %}
+{% load static %}
+{% comment %} {% load pwa %} 
+{% progressive_web_app_meta %} {% endcomment %}
+
+
 <!DOCTYPE html>
 <html lang="en">
-    {% load static %}
-    {% comment %} {% load pwa %} 
-    {% progressive_web_app_meta %} {% endcomment %}
+    
 
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Inventory Management Dashboard {% block head_title %}{% endblock head_title %}</title>
+
+        {% comment %} {% compress css %}
+        <link rel="stylesheet" href="{% static 'src/output.css' %}">
+        {% endcompress %} {% endcomment %}
+
         {% include 'base/css.html' %}
 
     </head>
@@ -17,38 +26,39 @@
 
             {% include 'dashboard/components/heading.html' %}
 
-            <main class="antialiased p-4 pt-20 md:ml-64 min-h-screen h-auto bg-gray-50 dark:bg-gray-900 ">
+            <main class="antialiased p-4 pt-20 md:ml-64 min-h-screen h-auto bg-gray-50 dark:bg-gray-900 "> 
+
                 {% block content %}
 
                 {% endblock content %}
+
             </main>
 
             <div id="alert-container" class="fixed bottom-0 right-0 p-4 space-y-4"></div>
             
         </div>
         
-
+        <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
         {% include 'base/js.html' %}
 
         {% comment %} Focus on finishing the products then the inventory (with warehouse button to select a warehouse, 
         get or set it from localstorage when the screen loads ) and then finish sales along with receipt generation {% endcomment %}
 
         <script>
+            function initializeFlowbite() {
+                // Call the Flowbite initialization function
+                if (typeof initFlowbite === 'function') {
+                    initFlowbite();
+                    console.log("flowbite reinitialized")
+                }
+            }
+
             function navigateTo(url) {
                 // Navigate to the specified URL
                 window.location.href = url;
             }
-            function PaginatedPage(url) {
-                fetch(url).then(data => {
-                    const response = data
-                    if (!response.ok) {
-                        return false
-                    }
-                    return response.json()
-                }).catch(error => {
-                    console.error('Error:', error);
-                });
-            }
+            
+
             function DisplayMessage(message, type) {
                 if (type === 'error') {
                     type = 'red'
@@ -90,8 +100,6 @@
                 }, 10000);
             }
         </script>
-        {% comment %} <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script> {% endcomment %}
-
         <script src="{% static 'js/dashboard/overview.js' %}"></script>
         <script src="{% static 'js/dashboard/sales.js' %}"></script>
         <script src="{% static 'js/dashboard/inventory.js' %}"></script>

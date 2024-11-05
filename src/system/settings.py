@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     "widget_tweaks",
     "slippers",
     'storages',
+    #'compressor',
     #"pwa",
 
 ]
@@ -324,7 +325,11 @@ else:
     MEDIA_URL = 'media/'
     STATICFILES_DIRS = [BASE_DIR / "static"]
 
+    #COMPRESS_ROOT = BASE_DIR / 'static'
+    #COMPRESS_ENABLED = True
+    
     STATICFILES_FINDERS = (
+        #'compressor.finders.CompressorFinder',
         "django.contrib.staticfiles.finders.FileSystemFinder",
         "django.contrib.staticfiles.finders.AppDirectoriesFinder",
         # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
