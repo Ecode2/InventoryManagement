@@ -1,10 +1,11 @@
 from django.http import HttpResponse
 from django.template.loader import get_template
 from rest_framework.decorators import action
-from rest_framework import viewsets, permissions, pagination
+from rest_framework import viewsets, permissions, pagination, filters
 from weasyprint import HTML
 
 from core.permissions import IsAdminUser, IsAdminOrStaff
+from sales.filters import SalesFilter
 #from core.mixins import CacheResponseMixin
 
 from .models import (Delivery, DeliveryDetail, Order, OrderDetail, 
@@ -34,6 +35,10 @@ class SaleViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = Sale.objects.all()
     serializer_class = SaleSerializer
     pagination_class = pagination.PageNumberPagination
+    filterset_class = SalesFilter
+    search_fields = ['sale_uuid'] #^
+    ordering_fields = ['created_at', 'updated_at']
+    ordering = ['-created_at']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve', "create", "update", "partial_update"]:
@@ -97,6 +102,7 @@ class SalesReceiptViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = SalesReceipt.objects.all()
     serializer_class = SalesReceiptSerializer
     pagination_class = pagination.PageNumberPagination
+    search_fields = ['sale__id']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve', "create", "update", "partial_update"]:

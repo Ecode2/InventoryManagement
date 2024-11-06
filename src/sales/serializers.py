@@ -1,10 +1,12 @@
 from rest_framework import serializers
+from products.serializers import ProductSerializer
 from .models import Delivery, DeliveryDetail, Order, OrderDetail, Sale, SalesDetail, SalesReceipt, DeliveryReceipt
 
 class SalesDetailSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(many=False, read_only=True)
     class Meta:
         model = SalesDetail
-        fields = "__all__"
+        fields = ["id", "sale", "product", "quantity", "unit_price", "bulk_price", "created_at"]
 
 class SaleSerializer(serializers.ModelSerializer):
     #sales_details = SalesDetailSerializer(many=True, read_only=True)
@@ -12,7 +14,7 @@ class SaleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sale
-        fields = ['id', "warehouse", "customer", "customer_name", "sales_details", "status", "created_at"]
+        fields = ['id', "sale_uuid", "warehouse", "customer", "customer_name", "payment_method", "sales_details", "status", "created_at"]
         read_only_fields = ["id", "created_at"]
 
     def get_sales_details(self, obj):

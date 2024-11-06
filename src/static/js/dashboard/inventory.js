@@ -575,20 +575,13 @@ const toggleModal = (modalId) => {
 function InventoryPage(role) {
     return inventories(role).then((response) => {
         let html = "";
-        let count = "";
-        let next = "";
-        let previous = "";
         let results = "";
         let paginator = "";
         if (response && response.html) {
             html = response.html;
-            count = response.count;
-            next = response.next;
-            previous = response.previous;
             results = response.results;
             paginator = response.paginator;
         }
-
         return `
 <!-- Start block -->
 <section class="bg-gray-50 dark:bg-gray-900 antialiased">
@@ -1203,7 +1196,7 @@ function InventoryPage(role) {
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>`;
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>`;
     });
 }
 

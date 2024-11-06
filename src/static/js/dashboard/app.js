@@ -191,20 +191,17 @@ const pages = [ ["overview", window.Overview],
 
 const tabs = ["overview", "sales", "inventory", "orders", "products", "profile"]
 
-const GetRole = () => {
-    return fetch("/api/role/")
-        .then(response => { 
-            if (!response.ok) {
-                window.location.href = "/home";
-            }
-            return response.json();
-        })
-        .then(data => {
-            return data.role;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+const GetRole = async () => {
+    try {
+        const response = await fetch("/api/role/");
+        if (!response.ok) {
+            window.location.href = "/home";
+        }
+        const data = await response.json();
+        return data.role;
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
 const GetWarehouse = () => {

@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 # Order status choices
 PENDING = 'pending'
@@ -152,8 +153,10 @@ class SalesDetail(models.Model):
 
 
 class Sale(models.Model):
+    sale_uuid = models.UUIDField(default=uuid.uuid1, editable=False, unique=True)
     warehouse = models.ForeignKey('management.Warehouse', related_name='sales', on_delete=models.CASCADE)
     customer = models.ForeignKey('accounts.User', related_name='sales', blank=True, null=True, on_delete=models.CASCADE)
+    payment_method = models.CharField(max_length=100, blank=True, null=True)
     customer_name = models.CharField(max_length=100, blank=True, null=True)
     status = models.CharField(max_length=20, choices=ORDER_CHOICES, default=PENDING)
     inventory_updated = models.BooleanField(default=False)

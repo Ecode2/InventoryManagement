@@ -15,7 +15,6 @@ class ProductFileFilter(filters.FilterSet):
             }
         }
         
-        
 class InventoryFilter(filters.FilterSet):
     min_stock_gte = filters.NumberFilter(field_name='min_stock', lookup_expr='gte')
     max_stock_lte = filters.NumberFilter(field_name='max_stock', lookup_expr='lte')
