@@ -1,12 +1,19 @@
 from rest_framework import serializers
+from django.shortcuts import get_object_or_404
 from products.serializers import ProductSerializer
+from products.models import Product
 from .models import Delivery, DeliveryDetail, Order, OrderDetail, Sale, SalesDetail, SalesReceipt, DeliveryReceipt
 
 class SalesDetailSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(many=False, read_only=True)
+    product_detail = serializers.SerializerMethodField()
     class Meta:
         model = SalesDetail
-        fields = ["id", "sale", "product", "quantity", "unit_price", "bulk_price", "created_at"]
+        fields = ["id", "sale", "product", "quantity", "unit_price", "bulk_price", "product_detail", "created_at"]
+
+    def get_product_detail(self, obj):
+        product = get_object_or_404(Product, id=obj.product.id)
+        serialized_data = ProductSerializer(product).data
+        return serialized_data
 
 class SaleSerializer(serializers.ModelSerializer):
     #sales_details = SalesDetailSerializer(many=True, read_only=True)

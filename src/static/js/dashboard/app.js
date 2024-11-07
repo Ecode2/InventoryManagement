@@ -253,7 +253,7 @@ function LoadPage() {
             GetRole().then(role => {
                 GetWarehouse().then(warehouse_id => {
                     console.log(role)
-                    const result = current_page(role);
+                    const result = current_page(role, warehouse_id);
                     if (result instanceof Promise) {
                         result.then(html => {
                             root.innerHTML = html;
@@ -278,11 +278,6 @@ const LoadTab = (tab) => {
 document.addEventListener('DOMContentLoaded', function() {
     LoadPage()
 });
-
-
-
-
-
 
 
 
