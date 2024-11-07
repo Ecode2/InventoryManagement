@@ -521,7 +521,7 @@ const createCart = async (warehouse_id) => {
       <div class="space-y-4 py-8">
           <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
             <dt class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">Total</dt>
-            <dd id="product_sale_items_price" class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">#0/dd>
+            <dd id="product_sale_items_price" class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">#0</dd>
           </dl>
 
           <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
