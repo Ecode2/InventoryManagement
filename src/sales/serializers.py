@@ -14,6 +14,21 @@ class SalesDetailSerializer(serializers.ModelSerializer):
         product = get_object_or_404(Product, id=obj.product.id)
         serialized_data = ProductSerializer(product).data
         return serialized_data
+    
+    def create(self, validated_data):
+        sales_detail = SalesDetail(**validated_data)
+        if not sales_detail.unit_price:
+            sales_detail.unit_price = sales_detail.product.selling_price
+        sales_detail.bulk_price = sales_detail.unit_price * sales_detail.quantity
+        sales_detail.save()
+        return sales_detail
+
+    def update(self, instance, validated_data):
+        instance.quantity = validated_data.get('quantity', instance.quantity)
+        instance.unit_price = validated_data.get('unit_price', instance.unit_price) or instance.product.selling_price
+        instance.bulk_price = instance.unit_price * instance.quantity
+        instance.save()
+        return instance
 
 class SaleSerializer(serializers.ModelSerializer):
     #sales_details = SalesDetailSerializer(many=True, read_only=True)
@@ -54,17 +69,16 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = fields = ['id', "warehouse", "provider", "expected_delivery_date", "actual_delivery_date", "order_details"]
 
 class SalesReceiptSerializer(serializers.ModelSerializer):
-    #sales = serializers.SerializerMethodField()
-    sale = SaleSerializer(many=False, read_only=True)
+    sales = serializers.SerializerMethodField()
     class Meta:
         model = SalesReceipt
-        fields = ["id", "sale", "amount", "payment_method", "created_at"] #sales", 
+        fields = ["id", "sale", "amount", "payment_method", "created_at", "sales"]
         read_only_fields = ["id", "created_at"]
         
-    """ def get_sales(self, obj):
+    def get_sales(self, obj):
         sales_data = Sale.objects.get(id=obj.sale.id)
         serialized_data = SaleSerializer(sales_data).data
-        return serialized_data """
+        return serialized_data
 
 class DeliveryReceiptSerializer(serializers.ModelSerializer):
     class Meta:

@@ -102,7 +102,9 @@ class SalesReceiptViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = SalesReceipt.objects.all()
     serializer_class = SalesReceiptSerializer
     pagination_class = pagination.PageNumberPagination
-    search_fields = ['sale__id']
+    search_fields = ['sale__id', 'sale__sale_uuid']
+    ordering_fields = ['created_at']
+    ordering = ['-created_at']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve', "create", "update", "partial_update"]:
