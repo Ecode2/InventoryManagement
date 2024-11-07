@@ -489,7 +489,7 @@ const createCart = async (warehouse_id) => {
         </table>
       </div>
       <div>
-        <dl class="flex items-center justify-between pr-1 py-2 gap-4 border-gray-200 dark:border-gray-700">
+        <dl class="flex items-center justify-between pr-1 py-2 px-2 gap-4 border-gray-200 dark:border-gray-700">
             <dt class="text-lg font-thin text-gray-900 dark:text-white">Add Item</dt>
             <dd class="text-lg font-thin text-gray-900 dark:text-white">
 
