@@ -3,3 +3,7 @@
       width: 300px;
     }
   }
+
+.height-overflow {
+    height: 50vh;
+}

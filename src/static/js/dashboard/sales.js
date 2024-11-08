@@ -367,7 +367,7 @@ const sales = async (role, page) => {
                                 class="w-full rounded-lg  border border-gray-200 bg-white px-5  py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
                                 Close
                               </button>
-                              <button type="button" onclick="calcelCart(${sale.id})"
+                              <button type="button" onclick="cancelCart(${sale.id})"
                                 class="w-full rounded-md border border-red-700 px-3 py-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900 md:w-auto">
                                 Cancel
                               </button>
@@ -395,9 +395,11 @@ const sales = async (role, page) => {
 
     if (previous) {
       let prevRegex = /[?&]page=(\d+)/;
-      let match = url.match(prevRegex);
+      let match = prev_url.match(prevRegex);
       if (match) {
         prev = match[1];
+      }else {
+        prev = "1"
       }
     } else {
       prev_url = null;
@@ -405,7 +407,7 @@ const sales = async (role, page) => {
 
     if (next) {
       let nxtRegex = /[?&]page=(\d+)/;
-      let match = url.match(nxtRegex);
+      let match = nxt_url.match(nxtRegex);
       if (match) {
         nxt = match[1];
       }
@@ -413,14 +415,14 @@ const sales = async (role, page) => {
       nxt_url = null;
     }
 
-    paginator += `<nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+    paginator += `<nav class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-3 sm:space-y-0 p-4" aria-label="Table navigation">
         <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
             <span class="font-semibold text-gray-900 dark:text-white">${count}</span>
             Results
         </span>
         <ul class="inline-flex items-stretch -space-x-px">
             <li>
-                <div onclick="load_products(${role || null}, ${prev_url})" 
+                <div onclick="load_sales('${role || null}', '${prev_url}')" 
                 class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                     <span class="sr-only">Previous</span>
                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -429,15 +431,15 @@ const sales = async (role, page) => {
                 </div>
             </li>
             <li>
-                <div onclick="load_products(${role || null}, ${prev_url})" 
+                <div onclick="load_sales('${role || null}', '${prev_url}')" 
                 class="flex items-center justify-center h-full text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${prev}</div>
             </li>
             <li>
-                <div onclick="load_products(${role || null}, ${nxt_url})" 
+                <div onclick="load_sales('${role || null}', '${nxt_url}')" 
                 class="flex items-center justify-center h-full text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${nxt}</div>
             </li>
             <li>
-                <div onclick="load_products(${role || null}, ${nxt_url})" 
+                <div onclick="load_sales('${role || null}', '${nxt_url}')" 
                 class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                     <span class="sr-only">Next</span>
                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -459,6 +461,60 @@ const sales = async (role, page) => {
   
 };
 
+
+const load_sales = async (role, page) => {
+  let categories = "";
+  let order = "";
+
+  role = "" ? role == "null" : role
+  let sorting = ""
+  let response
+  console.log("starting")
+
+  try {
+    if (page && page != "") {
+      response = await sales(role, page+sorting);
+
+    }else {
+      let warehouse_id = localStorage.getItem("warehouse_id");
+      let new_page = "/api/sale/cart/"
+
+      if (warehouse_id && role != "admin") {
+        new_page = `/api/sale/cart/?warehouse=${warehouse_id}`;
+      }
+      response = await sales(role, new_page+sorting);
+    }
+    
+    if (!response) {
+      console.log("something went wrong")
+      return
+    }
+
+    let html = "";
+    let paginator = "";
+    
+    if (response && response.html) {
+      html = response.html;
+      paginator = response.paginator;
+    }
+    const sales_section = document.getElementById("sales-section");
+    const pagination_section = document.getElementById("sales_pagination");
+
+    console.log("loading html")
+    sales_section.innerHTML = "";
+    sales_section.innerHTML = html;
+
+    console.log("loading pagination")
+    pagination_section.innerHTML = "";
+    pagination_section.innerHTML = paginator
+
+  }catch {
+    console.log("error")
+    return
+  }
+};
+
+
 const handleSubmit = async (event, func, ...args) => {
   event.preventDefault(); // Prevent the default form submission behavior
   func(...args); // Call the specified function with the provided arguments
@@ -469,7 +525,10 @@ const createCart = async (warehouse_id) => {
   const customer_info = document.getElementById("customer_info_container")
   const cart_info = document.getElementById("cart_info")
 
+  console.log("starting", customer_info, cart_info, name_input)
+
   if (!name_input.value || !warehouse_id || !(parseInt(warehouse_id) > 0) ) {
+    console.log("error")
     return;
   }
 
@@ -486,6 +545,7 @@ const createCart = async (warehouse_id) => {
   })
 
   if (!new_cart.ok) {
+    console.log("another error")
     return;
   }
 
@@ -576,7 +636,7 @@ const createCart = async (warehouse_id) => {
             Close
           </button>
           
-          <button type="button" onclick="calcelCart(${data.id})"
+          <button type="button" onclick="cancelCart(${data.id})"
             class="w-full rounded-md border border-red-700 px-3 py-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900 md:w-auto">
             Cancel
           </button>
@@ -586,9 +646,11 @@ const createCart = async (warehouse_id) => {
             Sell
           </button>
       </div>`
+  
+  console.log("completed")
 };
 
-const calcelCart = async (cart_id) => {
+const cancelCart = async (cart_id) => {
   popup = confirm("Delete Current Cart ?")
   if (popup) {
       try {
@@ -963,55 +1025,56 @@ async function SalesPage(role, warehouse_id) {
   let cart_id = "what"
 
   return `
-    <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
-  <div class="mx-auto max-w-screen-lg px-4 xl:px-0">
-    <div class="mx-auto max-w-4xl">
-      <div class="gap-4 sm:flex sm:items-center sm:justify-between">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white sm:text-xl">Sales</h2>
+<section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
+    <div class="mx-auto max-w-screen-lg px-4 xl:px-0">
+      <div class="mx-auto max-w-4xl">
+        <div class="gap-4 sm:flex sm:items-center sm:justify-between">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white sm:text-xl">Sales</h2>
 
-        <button type="button" id="createSaleButton" data-modal-toggle="createSaleModal" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-            <svg class="h-3.5 w-3.5 mr-1.5 -ml-1" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
-            </svg>
-            New Sale
-        </button>
+          <button type="button" id="createSaleButton" data-modal-toggle="createSaleModal" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+              <svg class="h-3.5 w-3.5 mr-1.5 -ml-1" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+              </svg>
+              New Sale
+          </button>
 
-        <div class="mt-6 gap-4 space-y-4 sm:mt-0 sm:flex sm:items-center sm:justify-end sm:space-y-0">
-          <div>
-            <label for="order-type" class="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select order type</label>
-            <select id="order-type" class="block w-full min-w-[8rem] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500">
-              <option selected>All orders</option>
-              <option value="pending">Pending</option>
-              <option value="delivered">Confirmed</option>
-              <option value="returned">Returned</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-          </div>
+          <div class="mt-6 gap-4 space-y-4 sm:mt-0 sm:flex sm:items-center sm:justify-end sm:space-y-0">
+            <div>
+              <label for="order-type" class="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select order type</label>
+              <select id="order-type" class="block w-full min-w-[8rem] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500">
+                <option selected>All orders</option>
+                <option value="pending">Pending</option>
+                <option value="delivered">Confirmed</option>
+                <option value="returned">Returned</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
 
-          <span class="inline-block text-gray-500 dark:text-gray-400"> from </span>
+            <span class="inline-block text-gray-500 dark:text-gray-400"> from </span>
 
-          <div>
-            <label for="duration" class="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select duration</label>
-            <select id="duration" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500">
-              <option selected>this week</option>
-              <option value="this month">this month</option>
-              <option value="last 3 months">the last 3 months</option>
-              <option value="lats 6 months">the last 6 months</option>
-              <option value="this year">this year</option>
-            </select>
+            <div>
+              <label for="duration" class="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select duration</label>
+              <select id="duration" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500">
+                <option selected>this week</option>
+                <option value="this month">this month</option>
+                <option value="last 3 months">the last 3 months</option>
+                <option value="lats 6 months">the last 6 months</option>
+                <option value="this year">this year</option>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="mt-6 flow-root sm:mt-8">
-        <div class="divide-y divide-gray-200 dark:divide-gray-700">
-          ${html}
+        <div class="mt-6 height-overflow overflow-y-auto sm:mt-8">
+          <div id="sales-section" class="divide-y divide-gray-200 dark:divide-gray-700">
+            ${html}
+          </div>
+        </div>
+        <div id="sales_pagination">
+          ${paginator}
         </div>
       </div>
-
-      ${paginator}
     </div>
-  </div>
 </section>
 
 
@@ -1033,7 +1096,7 @@ async function SalesPage(role, warehouse_id) {
             <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
                 <div id="customer_info_container" class="space-y-4 border-b border-gray-200 py-8 dark:border-gray-700">
                     <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Customer Information</h4>
-                    <form id="" onsubmit="handleSubmit(event, createCart, ${warehouse_id})" class="w-full flex justify-between">
+                    <div class="w-full flex justify-between">
                         <div class="flex">
                           <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -1043,11 +1106,11 @@ async function SalesPage(role, warehouse_id) {
                           <input type="text" id="customer_cart" class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                           placeholder="Customer Name">
                         </div>
-                        <button type="submit" onclick="createCart('${warehouse_id}')"
+                        <button type="button" onclick="createCart('${warehouse_id}')"
                           class="text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 text-sm w-full sm:w-auto px-5 py-2.5 text-center ">
                           Submit
                         </button>
-                    </form>
+                    </div>
                 </div>
 
                 <div id="cart_info" class="py-2">

@@ -272,6 +272,13 @@ function LoadPage() {
 
 const LoadTab = (tab) => {
     localStorage.setItem("last_page", tab.toLowerCase());
+
+    let sidebar_toggle = document.getElementById("drawer-navigation-btn");
+    if (sidebar_toggle && window.innerWidth < 768) {
+        console.log("clicked");
+        sidebar_toggle.click();
+    }
+    
     LoadPage();
 }
 

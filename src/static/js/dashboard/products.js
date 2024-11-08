@@ -170,14 +170,14 @@ const products = (role, page) => {
         nxt_url = null
       }
 
-      paginator += `<nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+      paginator += `<nav class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-3 sm:space-y-0 p-4" aria-label="Table navigation">
                 <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
                     <span class="font-semibold text-gray-900 dark:text-white">${count}</span>
                     Results
                 </span>
                 <ul class="inline-flex items-stretch -space-x-px">
                     <li>
-                        <div onclick="load_products(${role || null}, ${prev_url})" class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <div onclick="load_products('${role || null}', '${prev_url}')" class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                             <span class="sr-only">Previous</span>
                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -185,13 +185,13 @@ const products = (role, page) => {
                         </div>
                     </li>
                     <li>
-                        <div onclick="load_products(${role || null}, ${prev_url})" class="flex items-center justify-center h-full text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${prev}</div>
+                        <div onclick="load_products('${role || null}', '${prev_url}')" class="flex items-center justify-center h-full text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${prev}</div>
                     </li>
                     <li>
-                        <div onclick="load_products(${role || null}, ${nxt_url})" class="flex items-center justify-center h-full text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${nxt}</div>
+                        <div onclick="load_products('${role || null}', '${nxt_url}')" class="flex items-center justify-center h-full text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${nxt}</div>
                     </li>
                     <li>
-                        <div onclick="load_products(${role || null}, ${nxt_url})" class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <div onclick="load_products('${role || null}', '${nxt_url}')" class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                             <span class="sr-only">Next</span>
                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
@@ -243,81 +243,53 @@ const categories = () => {
     });
 };
 
-const load_products = (role, page) => {
+const load_products = async (role, page) => {
   let categories = "";
   let order = "";
 
-  if (page && page != "") {
-    let new_page = page
-    // add categories and sorting querys to page
-    return products(role, new_page).then((response) => {
-      let html = "";
-      let count = "";
-      let next = "";
-      let previous = "";
-      let results = "";
-      let paginator = "";
+  let sorting = ""
+  let response
 
-      if (response && response.html) {
-        html = response.html;
-        count = response.count;
-        next = response.next;
-        previous = response.previous;
-        results = response.results;
-        paginator = response.paginator
-      }
-      const product_section = document.getElementById("product-section")
-      const pagination_section = document.getElementById("inventory_pagination")
-      product_section.innerHTML = html
-      pagination_section.innerHTML = paginator
-    });
-  }else {
-    let new_page = "/api/shelf/products";
-    // add categories and sorting querys to new
-    return products(role, new_page).then((response) => {
-      let html = "";
-      let count = "";
-      let next = "";
-      let previous = "";
-      let results = "";
-      let paginator = "";
-
-      if (response && response.html) {
-        html = response.html;
-        count = response.count;
-        next = response.next;
-        previous = response.previous;
-        results = response.results;
-        paginator = response.paginator
-      }
-      const product_section = document.getElementById("product-section")
-      const pagination_section = document.getElementById("inventory_pagination")
-      product_section.innerHTML = html
-      pagination_section.innerHTML = paginator
-    });
-  }
-  
-};
-
-function ProductPage(role) {
-  return products(role).then((response) => {
-    let html = "";
-    let count = "";
-    let next = "";
-    let previous = "";
-    let results = "";
-    let paginator = "";
-
-    if (response && response.html) {
-      html = response.html;
-      count = response.count;
-      next = response.next;
-      previous = response.previous;
-      results = response.results;
-      paginator = response.paginator
+  try {
+    if (page && page != "") {
+      response = await products(role, page+sorting);
+    }else {
+      response = await products(role, "/api/shelf/products"+sorting);
+    }
+    
+    if (!response.ok) {
+      return
     }
 
-    return `<section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-12">
+    let html = "";
+    let results = "";
+    let paginator = "";
+    
+    if (response && response.html) {
+      html = response.html;
+      paginator = response.paginator;
+    }
+    const product_section = document.getElementById("product-section");
+    const pagination_section = document.getElementById("inventory_pagination");
+    product_section.innerHTML = html;
+    pagination_section.innerHTML = paginator;
+
+  }catch {
+    return
+  }
+};
+
+async function ProductPage(role) {
+  const response = await products(role);
+
+  let html = "";
+  let paginator = "";
+  
+  if (response && response.html) {
+    html = response.html;
+    paginator = response.paginator;
+  }
+  return `<section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-12">
       <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <!-- Heading & Filters -->
         <div class="mb-4 items-end justify-between space-y-4 sm:flex sm:space-y-0 md:mb-8">
@@ -873,7 +845,6 @@ function ProductPage(role) {
       </form>
 
     </section>`;
-  });
 }
 
 window.ProductPage = ProductPage;
