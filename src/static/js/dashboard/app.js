@@ -204,33 +204,33 @@ const GetRole = async () => {
     }
 }
 
-const GetWarehouse = () => {
+const GetWarehouse = async () => {
     let warehouse_id = localStorage.getItem("warehouse_id");
     let warehouse_name = localStorage.getItem("warehouse_name")
     let warehouse_address = localStorage.getItem("warehouse_address")
     if (!warehouse_id) {
-        return fetch("/api/manage/warehouses/")
-        .then(response => { 
+        try {
+            const response = await fetch("/api/manage/warehouses/")
+
             if (!response.ok) {
                 return null;
             }
-            return response.json();
-        })
+            const data = await response.json();
 
-        .then(data => {
             if (!data || !data.results) {
                 return null;
             }
+            
             let warehouse = data.results[0]
             localStorage.setItem("warehouse_id", warehouse.id);
             localStorage.setItem("warehouse_name", warehouse.name);
             localStorage.setItem("warehouse_address", warehouse.address);
             return warehouse.id;
-        })
-        .catch(error => {
+
+        }catch(error) {
             console.error('Error:', error);
             return null;
-        });
+        };
     }else {
         return Promise.resolve(warehouse_id);
     }
