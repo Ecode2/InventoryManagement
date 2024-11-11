@@ -17,6 +17,8 @@ class CategoryViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     pagination_class = pagination.PageNumberPagination
     filterset_fields = ['name', 'created_at']
     ordering_fields = ['name', 'created_at']
+    search_fields = ["name"]
+    ordering = ['-created_at']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
@@ -69,6 +71,7 @@ class InventoryViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     filterset_class = InventoryFilter
     ordering_fields = ['min_stock', 'max_stock', 'products__cost_price', 'products__selling_price', 'created_at', 'updated_at']
     search_fields = ["product__name", "product__sku", "id", "product__bar_code", "product__description"]
+    ordering = ['-created_at']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:

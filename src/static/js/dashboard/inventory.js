@@ -66,10 +66,10 @@ const inventories = async (role, page) => {
         inventory_modals = ``;
 
         for (const inventory of results) {
-            const categories = inventory.product.category.map((category) => category.name);
-            const files = inventory.product.files.map((file) => file.file);
+            const categories = inventory.product_detail.category.map((category) => category.name);
+            const files = inventory.product_detail.files.map((file) => file.file);
 
-            image = files.length ? `<img src="${files[0]}" alt="${inventory.product.name}-Image" class="h-8 w-auto mr-3">` : '';
+            image = files.length ? `<img src="${files[0]}" alt="${inventory.product_detail.name}-Image" class="h-8 w-auto mr-3">` : '';
             let category = categories.length ? `<span class="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">${categories[0]}</span>` : '';
 
             let admin_access_info = ``;
@@ -92,7 +92,7 @@ const inventories = async (role, page) => {
 
                 edit_btn += `
                     <li>
-                        <button type="button" data-drawer-target="drawer-update-product-${inventory.id}" data-drawer-show="drawer-update-product-${inventory.id}" onclick="toggleModal('drawer-update-product-${inventory.id}')"
+                        <button type="button" data-drawer-target="drawer-update-product-${inventory.id}" data-drawer-show="drawer-update-product-${inventory.id}"
                         aria-controls="drawer-update-product-${inventory.id}" class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
                             <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
@@ -290,7 +290,7 @@ const inventories = async (role, page) => {
 
                 delete_btn += `
                     <li>
-                        <button type="button" data-modal-target="delete-modal-${inventory.id}" data-modal-toggle="delete-modal-${inventory.id}" onclick="toggleModal('delete-modal-${inventory.id}')"
+                        <button type="button" data-modal-target="delete-modal-${inventory.id}" data-modal-toggle="delete-modal-${inventory.id}"
                         class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 text-red-500 dark:hover:text-red-400">
                             <svg class="w-4 h-4 mr-2" viewbox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M6.09922 0.300781C5.93212 0.30087 5.76835 0.347476 5.62625 0.435378C5.48414 0.523281 5.36931 0.649009 5.29462 0.798481L4.64302 2.10078H1.59922C1.36052 2.10078 1.13161 2.1956 0.962823 2.36439C0.79404 2.53317 0.699219 2.76209 0.699219 3.00078C0.699219 3.23948 0.79404 3.46839 0.962823 3.63718C1.13161 3.80596 1.36052 3.90078 1.59922 3.90078V12.9008C1.59922 13.3782 1.78886 13.836 2.12643 14.1736C2.46399 14.5111 2.92183 14.7008 3.39922 14.7008H10.5992C11.0766 14.7008 11.5344 14.5111 11.872 14.1736C12.2096 13.836 12.3992 13.3782 12.3992 12.9008V3.90078C12.6379 3.90078 12.8668 3.80596 13.0356 3.63718C13.2044 3.46839 13.2992 3.23948 13.2992 3.00078C13.2992 2.76209 13.2044 2.53317 13.0356 2.36439C12.8668 2.1956 12.6379 2.10078 12.3992 2.10078H9.35542L8.70382 0.798481C8.62913 0.649009 8.5143 0.523281 8.37219 0.435378C8.23009 0.347476 8.06631 0.30087 7.89922 0.300781H6.09922ZM4.29922 5.70078C4.29922 5.46209 4.39404 5.23317 4.56282 5.06439C4.73161 4.8956 4.96052 4.80078 5.19922 4.80078C5.43791 4.80078 5.66683 4.8956 5.83561 5.06439C6.0044 5.23317 6.09922 5.46209 6.09922 5.70078V11.1008C6.09922 11.3395 6.0044 11.5684 5.83561 11.7372C5.66683 11.906 5.43791 12.0008 5.19922 12.0008C4.96052 12.0008 4.73161 11.906 4.56282 11.7372C4.39404 11.5684 4.29922 11.3395 4.29922 11.1008V5.70078ZM8.79922 4.80078C8.56052 4.80078 8.33161 4.8956 8.16282 5.06439C7.99404 5.23317 7.89922 5.46209 7.89922 5.70078V11.1008C7.89922 11.3395 7.99404 11.5684 8.16282 11.7372C8.33161 11.906 8.56052 12.0008 8.79922 12.0008C9.03791 12.0008 9.26683 11.906 9.43561 11.7372C9.6044 11.5684 9.69922 11.3395 9.69922 11.1008V5.70078C9.69922 5.46209 9.6044 5.23317 9.43561 5.06439C9.26683 4.8956 9.03791 4.80078 8.79922 4.80078Z" />
@@ -343,7 +343,7 @@ const inventories = async (role, page) => {
                     <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         <div class="flex items-center mr-3">
                             ${image}
-                            <div class="text-base font-semibold">${inventory.product.name}</div>
+                            <div class="text-base font-semibold">${inventory.product_detail.name}</div>
                         </div>
                     </th>
                     <td class="px-4 py-3">
@@ -359,17 +359,17 @@ const inventories = async (role, page) => {
                     <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">${inventory.sales_month}</td>
                     ${admin_access_info}
                     <td class="px-4 py-3 flex items-center justify-center">                    
-                        <button id="${inventory.id}-${inventory.product.id}-dropdown-button" data-dropdown-toggle="${inventory.id}-${inventory.product.id}-dropdown"
+                        <button id="${inventory.id}-${inventory.product_detail.id}-dropdown-button" data-dropdown-toggle="${inventory.id}-${inventory.product_detail.id}-dropdown"
                         class="inline-flex items-center text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 p-1.5 dark:hover-bg-gray-800 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                             </svg>
                         </button>
-                        <div id="${inventory.id}-${inventory.product.id}-dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-                            <ul class="py-1 text-sm" aria-labelledby="${inventory.id}-${inventory.product.id}-dropdown-button">
+                        <div id="${inventory.id}-${inventory.product_detail.id}-dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+                            <ul class="py-1 text-sm" aria-labelledby="${inventory.id}-${inventory.product_detail.id}-dropdown-button">
                                 ${edit_btn}
                                 <li>
-                                    <button type="button" data-drawer-target="drawer-read-product-${inventory.id}-advanced" data-drawer-show="drawer-read-product-${inventory.id}-advanced" onclick="toggleModal('drawer-read-product-${inventory.id}-advanced')"
+                                    <button type="button" data-drawer-target="drawer-read-product-${inventory.id}-advanced" data-drawer-show="drawer-read-product-${inventory.id}-advanced"
                                     aria-controls="drawer-read-product-${inventory.id}-advanced" class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                         <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
@@ -642,33 +642,248 @@ const load_inventory = async (role, page) => {
 /* const handleSubmit = async (event, func, ...args) => {
 event.preventDefault(); // Prevent the default form submission behavior
 func(...args); // Call the specified function with the provided arguments
+} */
+
+const createProduct = async (product_data) => {
+
+    let request_data = {
+        "name": product_data.name,
+        "description": product_data.description ? product_data.description!=""? product_data.description : null : null,
+        "cost_price": product_data.cost_price,
+        "selling_price": product_data.selling_price,
+        "category_ids": product_data.category,
+        "weight": product_data.weight ? product_data.weight!=""? product_data.weight : null : null,
+        "height": product_data.width ? product_data.width!=""? product_data.width : null : null,
+        "width": product_data.length ? product_data.length!=""? product_data.length : null : null
+    }
+
+    if (product_data.recorder_quantity && parseInt(product_data.recorder_quantity) >= 1) {
+        request_data.recorder_quantity = product_data.recorder_quantity;
+        request_data.recorder_quantity_name = product_data.recorder_quantity_name;
+    }
+
+    try {
+        const response = await fetch("/api/shelf/products/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(request_data),
+        });
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const data = await response.json();
+        if (!data) {
+            return null;
+        }
+
+        if (product_data.files) {
+            for (file of product_data.files) {
+                try {
+                    let file_form = new FormData();
+                    file_form.append("product", data.id)
+                    file_form.append("file", file)
+
+                    await fetch("/api/shelf/product-files/", {
+                        method: "POST",
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        body: file_form,
+                    });
+
+                }catch {
+                    continue
+                }
+            }
+        }
+
+        return data;
+
+    } catch (error) {
+        return null;
+    }
 }
 
-const createInventory = async (event) => {
-    event.preventDefault();
-    const name = document.getElementById("name").value;
-    const category = document.getElementById("category").value;
-    const cost_price = document.getElementById("cost_price").value;
-    const selling_price = document.getElementById("selling_price").value;
-    const weight = document.getElementById("weight").value;
-    const length = document.getElementById("length").value;
-    const height = document.getElementById("height").value;
-    const width = document.getElementById("width").value;
-    const description = document.getElementById("description").value;
-    const stock = document.getElementById("stock").value;
-    const min_stock = document.getElementById("min_stock").value;
-    const max_stock = document.getElementById("max_stock").value;
-    const alert_level = document.getElementById("alert_level").value;
-    const warehouse = document.getElementById("warehouse").value;
-    const file_input = document.getElementById('dropzone-file');
-    
-    const files = input.files;
+const createInventory = async () => {
+console.log("starting")
 
-    if (name == "" || category == "" || cost_price == "" || selling_price) {
-        DisplayMessage("All fields are required", "error");
+    const name = document.getElementById("create_name").value;
+    const category_list = document.getElementById("category_checkbox_list");
+    const cost_price = document.getElementById("create_cost_price").value;
+    const selling_price = document.getElementById("create_selling_price").value;
+    const weight = document.getElementById("create_weight").value;
+    const height = document.getElementById("create_height").value;
+    const width = document.getElementById("create_width").value;
+    const description = document.getElementById("create_description").value;
+    const recorder_quantity = document.getElementById("create_recorder_quantity").value
+    const recorder_quantity_name = document.getElementById("create_recorder_quantity_name").value
+    const stock = document.getElementById("create_stock").value;
+    const min_stock = document.getElementById("create_min_stock").value;
+    const max_stock = document.getElementById("create_max_stock").value;
+    const alert_level = document.getElementById("create_alert_level").value;
+    const warehouse = document.getElementById("create_warehouse").value;
+    const file_input = document.getElementById('create_dropzone-file').files;
+
+    const top_msg = document.getElementById("top_error");
+    const bottom_msg = document.getElementById("bottom_error");
+
+    top_msg.innerHTML = "";
+    bottom_msg.innerHTML = "";
+    top_msg.classList.remove("hidden");
+    bottom_msg.classList.remove("hidden");
+    
+
+    if (!name || !selling_price) {
+        let message = DisplayMessage("Name and Price required", "error");
+        top_msg.innerHTML = message.outerHTML;
+        bottom_msg.innerHTML = message.outerHTML;
+
+        setTimeout(() => {
+            top_msg.classList.add("hidden");
+            bottom_msg.classList.add("hidden");
+        }, 4000);
         return;
     }
-} */
+    if (!stock) {
+        let message = DisplayMessage("Set stock Level", "error");
+        
+        top_msg.innerHTML = message.outerHTML;
+        bottom_msg.innerHTML = message.outerHTML;
+
+        setTimeout(() => {
+            top_msg.classList.add("hidden");
+            bottom_msg.classList.add("hidden");
+            }, 4000);
+        return;
+    }
+
+    let categories = category_list.querySelectorAll("input[type='checkbox']:checked");
+    if (categories.length == 0) {
+        let message = DisplayMessage("Select at least one category", "error");
+        
+        top_msg.innerHTML = message.outerHTML;
+        bottom_msg.innerHTML = message.outerHTML;
+
+        setTimeout(() => {
+            top_msg.classList.add("hidden");
+            bottom_msg.classList.add("hidden");
+            }, 4000);
+        return;
+    }
+
+    let category_ids = []
+    for (category of categories) {
+        category_ids.push(category.value);
+    }
+
+    product_data = {
+        name: name,
+        category: category_ids, 
+        cost_price: cost_price, 
+        selling_price: selling_price, 
+        weight: weight,
+        height: height,
+        width: width,
+        description: description, 
+        files: file_input
+    }
+
+    if (recorder_quantity && recorder_quantity != 0) {
+        product_data.recorder_quantity = recorder_quantity;
+        product_data.recorder_quantity_name = recorder_quantity_name;
+    }
+
+    const product_response = await createProduct(product_data);
+    if (!product_response) {
+        let message = DisplayMessage("Couldn't create product", "error");
+        
+        top_msg.innerHTML = message.outerHTML;
+        bottom_msg.innerHTML = message.outerHTML;
+
+        setTimeout(() => {
+            top_msg.classList.add("hidden");
+            bottom_msg.classList.add("hidden");
+            }, 4000);
+        return;
+    }
+
+    try {
+        let inventory_data = {
+            "product": product_response.id,
+            "stock": stock,
+            "warehouse": warehouse
+        }
+
+        if (min_stock && min_stock != "") {inventory_data.min_stock = min_stock;}
+        if (max_stock && max_stock != "") {inventory_data.max_stock = max_stock;}
+        if (alert_level && alert_level != "") {inventory_data.alert_level = alert_level;}
+        
+        const response = await fetch("/api/shelf/inventories/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(inventory_data),
+        });
+
+        if (!response.ok) {
+            let message = DisplayMessage("Couldn't create inventory", "error");
+            
+            top_msg.innerHTML = message.outerHTML;
+            bottom_msg.innerHTML = message.outerHTML;
+
+            setTimeout(() => {
+                top_msg.classList.add("hidden");
+                bottom_msg.classList.add("hidden");
+            }, 4000);
+            return;
+        }
+
+        const data = await response.json();
+        if (!data) {
+            let message = DisplayMessage("Couldn't create inventory", "error");
+            
+            top_msg.innerHTML = message.outerHTML;
+            bottom_msg.innerHTML = message.outerHTML;
+
+            setTimeout(() => {
+                top_msg.classList.add("hidden");
+                bottom_msg.classList.add("hidden");
+            }, 4000);
+            return;
+        }
+
+        let modal_btn = document.getElementById("close_create_modal");
+        modal_btn.click();
+
+        DisplayMessage("Inventory created successfully", "success");
+
+        top_msg.innerHTML = "";
+        bottom_msg.innerHTML = "";
+        top_msg.classList.add("hidden");
+        bottom_msg.classList.add("hidden");
+
+        load_inventory("admin");
+    }
+    catch(error) {
+        let message = DisplayMessage("Couldn't create inventory", "error");
+        
+        top_msg.innerHTML = message.outerHTML;
+        bottom_msg.innerHTML = message.outerHTML;
+
+        setTimeout(() => {
+            top_msg.classList.add("hidden");
+            bottom_msg.classList.add("hidden");
+            }, 4000);
+    }
+
+}
 
 /* const editInventory = async (event, id) => {}
 const deleteInventory = async (event, id) => {} */
@@ -689,7 +904,7 @@ const get_warehouse = async () => {
         
         let warehouses = data.results
         let warehouse_select = `
-                <label for="warehouse" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Warehouse</label>
+                <label for="create_warehouse" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Warehouse</label>
                  `;
 
         if (warehouses.length == 0) {
@@ -698,7 +913,7 @@ const get_warehouse = async () => {
         }
 
         warehouse_select = `
-                <select id="warehouse" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                <select id="create_warehouse" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                     <option value="${warehouses[0].id}" selected="">
                         <span>${warehouses[0].name}</span>
                         <span>${warehouses[0].address}</span>
@@ -724,7 +939,279 @@ const get_warehouse = async () => {
     }
 }
 
+const get_category = async () => {
+    let category_list = ""
+    try {
+        const response = await fetch("/api/shelf/categories/")
+        if (!response.ok) {
+            return `
+                <li>
+                    <div class="flex items-center">
+                    No category found 
+                    </div>
+                </li>`;
+        }
 
+        const data = await response.json();
+        if (!data || !data.results) {
+            return `
+                <li>
+                    <div class="flex items-center">
+                    No category found
+                    </div>
+                </li>`;
+        }
+
+        let categories = data.results
+
+        if (categories.length == 0) {
+            return `
+                <li>
+                    <div class="flex items-center">
+                    No category found
+                    </div>
+                </li>`;
+        }
+        category_list += `
+                    <li>
+                        <div class="flex items-center">
+                        <input id="checkbox-item-${categories[0].id}" type="checkbox" value="${categories[0].id}" checked class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                        <label for="checkbox-item-${categories[0].id}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${categories[0].name}</label>
+                        </div>
+                    </li>`
+
+        for (const category of categories.slice(1)) {
+            category_list += `
+                    <li>
+                        <div class="flex items-center">
+                        <input id="checkbox-item-${category.id}" type="checkbox" value="${category.id}" class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                        <label for="checkbox-item-${category.id}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${category.name}</label>
+                        </div>
+                    </li>`;
+        }
+        return category_list
+
+    }catch(error) {
+        return `
+        <li>
+            <div class="flex items-center">
+            An error occured
+            </div>
+        </li>`;
+        }
+}
+
+const create_category = async () => {
+    const top_msg = document.getElementById("top_error");
+    const bottom_msg = document.getElementById("bottom_error");
+
+    top_msg.innerHTML = "";
+    bottom_msg.innerHTML = "";
+    top_msg.classList.remove("hidden");
+    bottom_msg.classList.remove("hidden");
+
+    let category_name = document.getElementById("new_category").value;
+    let category_list = document.getElementById("category_checkbox_list");
+
+    if (!category_name) {
+        let message = DisplayMessage("Category name required", "error");
+        top_msg.innerHTML = message.outerHTML;
+        bottom_msg.innerHTML = message.outerHTML;
+
+        setTimeout(() => {
+            top_msg.classList.add("hidden");
+            bottom_msg.classList.add("hidden");
+        }, 4000);
+        return null;
+    }
+    try {
+        const response = await fetch("/api/shelf/categories/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({name: category_name}),
+        });
+
+        if (!response.ok) {
+            let message = DisplayMessage("Something Went Wrong", "error");
+            top_msg.innerHTML = message.outerHTML;
+            bottom_msg.innerHTML = message.outerHTML;
+
+            setTimeout(() => {
+                top_msg.classList.add("hidden");
+                bottom_msg.classList.add("hidden");
+            }, 4000);
+            return null;
+        }
+
+        const data = await response.json();
+        if (!data) {
+            let message = DisplayMessage("Something Went Wrong", "error");
+            top_msg.innerHTML = message.outerHTML;
+            bottom_msg.innerHTML = message.outerHTML;
+
+            setTimeout(() => {
+                top_msg.classList.add("hidden");
+                bottom_msg.classList.add("hidden");
+            }, 4000);
+            return null;
+        }
+
+        let category_item = `
+                    <div class="flex flex-col justify-between space-y-2">
+                        <div class="relative max-w-fit">
+                            <input type="text" id="input-category-search" oninput="debounceSearchCategory()"
+                            class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                            placeholder="Search Category">
+                        </div>
+                        <div class="flex md:justify-between md:items-center md:flex-row flex-col justify-center items-center space-x-0 space-y-1 md:space-y-0 md:space-x-4">
+                            <input type="text" id="new_category"
+                                class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                                placeholder="New Category">
+                            <button type="button" id="createCategoryButton" onclick="create_category()"
+                            class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                                Create
+                            </button>
+                        </div>
+                    </div>`;
+        category_list.innerHTML = category_item;
+
+        let categories = await get_category();
+        category_list.innerHTML += categories;
+
+        return data;
+
+
+    } catch (error) {
+        let message = DisplayMessage("Something Went Wrong", "error");
+        top_msg.innerHTML = message.outerHTML;
+        bottom_msg.innerHTML = message.outerHTML;
+
+        setTimeout(() => {
+            top_msg.classList.add("hidden");
+            bottom_msg.classList.add("hidden");
+        }, 4000);
+        return null;
+    }
+}
+
+let debounceCategoryTimeout;
+const debounceSearchCategory = (search_modal) => {
+  clearTimeout(debounceCategoryTimeout);
+  debounceCategoryTimeout = setTimeout(() => search_category(search_modal), 1000);
+}
+const search_category = async (search_modal) => {
+    const category_list = document.getElementById(`category_checkbox_list`);
+    const category_name = document.getElementById(`input-category-search`).value;
+
+    const top_msg = document.getElementById("top_error");
+    const bottom_msg = document.getElementById("bottom_error");
+
+    top_msg.innerHTML = "";
+    bottom_msg.innerHTML = "";
+    top_msg.classList.remove("hidden");
+    bottom_msg.classList.remove("hidden");
+
+    if (category_name.length >= 3) {
+      try {
+        const response = await fetch(`/api/shelf/categories/?search=${category_name}`)
+        if (!response.ok) {
+            let message = DisplayMessage("An error occurred", "error");
+            top_msg.innerHTML = message.outerHTML;
+            bottom_msg.innerHTML = message.outerHTML;
+
+            setTimeout(() => {
+                top_msg.classList.add("hidden");
+                bottom_msg.classList.add("hidden");
+            }, 4000);
+            return;
+        }
+        const data = await response.json()
+        const results = data.results;
+
+        let search_results = `
+            <div class="flex flex-col justify-between space-y-2">
+                <div class="relative max-w-fit">
+                    <input type="text" id="input-category-search" oninput="debounceSearchCategory()"
+                    class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                    placeholder="Search Category">
+                </div>
+                <div class="flex md:justify-between md:items-center md:flex-row flex-col justify-center items-center space-x-0 space-y-1 md:space-y-0 md:space-x-4">
+                    <input type="text" id="new_category"
+                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                        placeholder="New Category">
+                    <button type="button" id="createCategoryButton" onclick="create_category()"
+                    class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                        Create
+                    </button>
+                </div>
+            </div>
+            <li>
+                <div class="flex items-center">
+                <input id="checkbox-item-${results[0].id}" type="checkbox" value="${results[0].id}" checked class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                <label for="checkbox-item-${results[0].id}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${results[0].name}</label>
+                </div>
+            </li>`;
+
+        for (category of results.slice(1)) {
+          search_results += `
+            <li>
+                <div class="flex items-center">
+                <input id="checkbox-item-${category.id}" type="checkbox" value="${category.id}" class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                <label for="checkbox-item-${category.id}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${category.name}</label>
+                </div>
+            </li>`;
+        }
+
+        category_list.innerHTML = search_results;
+
+      }catch(error) {
+        console.log("sometsvrvhing")
+        let categories = await get_category();
+        category_list.innerHTML = `
+        <div class="flex flex-col justify-between space-y-2">
+                <div class="relative max-w-fit">
+                    <input type="text" id="input-category-search" oninput="debounceSearchCategory()"
+                    class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                    placeholder="Search Category">
+                </div>
+                <div class="flex md:justify-between md:items-center md:flex-row flex-col justify-center items-center space-x-0 space-y-1 md:space-y-0 md:space-x-4">
+                    <input type="text" id="new_category"
+                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                        placeholder="New Category">
+                    <button type="button" id="createCategoryButton" onclick="create_category()"
+                    class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                        Create
+                    </button>
+                </div>
+            </div>`;
+        category_list.innerHTML += categories;
+      }
+    } else {
+        console.log("something")
+        let categories = await get_category();
+        category_list.innerHTML = `
+        <div class="flex flex-col justify-between space-y-2">
+                <div class="relative max-w-fit">
+                    <input type="text" id="input-category-search" oninput="debounceSearchCategory()"
+                    class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                    placeholder="Search Category">
+                </div>
+                <div class="flex md:justify-between md:items-center md:flex-row flex-col justify-center items-center space-x-0 space-y-1 md:space-y-0 md:space-x-4">
+                    <input type="text" id="new_category"
+                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                        placeholder="New Category">
+                    <button type="button" id="createCategoryButton" onclick="create_category()"
+                    class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                        Create
+                    </button>
+                </div>
+            </div>`;
+        category_list.innerHTML += categories;
+    }
+}
 
 async function InventoryPage(role) {
     
@@ -740,6 +1227,8 @@ async function InventoryPage(role) {
         paginator = response.paginator;
         count = response.count;
     }
+
+    let categories = await get_category()
 
     let add_product_btn = role == "admin" ? `
         <button type="button" id="createProductButton" data-modal-toggle="createProductModal" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
@@ -758,7 +1247,7 @@ async function InventoryPage(role) {
                     <!-- Modal header -->
                     <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Add Product</h3>
-                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="createProductModal">
+                        <button id="close_create_modal" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="createProductModal">
                             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
@@ -766,51 +1255,89 @@ async function InventoryPage(role) {
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form action="#" onsubmit="handleSubmit(event, createInventory)">
+                    <div>
                         <div class="grid gap-4 mb-4 sm:grid-cols-2">
-                            <div>
-                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
-                                <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                            <div id="top_error" class="sm:col-span-2">
+                                
                             </div>
                             <div>
-                                <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
-                                <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                    <option selected="">Select category</option>
-                                    <option value="TV">TV/Monitors</option>
-                                    <option value="PC">PC</option>
-                                    <option value="GA">Gaming/Console</option>
-                                    <option value="PH">Phones</option>
-                                </select>
+                                <label for="create_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
+                                <input type="text" name="create_name" id="create_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
                             </div>
                             <div>
-                                <label for="cost_price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cost Price</label>
-                                <input type="number" name="cost_price" id="cost_price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="#2000" required="">
+                                <label for="category_checkbox_button" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
+                                <button id="category_checkbox_button" data-dropdown-toggle="category_checkbox" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 flex justify-between w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" type="button">
+                                    Select category
+                                    <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                    </svg>
+                                </button>
+
+                                <!-- Dropdown menu -->
+                                <div id="category_checkbox" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
+                                    
+                                    <ul id="category_checkbox_list" class="p-3 space-y-3 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="category_checkbox_button">
+                                        <div class="flex flex-col justify-between space-y-2">
+                                            <div class="relative max-w-fit">
+                                                <input type="text" id="input-category-search" oninput="debounceSearchCategory()"
+                                                class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                                                placeholder="Search Category">
+                                            </div>
+                                            <div class="flex md:justify-between md:items-center md:flex-row flex-col justify-center items-center space-x-0 space-y-1 md:space-y-0 md:space-x-4">
+                                                <input type="text" id="new_category"
+                                                    class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                                                    placeholder="New Category">
+                                                <button type="button" id="createCategoryButton" onclick="create_category()"
+                                                class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                                                    Create
+                                                </button>
+                                            </div>
+                                        </div>
+                                        ${categories}
+                                    </ul>
+                                </div>
                             </div>
                             <div>
-                                <label for="selling_price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Selling Price</label>
-                                <input type="number" name="selling_price" id="selling_price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="#3000" required="">
+                                <label for="create_cost_price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cost Price</label>
+                                <input type="number" name="create_cost_price" id="create_cost_price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="#2000" required="">
+                            </div>
+                            <div>
+                                <label for="create_selling_price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Selling Price</label>
+                                <input type="number" name="create_selling_price" id="create_selling_price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="#3000" required="">
                             </div>
                             <div class="grid gap-4 sm:col-span-2 md:gap-6 sm:grid-cols-4">
                                 <div>
-                                    <label for="weight" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product weight (kg)</label>
-                                    <input type="number" name="weight" id="weight" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="12">
+                                    <label for="create_weight" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product weight (kg)</label>
+                                    <input type="number" name="create_weight" id="create_weight" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="12">
                                 </div>
                                 <div>
-                                    <label for="length" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lenght (cm)</label>
-                                    <input type="number" name="length" id="length" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="105">
+                                    <label for="create_height" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Height (cm)</label>
+                                    <input type="number" name="create_height" id="create_height" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="15">
                                 </div>
                                 <div>
-                                    <label for="height" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Breadth (cm)</label>
-                                    <input type="number" name="height" id="height" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="15">
-                                </div>
-                                <div>
-                                    <label for="width" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Width (cm)</label>
-                                    <input type="number" name="width" id="width" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="23">
+                                    <label for="create_width" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Width (cm)</label>
+                                    <input type="number" name="create_width" id="create_width" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="23">
                                 </div>
                             </div>
+
+                            <div>
+                                <label for="create_recorder_quantity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity per Price</label>
+                                <input type="number" name="create_recorder_quantity" id="create_recorder_quantity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="23">
+                            </div>
+                            <div>
+                                <label for="create_recorder_quantity_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Per Quantity Name</label>
+                                <select id="create_recorder_quantity_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option value="Piece" selected="">Piece</option>
+                                    <option value="Pack">Pack</option>
+                                    <option value="Dozen">Dozen</option>
+                                    <option value="Trowser">Trowser</option>
+                                    <option value="Yard">Yard</option>
+                                </select>
+                            </div>
+
                             <div class="sm:col-span-2">
-                                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                                <textarea id="description" rows="4" 
+                                <label for="create_description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                                <textarea id="create_description" rows="4" 
                                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
                                     placeholder="Write product description here">
                                 </textarea>
@@ -819,20 +1346,20 @@ async function InventoryPage(role) {
                         <div class="mb-4 space-y-4 sm:flex sm:space-y-0">
                             <div class="grid gap-4 sm:col-span-2 md:gap-6 sm:grid-cols-4">
                                 <div>
-                                    <label for="stock" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Stock</label>
-                                    <input type="number" name="stock" id="stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="12"  required="">
+                                    <label for="create_stock" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Stock</label>
+                                    <input type="number" name="create_stock" id="create_stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="12"  required="">
                                 </div>
                                 <div>
-                                    <label for="min_stock" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Min level</label>
-                                    <input type="number" name="min_stock" id="min_stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="105">
+                                    <label for="create_min_stock" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Min level</label>
+                                    <input type="number" name="create_min_stock" id="create_min_stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="105">
                                 </div>
                                 <div>
-                                    <label for="max_stock" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Max level</label>
-                                    <input type="number" name="max_stock" id="max_stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="15">
+                                    <label for="create_max_stock" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Max level</label>
+                                    <input type="number" name="create_max_stock" id="create_max_stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="15">
                                 </div>
                                 <div>
-                                    <label for="alert_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alert Level</label>
-                                    <input type="number" name="alert_level" id="alert_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="23">
+                                    <label for="create_alert_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alert Level</label>
+                                    <input type="number" name="create_alert_level" id="create_alert_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="23">
                                 </div>
                             </div>
                         </div>
@@ -842,7 +1369,7 @@ async function InventoryPage(role) {
                         <div class="mb-4">
                             <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Images</span>
                             <div class="flex justify-center items-center w-full">
-                                <label for="dropzone-file" class="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                <label for="create_dropzone-file" class="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                     <div class="flex flex-col justify-center items-center pt-5 pb-6">
                                         <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -852,13 +1379,16 @@ async function InventoryPage(role) {
                                         </p>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                                     </div>
-                                    <input id="dropzone-file" type="file" class="hidden" multiple>
+                                    <input id="create_dropzone-file" type="file" class="hidden" multiple>
                                 </label>
                             </div>
                         </div>
-                        
+                        <div id="bottom_error" class="sm:col-span-2">
+                            
+                        </div>
                         <div class="items-center justify-evenly space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                            <button type="submit" class="w-full sm:w-auto justify-center text-white inline-flex bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                            <button type="submit" onclick="createInventory()"
+                                class="w-full sm:w-auto justify-center text-white inline-flex bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                                 Add product
                             </button>
                             <button data-modal-toggle="createProductModal" type="button" class="w-full justify-center sm:w-auto text-gray-500 inline-flex items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
@@ -868,7 +1398,7 @@ async function InventoryPage(role) {
                                 Discard
                             </button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>` : ``;

@@ -8,6 +8,10 @@
     height: 50vh;
 }
 
+.z-9999 {
+    z-index: 9999;
+}
+
 
 .green-700 {
   --tw-bg-opacity: 1;
