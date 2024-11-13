@@ -20,5 +20,6 @@ detail_router.register(r'receipt', views.DeliveryReceiptViewSet, basename="deliv
 urlpatterns = [
     path('order/', include(order_router.urls)),
     path('delivery/', include(detail_router.urls)),
+    path('test-receipt/', views.receipt_view, name='receipt'),
     path('', include(sale_router.urls)),
 ]

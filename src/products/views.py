@@ -37,7 +37,9 @@ class ProductViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
         'cost_price', 'selling_price', 'weight', 'height', 'width', 'depth', 'refriderated', 
         'is_active', 'created_at', 'updated_at'
     ]
+    search_fields = ["name", "sku", "id", "bar_code", "description"]
     ordering_fields = ['name', 'cost_price', 'selling_price', 'created_at', 'updated_at']
+    ordering = ['-created_at']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:

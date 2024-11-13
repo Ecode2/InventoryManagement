@@ -22,6 +22,7 @@ const sales = async (role, page) => {
   }
   let warehouse_address = localStorage.getItem("warehouse_address")
   try {
+    
     const data = await fetch(page);
     if (!data.ok) {
       DisplayMessage("Couldn't get inventory. Try again", "error");
@@ -138,7 +139,7 @@ const sales = async (role, page) => {
       html += `
           <div class="flex flex-wrap items-center gap-y-4 py-6">
             <dl class="w-1/2 sm:w-1/4 md:w-auto md:flex-1">
-              <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Order ID:</dt>
+              <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Sale ID:</dt>
               <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
                 <a href="#" class="hover:underline">${sale.sale_uuid.substring(0, 8)}</a>
               </dd>
@@ -162,7 +163,7 @@ const sales = async (role, page) => {
             <div class="w-full grid sm:grid-cols-2 md:flex md:w-64 md:items-center md:justify-between gap-4">
               <dl class="w-1/2 sm:w-1/4 md:w-auto md:flex-1">
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Name:</dt>
-                <p class="text-base text-gray-900 dark:text-white">${sale.customer_name.capitalize()}</p>
+                <p class="text-base whitespace-nowrap text-gray-900 dark:text-white">${sale.customer_name.capitalize()}</p>
               </dl>
               <button data-modal-target="${sale.sale_uuid.substring(0, 8)}-detail-modal" data-modal-toggle="${sale.sale_uuid.substring(0, 8)}-detail-modal"
                class="w-full inline-flex justify-center rounded-md  border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 md:w-auto">
@@ -231,7 +232,7 @@ const sales = async (role, page) => {
                       </dl>
                       <dl class="sm:flex items-center justify-between gap-4">
                           <dt class="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">Name</dt>
-                          <dd class="font-medium text-gray-900 dark:text-white sm:text-end">${sale.customer_name}</dd>
+                          <dd class="font-medium whitespace-nowrap text-gray-900 dark:text-white sm:text-end">${sale.customer_name}</dd>
                       </dl>
                       <dl class="sm:flex items-center justify-between gap-4">
                           <dt class="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">Address</dt>
@@ -333,7 +334,7 @@ const sales = async (role, page) => {
                                         <div class="relative">
                                           <span class="sr-only">${sale.id}</span>
                                           <input type="text" id="input-${sale.id}-search" oninput="debounceSearchProduct(${sale.id}, ${sale.id})"
-                                          class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Search Product">
+                                          class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Search Product">
                                         </div>
                                       </div>
                                       <ul id="${sale.id}_list" style="z-index:9999;" class=" max-h-48 h-auto px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="${sale.id}_search_button">
@@ -362,21 +363,87 @@ const sales = async (role, page) => {
                                 </dd>
                               </dl>
                           </div>
-                          <div class="gap-4 sm:flex sm:items-center">
+                          <div class="gap-4 sm:flex justify-evenly sm:items-center">
                               <button type="button" data-modal-toggle="${sale.sale_uuid.substring(0, 8)}-detail-modal"
-                                class="w-full rounded-lg  border border-gray-200 bg-white px-5  py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
+                                class="rounded-lg  border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
                                 Close
                               </button>
                               <button type="button" onclick="cancelCart(${sale.id})"
-                                class="w-full rounded-md border border-red-700 px-3 py-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900 md:w-auto">
+                                class="rounded-md border border-red-700 px-4 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900 md:w-auto">
                                 Cancel
                               </button>
                               <button type="submit" onclick="finalizeSale(${sale.id}, 'payment_${sale.id}_method')" data-modal-toggle="${sale.sale_uuid.substring(0, 8)}-detail-modal"
-                                class="mt-4 flex w-full items-center justify-center rounded-lg bg-primary-700  px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300  dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 sm:mt-0">
+                                class="mt-4 flex items-center justify-center rounded-lg border border-primary-300 dark:border-primary-600 px-4 py-2.5 text-sm font-medium text-primary-700 hover:text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:hover:bg-primary-600 dark:focus:ring-primary-800 sm:mt-0"">
                                 Sell 
                               </button>
                           </div>
                       </div>
+                  </div>
+              </div>
+          </div>
+      </div>`;
+      } else if (sale.status == "cancelled") {
+        let cancel_btn = "";
+        if (role == "admin") {
+          cancel_btn = `
+            <button type="button" onclick="deleteCart(${sale.id})"
+                class="rounded-lg border border-red-700 py-2.5 px-5 ms-3 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900">
+                Delete
+            </button>`;
+        }
+        sale_summary += `
+        <div id="${sale.sale_uuid.substring(0, 8)}-detail-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+          <div class="relative p-4 w-full max-w-2xl max-h-full">
+              <!-- Modal content -->
+              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                  <!-- Modal header -->
+                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                      <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl mb-2 ">Sale Detail <span class="hover:underline">${sale.sale_uuid.substring(0, 8)}<span> </h2>
+                      
+                      <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="${sale.sale_uuid.substring(0, 8)}-detail-modal">
+                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                          </svg>
+                          <span class="sr-only">Close modal</span>
+                      </button>
+                  </div>
+                  <!-- Modal body -->
+                  <div class="p-4 md:p-5 space-y-4">
+                      <dl class="sm:flex items-center justify-between gap-4">
+                          <dt class="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">Date</dt>
+                          <dd class="font-medium text-gray-900 dark:text-white sm:text-end">${new Date(sale.created_at).toLocaleDateString('en-GB')}</dd>
+                      </dl>
+                      <dl class="sm:flex items-center justify-between gap-4">
+                          <dt class="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">Payment Method</dt>
+                          <dd class="font-medium text-gray-900 dark:text-white sm:text-end">${sale.payment_method}</dd>
+                      </dl>
+                      <dl class="sm:flex items-center justify-between gap-4">
+                          <dt class="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">Name</dt>
+                          <dd class="font-medium whitespace-nowrap text-gray-900 dark:text-white sm:text-end">${sale.customer_name}</dd>
+                      </dl>
+                      <dl class="sm:flex items-center justify-between gap-4">
+                          <dt class="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">Address</dt>
+                          <dd class="font-medium text-gray-900 dark:text-white sm:text-end">${warehouse_address}</dd>
+                      </dl>
+                      <dl class="sm:flex items-center justify-between gap-4">
+                          <dt class="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">Items</dt>
+                          <dd id="${sale.id}-dropdown" data-dropdown-toggle="dropdown-${sale.id}" class="font-medium flex justify-evenly items-center text-gray-900 dark:text-white sm:text-end">
+                          ${sale.sales_details.length} Products
+                          <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                          </svg>
+                          </dd>
+                          ${detail_dropdown}
+                      </dl>
+                      <dl class="sm:flex items-center justify-between gap-4">
+                          <dt class="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">Total Price</dt>
+                          <dd class="font-medium text-gray-900 dark:text-white sm:text-end">#${price}</dd>
+                      </dl>
+                  </div>
+                  <!-- Modal footer -->
+                  <div class="flex items-center w-full justify-evenly p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                      <button data-modal-hide="${sale.sale_uuid.substring(0, 8)}-detail-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Close</button>
+                      ${cancel_btn}
                   </div>
               </div>
           </div>
@@ -508,6 +575,8 @@ const load_sales = async (role, page) => {
     pagination_section.innerHTML = "";
     pagination_section.innerHTML = paginator
 
+    initializeFlowbite();
+
   }catch {
     console.log("error")
     return
@@ -525,129 +594,49 @@ const createCart = async (warehouse_id) => {
   const customer_info = document.getElementById("customer_info_container")
   const cart_info = document.getElementById("cart_info")
 
-  console.log("starting", customer_info, cart_info, name_input)
-
   if (!name_input.value || !warehouse_id || !(parseInt(warehouse_id) > 0) ) {
     console.log("error")
     return;
   }
 
-  const new_cart = await fetch("/api/sale/cart/", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCookie('csrftoken')
-      },
-      body: JSON.stringify({
-        "warehouse": warehouse_id,
-        "customer_name": `${name_input.value}`
+  try {
+      const new_cart = await fetch("/api/sale/cart/", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: JSON.stringify({
+            "warehouse": warehouse_id,
+            "customer_name": `${name_input.value}`
+          })
       })
-  })
 
-  if (!new_cart.ok) {
-    console.log("another error")
-    return;
+      if (!new_cart.ok) {
+        console.log("another error")
+        return;
+      }
+
+      const data = await new_cart.json();
+
+      customer_info.innerHTML = `
+          <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Customer Information</h4>
+          <h5 class="text-base font-medium text-gray-900 dark:text-white">${data.customer_name}</h5>
+        `;
+
+      let search_input = document.getElementById("input-product-search")
+      let payment_cancel = document.getElementById("payment_cancel")
+      let payment_submit = document.getElementById("payment_submit")
+      
+      search_input.oninput = () => debounceSearchProduct("product", data.id);
+      payment_cancel.onclick = () => cancelCart(data.id);
+      payment_submit.onclick = () => finalizeSale(data.id, "payment_method");
+
+      console.log("completed")
+
+  }catch(error) {
+    console.log(error, "went wrong")
   }
-
-  const data = await new_cart.json();
-
-  customer_info.innerHTML = `
-      <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Customer Information</h4>
-      <h5 class="text-base font-medium text-gray-900 dark:text-white">${data.customer_name}</h5>
-    `;
-
-  cart_info.innerHTML = `
-      <div class="relative border-b overflow-x-auto border-gray-200 dark:border-gray-800">
-        <table class="w-full text-left font-medium text-gray-900 dark:text-white md:table-fixed">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="width-md px-6 py-3">
-                        Product
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Price
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        QTY
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Delete
-                    </th>
-                </tr>
-            </thead>
-            <tbody id="product-sale-items" class="divide-y divide-gray-200 dark:divide-gray-800">
-                
-            </tbody>
-        </table>
-      </div>
-      <div>
-        <dl class="flex items-center justify-between pr-1 py-2 px-2 gap-4 border-gray-200 dark:border-gray-700">
-            <dt class="text-lg font-thin text-gray-900 dark:text-white">Add Item</dt>
-            <dd class="text-lg font-thin text-gray-900 dark:text-white">
-
-              <button id="product_search_button" type="button" data-dropdown-toggle="product_search" data-dropdown-placement="bottom-end"
-                class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7h-1M8 7h-.688M13 5v4m-2-2h4"/>
-                </svg>
-              </button>
-
-              <!-- Dropdown menu -->
-              <div id="product_search" class="z-10 absolute hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
-                  <div class="p-3">
-                    <label for="input-product-search" class="sr-only">Search</label>
-                    <div class="relative">
-                      <span class="sr-only">${data.id}</span>
-                      <input type="text" id="input-product-search" oninput="debounceSearchProduct('product', ${data.id})"
-                      class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Search Product">
-                    </div>
-                  </div>
-                  <ul id="product_list" style="z-index:9999;" class=" max-h-48 h-auto px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="product_search_button">
-                    
-                  </ul>
-              </div>
-            </dd>
-          </dl>
-      </div>
-
-      <div class="space-y-4 py-8">
-          <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
-            <dt class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">Total</dt>
-            <dd id="product-sale-items-price" class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">#0 </dd>
-          </dl>
-
-          <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
-
-            <dt class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">Payment Method</dt>
-            <dd class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">
-              <select id="payment_method" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500">
-                <option selected value="Cash Payment">Cash Payment</option>
-                <option value="Bank Transfer">Bank Transfer</option>
-                <option value="POS Payment">POS Payment</option>
-              </select>
-            </dd>
-          </dl>
-      </div>
-
-
-      <div class="gap-4 sm:flex sm:items-center">
-          <button type="button" data-modal-toggle="createSaleModal"
-            class="w-full rounded-lg  border border-gray-200 bg-white px-5  py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
-            Close
-          </button>
-          
-          <button type="button" onclick="cancelCart(${data.id})"
-            class="w-full rounded-md border border-red-700 px-3 py-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900 md:w-auto">
-            Cancel
-          </button>
-
-          <button type="submit" onclick="finalizeSale(${data.id}, 'payment_method')"
-            class="mt-4 flex w-full items-center justify-center rounded-lg bg-primary-700  px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300  dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 sm:mt-0">
-            Sell
-          </button>
-      </div>`
-  
-  console.log("completed")
 };
 
 const cancelCart = async (cart_id) => {
@@ -787,38 +776,40 @@ const searchProduct = async (search_modal, cart_id) => {
             continue
           }
 
-          const files = item.product.files.map((file) => file.file);
+          const files = item.product_detail.files.map((file) => file.file);
           img_url = files.length ? files[0] : "";
-          image = `<img src="${img_url}" alt="${item.product.name}-Image" class="h-8 w-auto mr-3">`;
-
-          /* onclick="addProduct(${cart_id})" */
+          image = `<img src="${img_url}" alt="${item.product_detail.name}-Image" class="h-8 w-auto mr-3">`;
 
           search_results += `
             <li>
-              <div onclick="addProduct('${cart_id}', ${item.product.id}, '${search_modal}-sale-items', '${search_modal}-sale-items-price')"
+              <div onclick="addProduct('${cart_id}', ${item.product_detail.id}, '${search_modal}-sale-items', '${search_modal}-sale-items-price')"
               class="flex items-center ps-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                 <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
 
                   <dt class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     <div class="flex items-center mr-3">
                         ${image}
-                        <div class="text-base font-semibold">${item.product.name}</div>
+                        <div class="text-base font-semibold">${item.product_detail.name}</div>
                     </div>
                   </dt>
 
-                  <dd class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">#${item.product.selling_price}</dd>
+                  <dd class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">#${item.product_detail.selling_price}</dd>
                 </dl>
               </div>
             </li>
           `;
+
+          console.log(search_results)
         }
 
         product_list.innerHTML = search_results;
 
       }catch(error) {
+        console.log("error", error)
         return;
       }
     } else {
+      console.log("blank")
       product_list.innerHTML = ""; // Clear the list if input length is less than 3
     }
 }
@@ -1108,18 +1099,95 @@ async function SalesPage(role, warehouse_id) {
                         </div>
                         <button type="button" onclick="createCart('${warehouse_id}')"
                           class="text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 text-sm w-full sm:w-auto px-5 py-2.5 text-center ">
-                          Submit
+                          Start
                         </button>
                     </div>
                 </div>
 
                 <div id="cart_info" class="py-2">
-                  <div class="gap-4 sm:flex sm:items-center">
-                      <button type="button" data-modal-toggle="createSaleModal"
-                        class="w-full rounded-lg border border-gray-200 bg-white px-5  py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
-                        Close
-                      </button>
-                  </div>
+                    <div class="relative border-b overflow-x-auto shadow-md sm:rounded-lg border-gray-200 dark:border-gray-800">
+                      <table class="w-full text-left font-medium text-gray-900 dark:text-white md:table-fixed">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                              <tr>
+                                  <th scope="col" class="width-md px-6 py-3">
+                                      Product
+                                  </th>
+                                  <th scope="col" class="px-6 py-3">
+                                      Price
+                                  </th>
+                                  <th scope="col" class="px-6 py-3">
+                                      QTY
+                                  </th>
+                                  <th scope="col" class="px-6 py-3">
+                                      Delete
+                                  </th>
+                              </tr>
+                          </thead>
+                          <tbody id="product-sale-items" class="divide-y divide-gray-200 dark:divide-gray-800">
+                              
+                          </tbody>
+                      </table>
+                    </div>
+                    <div>
+                      <dl class="flex items-center justify-between pr-1 py-2 gap-4 border-gray-200 dark:border-gray-700">
+                          <dt class="text-lg font-thin text-gray-900 dark:text-white">Add Item</dt>
+                          <dd class="text-lg font-thin text-gray-900 dark:text-white">
+
+                            <button id="product_search_button" type="button" data-dropdown-toggle="product_search" data-dropdown-placement="bottom-end"
+                              class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                              <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7h-1M8 7h-.688M13 5v4m-2-2h4"/>
+                              </svg>
+                            </button>
+
+                            <!-- Dropdown menu -->
+                            <div id="product_search" class="z-10 absolute hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
+                                <div class="p-3">
+                                  <label for="input-product-search" class="sr-only">Search</label>
+                                  <div class="relative">
+                                    <input type="text" id="input-product-search"
+                                    class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Search Product">
+                                  </div>
+                                </div>
+                                <ul id="product_list" style="z-index:9999;" class=" max-h-48 h-auto px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="product_search_button">
+                                  
+                                </ul>
+                            </div>
+                          </dd>
+                        </dl>
+                    </div>
+                    <div class="space-y-4 py-8">
+                        <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
+                          <dt class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">Total</dt>
+                          <dd id="product-sale-items-price" class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">#0.00</dd>
+                        </dl>
+
+                        <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
+
+                          <dt class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">Payment Method</dt>
+                          <dd class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">
+                            <select id="payment_method" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500">
+                              <option selected value="Cash Payment">Cash Payment</option>
+                              <option value="Bank Transfer">Bank Transfer</option>
+                              <option value="POS Payment">POS Payment</option>
+                            </select>
+                          </dd>
+                        </dl>
+                    </div>
+                    <div class="gap-4 sm:flex justify-evenly sm:items-center">
+                        <button type="button" data-modal-toggle="createSaleModal"
+                          class="rounded-lg  border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
+                          Close
+                        </button>
+                        <button type="button" id="payment_cancel"
+                          class="w-full rounded-md border border-red-700 px-4 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900 md:w-auto">
+                          Cancel
+                        </button>
+                        <button type="button" id="payment_submit" data-modal-toggle="createSaleModal"
+                          class="mt-4 flex items-center justify-center rounded-lg border border-primary-300 dark:border-primary-600 px-4 py-2.5 text-sm font-medium text-primary-700 hover:text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:hover:bg-primary-600 dark:focus:ring-primary-800 sm:mt-0">
+                          Sell 
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

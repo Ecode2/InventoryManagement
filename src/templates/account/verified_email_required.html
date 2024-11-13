@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load allauth %}
+
+{% block head_title %}
+    {% trans "Verify Your Email Address" %}
+{% endblock head_title %}
+
+{% block content %}
+    <section class="bg-gray-50 dark:bg-gray-900">
+        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <div class="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+
+                <h2 class="mb-4 text-2xl font-bold leading-tight text-gray-900 dark:text-white">
+                    {% trans "Verify Your Email Address" %}
+                </h2>
+
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    {% blocktrans %}
+                    This part of the site requires us to verify that you are who you claim to be. For this purpose, we require that you verify ownership of your email address.
+                    {% endblocktrans %}
+                </p>
+
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    {% blocktrans %}
+                    We have sent an email to you for verification. Please click on the link inside that email. If you do not see the verification email in your main inbox, check your spam folder. Otherwise, contact us if you do not receive it within a few minutes.
+                    {% endblocktrans %}
+                </p>
+
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    {% blocktrans %}
+                    <strong>Note:</strong> You can still <a href="{{ email_url }}" class="text-blue-500 hover:underline">change your email address</a>.
+                    {% endblocktrans %}
+                </p>
+
+            </div>
+        </div>
+    </section>
+{% endblock content %}

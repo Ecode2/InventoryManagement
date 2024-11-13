@@ -2,7 +2,7 @@
 {% load i18n allauth account %}
 
 {% block head_title %}
-    {% trans "Password Reset" %}
+    {% trans "Sign In" %}
 {% endblock head_title %}
 
 {% block content %}
@@ -12,23 +12,21 @@
         <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div class="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
                 <h2 class="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                    {% trans "Password Reset" %}
+                    {% trans "Mail me a sign-in code" %}
                 </h2>
-                {% if user.is_authenticated %}
-                    {% include "account/snippets/already_logged_in.html" %}
-                {% endif %}
                 <p class="mb-5 text-sm font-light text-gray-500 dark:text-gray-300">
-                    {% trans "Forgotten your password? Enter your email address below, and we'll send you an email allowing you to reset it." %}
+                    {% blocktrans %}You will receive an email containing a special code for a password-free sign-in.{% endblocktrans %}
                 </p>
                 
-                {% url 'account_reset_password' as reset_url %}
-                <form method="post" action="{{ reset_url }}" class="space-y-4">
+                {% url 'account_request_login_code' as login_url %}
+                <form method="post" action="{{ login_url }}" class="space-y-4">
                     {% csrf_token %}
                     <!-- Email Input -->
                     <div>
                         <label for="id_email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{% trans "Email Address" %}</label>
-                        <input type="email" id="id_email" name="email"  {% if form.email.value %} value="{{ form.oldpassword.value }}" {% endif %} placeholder="name@company.com"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                        <input type="email" id="id_email" name="email" {% if form.email.value %} value="{{ form.email.value }}" {% endif %}
+                            placeholder="name@company.com"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required="">
                         {% if form.email.errors %}
                             <div class="error text-red-500">{{ form.email.errors }}</div>
@@ -39,13 +37,19 @@
                     <div>
                         <button type="submit" 
                             class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            {% trans "Reset My Password" %}
+                            {% trans "Request Code" %}
                         </button>
                     </div>
                 </form>
-                <p class="mt-4 text-sm font-light text-gray-500 dark:text-gray-300">
-                    {% blocktrans %}Please contact us if you have any trouble resetting your password.{% endblocktrans %}
-                </p>
+
+                <div class="mt-4 text-sm font-light text-gray-500 dark:text-gray-300">
+                    <p>
+                        {% url 'account_login' as login_url %}
+                        <a href="{{ login_url }}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                            {% trans "Other sign-in options" %}
+                        </a>
+                    </p>
+                </div>
             </div>
         </div>
     </section>

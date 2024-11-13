@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load i18n allauth %}
+
+{% block head_title %}
+    {% trans "Email Address" %}
+{% endblock head_title %}
+
+{% block content %}
+    <section class="bg-gray-50 dark:bg-gray-900">
+        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <div class="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+                
+                <h2 class="mb-4 text-2xl font-bold leading-tight text-gray-900 dark:text-white">
+                    {% trans "Email Address" %}
+                </h2>
+
+                {% if not emailaddresses %}
+                    {% include "account/snippets/warn_no_email.html" %}
+                {% endif %}
+                
+                <form method="post" action="{% url 'account_email' %}" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    {% if current_emailaddress %}
+                        <div class="mb-4">
+                            <label for="current_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                {% trans "Current email" %}
+                            </label>
+                            <input type="email" id="current_email" value="{{ current_emailaddress.email }}" disabled class="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white">
+                        </div>
+                    {% endif %}
+
+                    {% if new_emailaddress %}
+                        <div class="mb-4">
+                            <label for="new_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                {% if not current_emailaddress %}
+                                    {% trans "Current email" %}
+                                {% else %}
+                                    {% trans "Changing to" %}
+                                {% endif %}
+                            </label>
+                            <input type="email" id="new_email" value="{{ new_emailaddress.email }}" disabled class="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white">
+
+                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                                {% blocktrans %}
+                                    Your email address is still pending verification.
+                                {% endblocktrans %}
+                            </p>
+
+                            <div class="mt-4">
+                                <button form="pending-email" type="submit" name="action_send" class="w-full py-2 px-4 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-500 dark:hover:bg-primary-600 dark:focus:ring-primary-700">
+                                    {% trans 'Re-send Verification' %}
+                                </button>
+
+                                {% if current_emailaddress %}
+                                    <button form="pending-email" type="submit" name="action_remove" class="w-full mt-2 py-2 px-4 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-700">
+                                        {% trans 'Cancel Change' %}
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="mb-6">
+                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            {% trans "Change to" %}
+                        </label>
+                        <input type="email" id="email" name="email" value="{{ form.email.value }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white">
+                        {% if form.email.errors %}
+                            <p class="text-sm text-red-600 dark:text-red-400 mt-2">{{ form.email.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-4">
+                        <button name="action_add" type="submit" class="w-full py-2 px-4 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-500 dark:hover:bg-primary-600 dark:focus:ring-primary-700">
+                            {% trans "Change Email" %}
+                        </button>
+                    </div>
+                </form>
+
+                {% if new_emailaddress %}
+                    <form id="pending-email" style="display: none" method="post" action="{% url 'account_email' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="email" value="{{ new_emailaddress.email }}">
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock content %}

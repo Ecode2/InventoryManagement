@@ -207,6 +207,47 @@ class SalesReceipt(models.Model):
         if self.sale.status != DELIVERED and not self.sale.inventory_updated:
             self.sale.update_status(DELIVERED)
 
+    def get_receipt_data(self):
+        """ return {
+            'receipt_id': self.id,
+            'date': self.created_at,
+            'customer_name': self.sale.customer_name,
+            'amount': self.amount,
+        } """
+
+        return {
+            'company': {
+                'name': 'East Repair Inc.',
+                'address': '1912 Harvest Lane',
+                'city': 'New York, NY 12210'
+            },
+            'bill_to': {
+                'name': 'John Smith',
+                'address': '2 Court Square',
+                'city': 'New York, NY 12210'
+            },
+            'ship_to': {
+                'name': 'John Smith',
+                'address': '3787 Pineview Drive',
+                'city': 'Cambridge, MA 12210'
+            },
+            'receipt': {
+                'number': 'US-001',
+                'date': '11/02/2019',
+                'po_number': '2312/2019',
+                'due_date': '26/02/2019'
+            },
+            'items': [
+                {'qty': 1, 'description': 'Front and rear brake cables', 'unit_price': 100.00, 'amount': 100.00},
+                {'qty': 2, 'description': 'New set of pedal arms', 'unit_price': 15.00, 'amount': 30.00},
+                {'qty': 3, 'description': 'Labor 3hrs', 'unit_price': 5.00, 'amount': 15.00}
+            ],
+            'subtotal': 145.00,
+            'tax': 9.06,
+            'total': 154.06,
+            'signature': 'John Smith'
+        }
+
     def __str__(self):
         return f'{self.sale.customer_name or "Unknown Customer"} - Sale {self.sale.id} - {self.amount}'
 

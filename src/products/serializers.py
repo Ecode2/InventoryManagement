@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from drf_spectacular.utils import extend_schema_field, OpenApiTypes
+
+from management.serializers import WarehouseSerializer
 from .models import Category, Product, ProductFile, Inventory
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -56,6 +58,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class InventorySerializer(serializers.ModelSerializer):
     product_detail = serializers.SerializerMethodField()
+    warehouse_detail = serializers.SerializerMethodField()
     sales_day = serializers.SerializerMethodField()
     sales_month = serializers.SerializerMethodField()
     total_sales = serializers.SerializerMethodField()
@@ -67,7 +70,7 @@ class InventorySerializer(serializers.ModelSerializer):
         model = Inventory
         fields = ['id',
             'product', 'warehouse', 'stock', 'min_stock', 
-            'max_stock', 'alert_level', 'product_detail', 'sales_day', 
+            'max_stock', 'alert_level', 'product_detail', 'warehouse_detail', 'sales_day', 
             'sales_month', 'total_sales', 'revenue', 'average_sales_day',
             'average_sales_month'
         ]
@@ -75,6 +78,10 @@ class InventorySerializer(serializers.ModelSerializer):
     def get_product_detail(self, obj):
         product_details = ProductSerializer(obj.product).data
         return product_details
+    
+    def get_warehouse_detail(self, obj):
+        warehouse_details = WarehouseSerializer(obj.warehouse).data
+        return warehouse_details
 
     def get_sales_day(self, obj):
         sales_data = obj.get_sales_data()

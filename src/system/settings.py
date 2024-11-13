@@ -61,8 +61,6 @@ else:
 
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
 # Application definition
 INSTALLED_APPS = [
     "admin_interface",
@@ -73,6 +71,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django.contrib.humanize',
     "core",
     "home",
     "dashboard",
@@ -91,7 +90,7 @@ INSTALLED_APPS = [
     "drf_spectacular_sidecar",
     "whitenoise.runserver_nostatic",
     "widget_tweaks",
-    "slippers",
+    #"slippers",
     'storages',
     #'compressor',
     #"pwa",
@@ -156,6 +155,16 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 SILENCED_SYSTEM_CHECKS = ["security.W019"]
 
 ALLAUTH_UI_THEME = "light"
+
+# For development (console backend)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'alayaabubakar14@gmail.com'
+EMAIL_HOST_PASSWORD = 'skxo qsnb ohlq uela'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'alayaabubakar14@gmail.com'
+
 
 # Databasedjango-widget-tweaksdjango-widget-tweaks
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -307,7 +316,9 @@ SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-#ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 USE_I18N = True
 

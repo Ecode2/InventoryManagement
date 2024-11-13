@@ -1,98 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        {% load static %}
-        <meta charset="UTF-8">
-        <title>Inventory Management Receipt</title>
-        {% include 'base/css.html' %}
-    </head>
-    <body class="p-10">
-        <div class="max-w-2xl mx-auto p-6 border border-gray-300 rounded-lg">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-3xl font-bold">Receipt</h1>
-                <div class="w-16 h-16 bg-gray-200 flex items-center justify-center rounded-full">
-                    <span class="text-lg font-semibold">LOGO</span>
-                </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .receipt {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        header, footer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .details, .totals, .signature {
+            margin-bottom: 20px;
+        }
+        .details div {
+            display: inline-block;
+            width: 32%;
+            vertical-align: top;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #000;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        .totals p, .signature p {
+            text-align: right;
+        }
+        .signature {
+            text-align: center;
+            border-top: 1px solid #000;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt">
+        <header>
+            <h1>{{ company.name }}</h1>
+            <p>{{ company.address }}<br>{{ company.city }}</p>
+        </header>
+        <section class="details">
+            <div>
+                <h3>Bill To</h3>
+                <p>{{ bill_to.name }}<br>{{ bill_to.address }}<br>{{ bill_to.city }}</p>
             </div>
-            <div class="grid grid-cols-2 gap-4 mb-6">
-                <div>
-                    <h2 class="text-xl font-bold">FROM</h2>
-                    <p>John Smith</p>
-                    <p>4490 Oak Drive</p>
-                    <p>Albany, NY 12210</p>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold">RECEIPT #</h2>
-                    <p>INT-001</p>
-                    <h2 class="text-xl font-bold">RECEIPT DATE</h2>
-                    <p>11/02/2019</p>
-                    <h2 class="text-xl font-bold">P.O.#</h2>
-                    <p>2412/2019</p>
-                    <h2 class="text-xl font-bold">DUE DATE</h2>
-                    <p>26/02/2019</p>
-                </div>
+            <div>
+                <h3>Ship To</h3>
+                <p>{{ ship_to.name }}<br>{{ ship_to.address }}<br>{{ ship_to.city }}</p>
             </div>
-            <div class="grid grid-cols-2 gap-4 mb-6">
-                <div>
-                    <h2 class="text-xl font-bold">BILL TO</h2>
-                    <p>Jessie M Horne</p>
-                    <p>4312 Wood Road</p>
-                    <p>New York, NY 10031</p>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold">SHIP TO</h2>
-                    <p>Jessie M Horne</p>
-                    <p>2019 Redbud Drive</p>
-                    <p>New York, NY 10011</p>
-                </div>
+            <div>
+                <p><strong>Receipt #:</strong> {{ receipt.number }}</p>
+                <p><strong>Receipt Date:</strong> {{ receipt.date }}</p>
+                <p><strong>P.O.#:</strong> {{ receipt.po_number }}</p>
+                <p><strong>Due Date:</strong> {{ receipt.due_date }}</p>
             </div>
-            <table class="min-w-full bg-white border border-gray-300 mb-6">
-                <thead>
-                    <tr>
-                        <th class="py-2 px-4 border-b border-gray-300">QTY</th>
-                        <th class="py-2 px-4 border-b border-gray-300">DESCRIPTION</th>
-                        <th class="py-2 px-4 border-b border-gray-300">UNIT PRICE</th>
-                        <th class="py-2 px-4 border-b border-gray-300">AMOUNT</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b border-gray-300">1</td>
-                        <td class="py-2 px-4 border-b border-gray-300">Front and rear brake cables</td>
-                        <td class="py-2 px-4 border-b border-gray-300">100.00</td>
-                        <td class="py-2 px-4 border-b border-gray-300">100.00</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b border-gray-300">2</td>
-                        <td class="py-2 px-4 border-b border-gray-300">New set of pedal arms</td>
-                        <td class="py-2 px-4 border-b border-gray-300">25.00</td>
-                        <td class="py-2 px-4 border-b border-gray-300">50.00</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b border-gray-300">3</td>
-                        <td class="py-2 px-4 border-b border-gray-300">Labor 3hrs</td>
-                        <td class="py-2 px-4 border-b border-gray-300">15.00</td>
-                        <td class="py-2 px-4 border-b border-gray-300">45.00</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="text-right mb-6">
-                <p>Subtotal: 195.00</p>
-                <p>Sales Tax 5.0%: 9.75</p>
-                <h2 class="text-2xl font-bold mt-4">TOTAL: $204.75</h2>
-            </div>
-            <div class="mt-6">
-                <h2 class="text-xl font-bold">TERMS & CONDITIONS</h2>
-                <p>Payment is due within 15 days</p>
-                <p>Name of Bank</p>
-                <p>Account number: 1234567890</p>
-                <p>Routing: 098765432</p>
-            </div>
-            <div class="mt-6 flex justify-end">
-                <p class="font-semibold">John Smith</p>
-            </div>
+        </section>
+        <table>
+            <thead>
+                <tr>
+                    <th>QTY</th>
+                    <th>DESCRIPTION</th>
+                    <th>UNIT PRICE</th>
+                    <th>AMOUNT</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.qty }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.unit_price }}</td>
+                    <td>{{ item.amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="totals">
+            <p><strong>Subtotal:</strong> ${{ subtotal }}</p>
+            <p><strong>Sales Tax 6.25%:</strong> ${{ tax }}</p>
+            <p class="total"><strong>TOTAL:</strong> ${{ total }}</p>
         </div>
-
-        {% include 'base/js.html' %}
-    </body>
+        <div class="signature">
+            <p>{{ signature }}</p>
+        </div>
+        <footer>
+            <p><strong>Terms &amp; Conditions</strong><br>Payment is due within 15 days<br>Please make checks payable to: {{ company.name }}</p>
+        </footer>
+    </div>
+</body>
 </html>

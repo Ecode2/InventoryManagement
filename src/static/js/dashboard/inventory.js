@@ -19,6 +19,7 @@ const inventories = async (role, page) => {
     }
 
     try {
+        
         const data = await fetch(page);
         if (!data.ok) {
             DisplayMessage("Couldn't get inventory. Try again", "error");
@@ -72,6 +73,67 @@ const inventories = async (role, page) => {
             image = files.length ? `<img src="${files[0]}" alt="${inventory.product_detail.name}-Image" class="h-8 w-auto mr-3">` : '';
             let category = categories.length ? `<span class="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">${categories[0]}</span>` : '';
 
+            let all_categories = category
+            for (let category in categories.slice(1)) {
+                all_categories += `<span class="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">${category}</span>`
+            }
+
+
+            let preview_images = files.length ? `
+            <div class="p-2 w-auto bg-gray-100 rounded-lg dark:bg-gray-700">
+                <img src="${files[0]}" alt="${inventory.product_detail.name}-Image">
+            </div>
+            ` : '';
+            let update_images = inventory.product_detail.files.length ? `
+                <div class="relative p-2 bg-gray-100 rounded-lg w-fit sm:h-36 dark:bg-gray-700">
+                    <img src="${inventory.product_detail.files[0].file}" class="h-full w-full" alt="${inventory.product_detail.name}-Image">
+                    <button type="button" onclick="delete_image('${role}', '${inventory.product_detail.files[0].id}', '${inventory.id}-image_container')"
+                        class="absolute text-red-600 dark:text-red-500 hover:text-red-500 dark:hover:text-red-400 bottom-1 left-1">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="sr-only">Remove image</span>
+                    </button>
+                </div>` : '';
+
+            for (let img_file of inventory.product_detail.files.slice(1)) {
+                preview_images += `
+                    <div class="p-2 w-auto bg-gray-100 rounded-lg dark:bg-gray-700">
+                        <img src="${img_file}" alt="${inventory.product_detail.name}-Image">
+                    </div>`;
+                update_images += `
+                    <div class="relative p-2 bg-gray-100 rounded-lg sm:w-36 sm:h-36 dark:bg-gray-700">
+                        <img src="${img_file.file}" class="h-full w-full" alt="${inventory.product_detail.name}-Image">
+                        <button type="button" onclick="delete_image('${role}', '${img_file.id}', '${inventory.id}-image_container')"
+                            class="absolute text-red-600 dark:text-red-500 hover:text-red-500 dark:hover:text-red-400 bottom-1 left-1">
+                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="sr-only">Remove image</span>
+                        </button>
+                    </div>`
+            }
+
+            let dimension = `<div class="p-3 bg-gray-100 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+                    <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Dimensions (cm)</dt>
+                    <dd class="text-gray-500 dark:text-gray-400">`;
+            let product_weight = "";
+
+            dimension += inventory.product_detail.height? inventory.product_detail.height : '';
+            dimension += inventory.product_detail.width? ' X '+inventory.product_detail.width : '';
+            dimension += inventory.product_detail.depth? ' X '+inventory.product_detail.depth : '';
+            dimension += `</dd>
+                </div>`;
+            if (!inventory.product_detail.height || !inventory.product_detail.width){dimension="";}
+
+            if (inventory.product_detail.weight) {
+                product_weight = `
+                <div class="p-3 bg-gray-100 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+                    <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Item weight (kg)</dt>
+                    <dd class="text-gray-500 dark:text-gray-400">${inventory.product_detail.weight}</dd>
+                </div>`;
+            }
+
             let admin_access_info = ``;
             let edit_btn = ``;
             let delete_btn = ``;
@@ -104,7 +166,7 @@ const inventories = async (role, page) => {
 
                 update_modal = `
                     <form action="#" id="drawer-update-product-${inventory.id}" class="fixed top-0 left-0 z-50 w-full h-screen max-w-3xl p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-update-product-${inventory.id}-label" aria-hidden="true">
-                        <h5 id="drawer-label" class="inline-flex items-center mb-6 text-sm font-semibold text-gray-500 uppercase dark:text-gray-400">New Product</h5>
+                        <h5 id="drawer-label" class="inline-flex items-center mb-6 text-sm font-semibold text-gray-500 uppercase dark:text-gray-400">Edit Product</h5>
                         <button type="button" data-drawer-dismiss="drawer-update-product-${inventory.id}" aria-controls="drawer-update-product-${inventory.id}" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
                             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -115,7 +177,8 @@ const inventories = async (role, page) => {
                             <div class="space-y-4 sm:col-span-2 sm:space-y-6">
                                 <div>
                                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
-                                    <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="Apple iMac 27&ldquo;" placeholder="Type product name" required="">
+                                    <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                                    value="${inventory.product_detail.name}" placeholder="Type product name" required="">
                                 </div>
                                 <div>
                                     <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
@@ -180,51 +243,19 @@ const inventories = async (role, page) => {
                                                 <div class="tooltip-arrow" data-popper-arrow=""></div>
                                             </div>
                                         </div>
-                                        <div class="px-4 py-3 bg-white rounded-b-lg dark:bg-gray-800"><textarea id="description" rows="8" class="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write product description here" required="">Standard glass, 3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boost up to 5.0GHz, 16GB 2666MHz DDR4 memory, Radeon Pro 5500 XT with 8GB of GDDR6 memory, 256GB SSD storage, Gigabit Ethernet, Magic Mouse 2, Magic Keyboard - US</textarea></div>
+                                        <div class="px-4 py-3 bg-white rounded-b-lg dark:bg-gray-800">
+                                            <textarea id="description" rows="8" class="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" 
+                                                placeholder="Write product description here" required="">${inventory.product_detail.description}</textarea>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="mb-4">
                                     <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Images</span>
-                                    <div class="grid grid-cols-3 gap-4 mb-4">
-                                        <div class="relative p-2 bg-gray-100 rounded-lg sm:w-36 sm:h-36 dark:bg-gray-700">
-                                            <img src="https://flowbite.s3.amazonaws.com/blocks/application-ui/products/imac-side-image.png" alt="imac image">
-                                            <button type="button" class="absolute text-red-600 dark:text-red-500 hover:text-red-500 dark:hover:text-red-400 bottom-1 left-1">
-                                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                                </svg>
-                                                <span class="sr-only">Remove image</span>
-                                            </button>
-                                        </div>
-                                        <div class="relative p-2 bg-gray-100 rounded-lg sm:w-36 sm:h-36 dark:bg-gray-700">
-                                            <img src="https://flowbite.s3.amazonaws.com/blocks/application-ui/products/imac-front-image.png" alt="imac image">
-                                            <button type="button" class="absolute text-red-600 dark:text-red-500 hover:text-red-500 dark:hover:text-red-400 bottom-1 left-1">
-                                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                                </svg>
-                                                <span class="sr-only">Remove image</span>
-                                            </button>
-                                        </div>
-                                        <div class="relative p-2 bg-gray-100 rounded-lg sm:w-36 sm:h-36 dark:bg-gray-700">
-                                            <img src="https://flowbite.s3.amazonaws.com/blocks/application-ui/products/imac-back-image.png" alt="imac image">
-                                            <button type="button" class="absolute text-red-600 dark:text-red-500 hover:text-red-500 dark:hover:text-red-400 bottom-1 left-1">
-                                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                                </svg>
-                                                <span class="sr-only">Remove image</span>
-                                            </button>
-                                        </div>
-                                        <div class="relative p-2 bg-gray-100 rounded-lg sm:w-36 sm:h-36 dark:bg-gray-700">
-                                            <img src="https://flowbite.s3.amazonaws.com/blocks/application-ui/products/imac-side-image.png" alt="imac image">
-                                            <button type="button" class="absolute text-red-600 dark:text-red-500 hover:text-red-500 dark:hover:text-red-400 bottom-1 left-1">
-                                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                                </svg>
-                                                <span class="sr-only">Remove image</span>
-                                            </button>
-                                        </div>
+                                    <div id="${inventory.id}-image_container" class="grid grid-cols-3 gap-4 mb-4">
+                                        ${update_images}
                                     </div>
                                     <div class="flex items-center justify-center w-full">
-                                        <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                        <label for="update-${inventory.id}-dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                             <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                                 <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -235,21 +266,12 @@ const inventories = async (role, page) => {
                                                 </p>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                                             </div>
-                                            <input id="dropzone-file" type="file" class="hidden">
+                                            <input id="update-${inventory.id}-dropzone-file" onchange="select_image(event, 'update-${inventory.id}-selected-images')" type="file" class="hidden" multiple>
+                                            <div id="update-${inventory.id}-selected-images" class="flex flex-wrap justify-center space-x-2 items-center w-full">
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">Selected files will appear here</p>
+                                            </div>
                                         </label>
                                     </div>
-                                </div>
-                                <div class="flex items-center mb-4">
-                                    <input id="product-options" type="checkbox" value="" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="product-options" class="ml-2 text-sm text-gray-500 dark:text-gray-300">Product has multiple options, like different colors or sizes</label>
-                                </div>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <input datepicker="" id="datepicker" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 datepicker-input" value="15/08/2022" placeholder="Select date">
                                 </div>
                             </div>
                             <div class="space-y-4 sm:space-y-6">
@@ -257,7 +279,16 @@ const inventories = async (role, page) => {
                                     <label for="product-brand" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand</label>
                                     <input type="text" id="product-brand" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="Apple" placeholder="Product Brand" required="">
                                 </div>
-                                <div><label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label><select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"><option selected="">Electronics</option><option value="TV">TV/Monitors</option><option value="PC">PC</option><option value="GA">Gaming/Console</option><option value="PH">Phones</option></select></div>
+                                <div>
+                                    <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
+                                    <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        <option selected="">Electronics</option>
+                                        <option value="TV">TV/Monitors</option>
+                                        <option value="PC">PC</option>
+                                        <option value="GA">Gaming/Console</option>
+                                        <option value="PH">Phones</option>
+                                    </select>
+                                </div>
                                 <div>
                                     <label for="item-weight" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item Weight (kg)</label>
                                     <input type="number" name="item-weight" id="item-weight" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="12" placeholder="Ex. 12" required="">
@@ -315,7 +346,10 @@ const inventories = async (role, page) => {
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this product?</h3>
-                                    <button data-modal-toggle="delete-modal-${inventory.id}" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">Yes, I'm sure</button>
+                                    <button data-modal-toggle="delete-modal-${inventory.id}" type="button"  onclick="deleteInventory('${role}', ${inventory.id})"
+                                        class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                                        Yes, I'm sure
+                                    </button>
                                     <button data-modal-toggle="delete-modal-${inventory.id}" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
                                 </div>
                             </div>
@@ -384,13 +418,46 @@ const inventories = async (role, page) => {
                     </td>
                 </tr>`;
             
+            let preview_cost = ``;
+            let preview_update = "";
+            let preview_delete = "";
+            if (role == "admin") {
+                preview_cost = `#${inventory.product_detail.cost_price} 
+                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4"/>
+                    </svg>`
+                preview_update = `
+                    <button type="button" data-drawer-target="drawer-update-product-${inventory.id}" data-drawer-show="drawer-update-product-${inventory.id}"
+                            aria-controls="drawer-update-product-${inventory.id}" class="text-white w-full inline-flex items-center justify-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                            <svg aria-hidden="true" class="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                            </svg>
+                            Edit
+                    </button>`;
+                preview_delete = `
+                    <button type="button" data-modal-target="delete-modal-${inventory.id}" data-modal-toggle="delete-modal-${inventory.id}" 
+                            class="inline-flex w-full items-center text-white justify-center bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+                            <svg aria-hidden="true" class="w-5 h-5 mr-1.5 -ml-1" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" />
+                            </svg>
+                            Delete
+                        </button>`;
+
+            }
             
             preview_modal = `
                 <!-- Preview Drawer -->
                 <div id="drawer-read-product-${inventory.id}-advanced" class="overflow-y-auto fixed top-0 left-0 z-50 p-4 w-full max-w-lg h-screen bg-white transition-transform -translate-x-full dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-label" aria-hidden="true">
                     <div>
-                        <h4 id="read-drawer-label" class="mb-1.5 leading-none text-xl font-semibold text-gray-900 dark:text-white">Apple iMac 25"</h4>
-                        <h5 class="mb-5 text-xl font-bold text-gray-900 dark:text-white">$2999</h5>
+                        <h4 id="read-drawer-label" class="mb-1.5 leading-none flex w-full justify-start space-x-4 text-xl font-semibold text-gray-900 dark:text-white">
+                            <span>${inventory.product_detail.name}</span>
+                            <a href="#" class="hover:underline">${inventory.product_detail.sku.substring(0, 8)}</a>
+                        </h4>
+                        <h5 class="mb-5 text-xl font-bold flex w-full justify-start space-x-4 text-gray-900 dark:text-white">
+                            <span class="flex flex-row space-x-3 flex-nowrap">${preview_cost}</span>
+                            <span>#${inventory.product_detail.selling_price} For ${inventory.product_detail.recorder_quantity} ${inventory.product_detail.recorder_quantity_name}</span>
+                        </h5>
                     </div>
                     <button type="button" data-drawer-dismiss="drawer-read-product-${inventory.id}-advanced" aria-controls="drawer-read-product-${inventory.id}-advanced" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -399,78 +466,89 @@ const inventories = async (role, page) => {
                         <span class="sr-only">Close menu</span>
                     </button>
                     <div class="grid grid-cols-3 gap-4 mb-4 sm:mb-5">
-                        <div class="p-2 w-auto bg-gray-100 rounded-lg dark:bg-gray-700">
-                            <img src="https://flowbite.s3.amazonaws.com/blocks/application-ui/products/imac-side-image.png" alt="iMac Side Image">
-                        </div>
-                        <div class="p-2 w-auto bg-gray-100 rounded-lg dark:bg-gray-700">
-                            <img src="https://flowbite.s3.amazonaws.com/blocks/application-ui/products/imac-front-image.png" alt="iMac Front Image">
-                        </div>
-                        <div class="p-2 w-auto bg-gray-100 rounded-lg dark:bg-gray-700">
-                            <img src="https://flowbite.s3.amazonaws.com/blocks/application-ui/products/imac-back-image.png" alt="iMac Back Image">
-                        </div>
-                        <div class="p-2 w-auto bg-gray-100 rounded-lg dark:bg-gray-700">
-                            <img src="https://flowbite.s3.amazonaws.com/blocks/application-ui/products/imac-side-image.png" alt="iMac Back Image">
-                        </div>
-                        <div class="p-2 w-auto bg-gray-100 rounded-lg dark:bg-gray-700">
-                            <img src="https://flowbite.s3.amazonaws.com/blocks/application-ui/products/imac-back-image.png" alt="iMac Front Image">
-                        </div>
-                        <div class="p-2 w-auto bg-gray-100 rounded-lg dark:bg-gray-700">
-                            <img src="https://flowbite.s3.amazonaws.com/blocks/application-ui/products/imac-side-image.png" alt="iMac Side Image">
-                        </div>
+                        ${preview_images}
                     </div>
-                    <dl class="sm:mb-5"><dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Details</dt><dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">Standard glass ,3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boost up to 5.0GHz, 16GB 2666MHz DDR4 memory, Radeon Pro 5500 XT with 8GB of GDDR6 memory, 256GB SSD storage, Gigabit Ethernet, Magic Mouse 2, Magic Keyboard - US.</dd></dl>
+                    <dl class="sm:mb-5">
+                        <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Details</dt>
+                        <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"> ${inventory.product_detail.description} </dd>
+                    </dl>
+                    <dl class="sm:mb-5">
+                        <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Warehouse</dt>
+                        <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"> ${inventory.warehouse_detail.name} : ${inventory.warehouse_detail.address}</dd>
+                    </dl>
                     <dl class="grid grid-cols-2 gap-4 mb-4">
-                        <div class="col-span-2 p-3 bg-gray-100 rounded-lg border border-gray-200 dark:bg-gray-700 sm:col-span-1 dark:border-gray-600">
-                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Shipping</dt>
-                            <dd class="flex items-center text-gray-500 dark:text-gray-400">
-                                <svg class="w-4 h-4 mr-1.5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                                </svg>
-                                United States, Europe
-                            </dd>
+                        <div class="col-span-2 p-3 bg-gray-100 grid grid-cols-4 gap-2 w-full justify-evenly rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+                            <div>
+                                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Stock</dt>
+                                <dd class="flex items-center text-gray-500 dark:text-gray-400">
+                                    <div class="h-4 w-4 rounded-full inline-block mr-2 ${alert_color}-700"></div>
+                                    ${inventory.stock}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Min</dt>
+                                <dd class="flex items-center text-gray-500 dark:text-gray-400">
+                                    ${inventory.min_stock}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Alert</dt>
+                                <dd class="flex items-center text-gray-500 dark:text-gray-400">
+                                    ${inventory.alert_level}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Max</dt>
+                                <dd class="flex items-center text-gray-500 dark:text-gray-400">
+                                    ${inventory.max_stock}
+                                </dd>
+                            </div>
                         </div>
-                        <div class="col-span-2 p-3 bg-gray-100 rounded-lg border border-gray-200 dark:bg-gray-700 sm:col-span-1 dark:border-gray-600">
-                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Colors</dt>
-                            <dd class="flex items-center space-x-2 font-light text-gray-500 dark:text-gray-400">
-                                <div class="flex-shrink-0 w-6 h-6 bg-purple-600 rounded-full"></div>
-                                <div class="flex-shrink-0 w-6 h-6 bg-indigo-400 rounded-full"></div>
-                                <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary-600"></div>
-                                <div class="flex-shrink-0 w-6 h-6 bg-pink-400 rounded-full"></div>
-                                <div class="flex-shrink-0 w-6 h-6 bg-teal-300 rounded-full"></div>
-                                <div class="flex-shrink-0 w-6 h-6 bg-green-300 rounded-full"></div>
+                        <div class="p-3 bg-gray-100 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Category</dt>
+                            <dd class="text-gray-500 dark:text-gray-400">
+                                ${all_categories}
                             </dd>
                         </div>
                         <div class="p-3 bg-gray-100 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
-                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Product State</dt>
-                            <dd class="text-gray-500 dark:text-gray-400">
-                                <span class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
-                                    <svg aria-hidden="true" class="mr-1 w-3 h-3" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                    </svg>
-                                    New
-                                </span>
-                            </dd>
+                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Revenue</dt>
+                            <dd class="text-gray-500 dark:text-gray-400">#${inventory.revenue}</dd>
                         </div>
-                        <div class="p-3 bg-gray-100 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600"><dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Sold by</dt><dd class="text-gray-500 dark:text-gray-400">Flowbite</dd></div>
-                        <div class="p-3 bg-gray-100 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600"><dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Ships from</dt><dd class="text-gray-500 dark:text-gray-400">Flowbite</dd></div>
-                        <div class="p-3 bg-gray-100 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600"><dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Brand</dt><dd class="text-gray-500 dark:text-gray-400">Apple</dd></div>
-                        <div class="p-3 bg-gray-100 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600"><dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Dimensions (cm)</dt><dd class="text-gray-500 dark:text-gray-400">105 x 15 x 23</dd></div>
-                        <div class="p-3 bg-gray-100 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600"><dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Item weight</dt><dd class="text-gray-500 dark:text-gray-400">12kg</dd></div>
+                        ${dimension}
+                        ${product_weight}
+                        <div class="col-span-2 p-3 bg-gray-100 grid grid-cols-4 gap-2 w-full justify-evenly rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+                            <!-- <div class="col-span-2">
+                                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Sales</dt>
+                            </div> -->
+                            <div>
+                                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Today</dt>
+                                <dd class="flex items-center text-gray-500 dark:text-gray-400">
+                                    ${inventory.sales_day}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Month</dt>
+                                <dd class="flex items-center text-gray-500 dark:text-gray-400">
+                                    ${inventory.sales_month}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Daily</dt>
+                                <dd class="flex items-center text-gray-500 dark:text-gray-400">
+                                    ${parseFloat(inventory.average_sales_day).toFixed(3)}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Monthly</dt>
+                                <dd class="flex items-center text-gray-500 dark:text-gray-400">
+                                    ${parseFloat(inventory.average_sales_month).toFixed(3)}
+                                </dd>
+                            </div>
+                        </div>
                     </dl>
                     <div class="flex bottom-0 left-0 justify-center pb-4 space-x-4 w-full">
-                        <button type="button" class="text-white w-full inline-flex items-center justify-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            <svg aria-hidden="true" class="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                            </svg>
-                            Edit
-                        </button>
-                        <button type="button" class="inline-flex w-full items-center text-white justify-center bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                            <svg aria-hidden="true" class="w-5 h-5 mr-1.5 -ml-1" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" />
-                            </svg>
-                            Delete
-                        </button>
+                        ${preview_update}
+                        ${preview_delete}
                     </div>
                 </div>`;
             
@@ -584,10 +662,10 @@ const load_inventory = async (role, page) => {
     role = "" ? role == "null" : role
     let sorting = ""
     let response
-    console.log("starting")
-  
+
     try {
       if (page && page != "") {
+        
         response = await inventories(role, page+sorting);
 
       }else {
@@ -598,11 +676,12 @@ const load_inventory = async (role, page) => {
           new_page = `/api/shelf/inventories/?warehouse=${warehouse_id}`;
         }
 
+        console.log(new_page)
         response = await inventories(role, new_page+sorting);
       }
       
       if (!response) {
-        console.log("something went wrong")
+        DisplayMessage("An error occurred", "error");
         return
       }
   
@@ -727,7 +806,7 @@ console.log("starting")
     const max_stock = document.getElementById("create_max_stock").value;
     const alert_level = document.getElementById("create_alert_level").value;
     const warehouse = document.getElementById("create_warehouse").value;
-    const file_input = document.getElementById('create_dropzone-file').files;
+    const file_input = document.getElementById('create-dropzone-file').files;
 
     const top_msg = document.getElementById("top_error");
     const bottom_msg = document.getElementById("bottom_error");
@@ -885,8 +964,46 @@ console.log("starting")
 
 }
 
-/* const editInventory = async (event, id) => {}
-const deleteInventory = async (event, id) => {} */
+/* const editInventory = async (event, id) => {} */
+const deleteInventory = async (role, inventory_id) => {
+    try {
+        const response = await fetch(`/api/shelf/inventories/${inventory_id}/`)
+        if (!response.ok){
+            DisplayMessage("Couldn't identify inventory", "error")
+            return
+        }
+
+        const data = await response.json()
+
+        /* for (file of data.product_detail.files) {
+            try {
+                await fetch(`/api/shelf/product-files/${file.id}/`, {
+                    method: "DELETE",
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+            }catch{
+                continue
+            }
+        } */
+        
+        await fetch(`/api/shelf/products/${data.product}/`, {
+            method: "DELETE",
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+
+        console.log("deleting")
+        load_inventory(role)
+
+
+    }catch(error) {
+        DisplayMessage("Couldn't identify inventory", "error")
+        return;
+    }
+}
 
  /*add_product_btn(role)*/
 
@@ -1213,6 +1330,91 @@ const search_category = async (search_modal) => {
     }
 }
 
+const select_image = async (event, img_container) => {
+    const fileInput = event.target;
+    const selectedImagesContainer = document.getElementById(img_container);
+
+    // Clear previous content
+    selectedImagesContainer.innerHTML = '';
+
+    const files = fileInput.files;
+    if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+            const fileName = files[i].name;
+            const fileItem = document.createElement('p');
+            fileItem.className = 'text-sm text-gray-500 dark:text-gray-400';
+            fileItem.textContent = fileName;
+            selectedImagesContainer.appendChild(fileItem);
+            console.log("uploaded")
+        }
+    } else {
+        const noFilesMessage = document.createElement('p');
+        noFilesMessage.className = 'text-sm text-gray-500 dark:text-gray-400';
+        noFilesMessage.textContent = 'No files selected';
+        selectedImagesContainer.appendChild(noFilesMessage);
+    };
+}
+
+const delete_image = async (role, img_id, image_container) => {
+    if (role != "admin") {
+        DisplayMessage("Unauthorised to perform this action", "error")
+            return
+    }
+
+    try {
+        const response = await fetch(`/api/shelf/product-files/${img_id}/`)
+        if (!response.ok){
+            DisplayMessage("Image not found", "error")
+            return
+        }
+
+        const data = await response.json()
+
+        await fetch(`/api/shelf/product-files/${img_id}/`, {
+            method: "DELETE",
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+
+        const product_response = await fetch(`/api/shelf/products/${data.product}/`)
+        if (!product_response.ok){
+            return;}
+        const product_data = await product_response.json()
+
+        let product_files = product_data.files.map((file) => file.file);
+        const imageContainer = document.getElementById(image_container)
+
+        imageContainer.innerHTML = product_files.length ? `
+        <div class="relative p-2 bg-gray-100 rounded-lg w-fit sm:h-36 dark:bg-gray-700">
+            <img src="${product_files[0]}" class="h-full w-full" alt="${product_data.name}-Image">
+            <button type="button" class="absolute text-red-600 dark:text-red-500 hover:text-red-500 dark:hover:text-red-400 bottom-1 left-1">
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <span class="sr-only">Remove image</span>
+            </button>
+        </div>` : '';
+
+        for (let file of product_files.slice(1)){
+            imageContainer.innerHTML += `
+                <div class="relative p-2 bg-gray-100 rounded-lg w-fit sm:h-36 dark:bg-gray-700">
+                    <img src="${file}" class="h-full w-full" alt="${product_data.name}-Image">
+                    <button type="button" class="absolute text-red-600 dark:text-red-500 hover:text-red-500 dark:hover:text-red-400 bottom-1 left-1">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="sr-only">Remove image</span>
+                    </button>
+                </div>`
+        }
+
+    }catch(error) {
+        DisplayMessage("Something went wrong", "error")
+        return;
+    }
+}
+
 async function InventoryPage(role) {
     
     const response = await inventories(role);
@@ -1339,8 +1541,7 @@ async function InventoryPage(role) {
                                 <label for="create_description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
                                 <textarea id="create_description" rows="4" 
                                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                                    placeholder="Write product description here">
-                                </textarea>
+                                    placeholder="Write product description here"></textarea>
                             </div>
                         </div>
                         <div class="mb-4 space-y-4 sm:flex sm:space-y-0">
@@ -1369,7 +1570,7 @@ async function InventoryPage(role) {
                         <div class="mb-4">
                             <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Images</span>
                             <div class="flex justify-center items-center w-full">
-                                <label for="create_dropzone-file" class="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                <label for="create-dropzone-file" class="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                     <div class="flex flex-col justify-center items-center pt-5 pb-6">
                                         <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -1379,7 +1580,10 @@ async function InventoryPage(role) {
                                         </p>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                                     </div>
-                                    <input id="create_dropzone-file" type="file" class="hidden" multiple>
+                                    <input id="create-dropzone-file" onchange="select_image(event, 'create-selected-images')" type="file" class="hidden" multiple>
+                                    <div id="create-selected-images" class="flex flex-wrap justify-center space-x-2 items-center w-full">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Selected files will appear here</p>
+                                    </div>
                                 </label>
                             </div>
                         </div>
