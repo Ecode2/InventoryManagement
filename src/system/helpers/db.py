@@ -2,7 +2,8 @@ import dj_database_url
 from pathlib import Path
 from functools import lru_cache
 
-from .env import BASE_DIR, config
+from .env import BASE_DIR
+from decouple import config
 
 @lru_cache
 def get_database_url(BASE_DIR:Path, DEBUG:bool, DATABASE_URL)->dict:

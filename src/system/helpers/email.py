@@ -1,4 +1,4 @@
-from .env import config
+from decouple import config
 
 
 # Looking to send emails in production? Check out our Email API/SMTP product!

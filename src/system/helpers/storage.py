@@ -1,4 +1,4 @@
-from .env import config
+from decouple import config
 
 # Backblaze B2 configuration for production
 B2_ACCESS_KEY_ID = config("B2_ACCESS_KEY_ID", default=None)

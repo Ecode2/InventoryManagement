@@ -1,4 +1,4 @@
-from .env import config
+from decouple import config
 
 # Wasabi configuration for development
 WASABI_ACCESS_KEY_ID = config("WASABI_ACCESS_KEY_ID", default=None)
