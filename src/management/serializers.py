@@ -11,7 +11,7 @@ class LocationSerializer(serializers.ModelSerializer):
 class WarehouseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Warehouse
-        fields = ['id', 'name', 'is_refrigerated', 'address', 'location', 'is_active', 'created_at']
+        fields = ['id', 'name', 'phone_number', 'email', 'is_refrigerated', 'address', 'location', 'is_active', 'created_at']
         read_only_fields = ['id', 'created_at']
 
 

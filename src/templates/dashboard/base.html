@@ -117,6 +117,14 @@
                 return alert;
             }
 
+            // Post a message to the parent window indicating logout success
+            window.addEventListener('DOMContentLoaded', (event) => {
+                const form = document.getElementById("logout_form")
+                form.addEventListener('submit', () => {
+                    window.parent.postMessage('logoutSuccess', '*');
+                });
+            });
+
             window.addEventListener('message', function(event) {
                 if (event.data === 'logoutSuccess') {
                     // Redirect the parent window to the home page or login page

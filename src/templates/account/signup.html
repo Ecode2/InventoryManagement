@@ -20,7 +20,7 @@
                         {% csrf_token %}
                         <div>
                             <label for="id_email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> {% trans "Your email" %}</label>
-                            <input type="email" name="email" id="id_email" value="{{ form.email.value }}"
+                            <input type="email" name="email" id="id_email" {% if form.email.value %} value="{{ form.email.value }}" {% endif %}
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                             placeholder="name@company.com" required="" autocomplete="email" maxlength="320">
                             {% if form.email.errors %}
@@ -30,7 +30,7 @@
 
                         <div>
                             <label for="id_password1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{% trans "Password" %}</label>
-                            <input type="password" name="password1" id="id_password1" placeholder="••••••••" {% comment %} value="{{ form.password1.value }}" {% endcomment %}
+                            <input type="password" name="password1" id="id_password1" placeholder="••••••••" 
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                             required="" autocomplete="new-password" >
                             {% if form.password1.errors %}
@@ -40,7 +40,7 @@
 
                         <div>
                             <label for="id_password2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
-                            <input type="confirm-password" name="password2" id="id_password2" placeholder="••••••••" {% comment %} value="{{ form.password2.value }}" {% endcomment %}
+                            <input type="password" name="password2" id="id_password2" placeholder="••••••••" {% if form.password2.value %} value="{{ form.password2.value }}" {% endif %}
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                             required="" autocomplete="new-password">
                             {% if form.password2.errors %}

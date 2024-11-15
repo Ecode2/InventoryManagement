@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receipt</title>
+    <title>Sales Receipt</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,14 +19,18 @@
             text-align: center;
             margin-bottom: 20px;
         }
-        .details, .totals, .signature {
+        .details, .totals {
             margin-bottom: 20px;
         }
-        .details div {
+        .details {
+            display: flex;
+            justify-content: space-between;
+        }
+        /*.details div {
             display: inline-block;
             width: 32%;
             vertical-align: top;
-        }
+        }*/
         table {
             width: 100%;
             border-collapse: collapse;
@@ -39,49 +43,42 @@
             padding: 8px;
             text-align: left;
         }
-        .totals p, .signature p {
-            text-align: right;
-        }
-        .signature {
-            text-align: center;
-            border-top: 1px solid #000;
-            padding-top: 20px;
+        
+        .totals {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #000;
         }
     </style>
 </head>
 <body>
     <div class="receipt">
         <header>
-            <h1>{{ company.name }}</h1>
-            <p>{{ company.address }}<br>{{ company.city }}</p>
+            <h1>{{ sold_at.name }}</h1>
+            <p>{{ sold_at.address }}</p>
+            
         </header>
         <section class="details">
             <div>
-                <h3>Bill To</h3>
-                <p>{{ bill_to.name }}<br>{{ bill_to.address }}<br>{{ bill_to.city }}</p>
+                <p><strong>Sold To:</strong> {{ info.name }}</p>
+                <p><strong>Sale Id:</strong> {{ receipt.sale }}</p>
             </div>
             <div>
-                <h3>Ship To</h3>
-                <p>{{ ship_to.name }}<br>{{ ship_to.address }}<br>{{ ship_to.city }}</p>
-            </div>
-            <div>
-                <p><strong>Receipt #:</strong> {{ receipt.number }}</p>
+                <p><strong>Receipt Id:</strong> {{ receipt.number }}</p>
                 <p><strong>Receipt Date:</strong> {{ receipt.date }}</p>
-                <p><strong>P.O.#:</strong> {{ receipt.po_number }}</p>
-                <p><strong>Due Date:</strong> {{ receipt.due_date }}</p>
             </div>
         </section>
         <table>
             <thead>
                 <tr>
                     <th>QTY</th>
-                    <th>DESCRIPTION</th>
+                    <th>PRODUCT</th>
                     <th>UNIT PRICE</th>
                     <th>AMOUNT</th>
                 </tr>
             </thead>
             <tbody>
-                {% for item in items %}
+                {% for item in detail.items %}
                 <tr>
                     <td>{{ item.qty }}</td>
                     <td>{{ item.description }}</td>
@@ -92,15 +89,20 @@
             </tbody>
         </table>
         <div class="totals">
-            <p><strong>Subtotal:</strong> ${{ subtotal }}</p>
-            <p><strong>Sales Tax 6.25%:</strong> ${{ tax }}</p>
-            <p class="total"><strong>TOTAL:</strong> ${{ total }}</p>
-        </div>
-        <div class="signature">
-            <p>{{ signature }}</p>
+            <p><strong>SIGNATURE:</strong> {{ info.staff }}</p>
+            <p class="total"><strong>TOTAL:</strong> #{{ detail.total }}</p>
         </div>
         <footer>
-            <p><strong>Terms &amp; Conditions</strong><br>Payment is due within 15 days<br>Please make checks payable to: {{ company.name }}</p>
+            <p>
+                <strong>Contact Us</strong>
+                {% if sold_at.number and sold_at.number != "" %}
+                    <br> <p>+234 {{ sold_at.number }}</p>
+                {% endif %}
+                {% if sold_at.email and sold_at.email != "" %}
+                    <p>{{ sold_at.email }}</p>
+                {% endif %}
+                www.doesnotexist.com
+            </p>
         </footer>
     </div>
 </body>

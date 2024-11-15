@@ -57,7 +57,8 @@ if config("DEBUG", default=False, cast=bool) == False:
 
 else:
     DEBUG = True
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = [] #["2c50-2a09-bac5-4dd3-d2-00-15-378.ngrok-free.app"]
+    #CSRF_TRUSTED_ORIGINS = ["https://2c50-2a09-bac5-4dd3-d2-00-15-378.ngrok-free.app"]
 
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 
@@ -88,6 +89,7 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_spectacular",
     "drf_spectacular_sidecar",
+    "django_notification",
     "whitenoise.runserver_nostatic",
     "widget_tweaks",
     #"slippers",
@@ -151,7 +153,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/home/'
 WSGI_APPLICATION = "system.wsgi.application"
 
 
-X_FRAME_OPTIONS = "SAMEORIGIN"
+#X_FRAME_OPTIONS = "SAMEORIGIN"
 SILENCED_SYSTEM_CHECKS = ["security.W019"]
 
 ALLAUTH_UI_THEME = "light"
@@ -216,6 +218,10 @@ SPECTACULAR_SETTINGS = {
     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
     'REDOC_DIST': 'SIDECAR',
 }
+
+DJANGO_NOTIFICATION_API_FILTERSET_CLASS = (
+    "django_notification.api.filters.notification_filter.NotificationFilter"
+)
 
 
 # Password validation

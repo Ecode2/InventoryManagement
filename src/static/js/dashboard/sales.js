@@ -31,7 +31,7 @@ const sales = async (role, page) => {
     const response = await data.json();
     if (!response) return null;
     if (response.count == 0) {
-      DisplayMessage("No Inventory Available", "warning");
+      DisplayMessage("No Sales Yet", "warning");
       return null;
     }
 
@@ -49,7 +49,8 @@ const sales = async (role, page) => {
       let detail_dropdown = `<!-- Dropdown menu -->
         <div id="dropdown-${sale.id}"  class="hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700">
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="${sale.id}-dropdown">`;
-      sale.sales_details.forEach(detail => {
+      
+      for (let detail of sale.sales_details) {
         detail_dropdown += `
               <li>
                 <p class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap dark:hover:bg-gray-600 dark:hover:text-white">
@@ -61,6 +62,13 @@ const sales = async (role, page) => {
         }
         if (sale.status == "pending") {
           /* [384px] */
+          let max = ""
+          const stock_response = await fetch(`/api/shelf/inventories/?product=${detail.product}&warehouse=${sale.warehouse}`)
+          if (stock_response.ok) {
+            const inventory = await stock_response.json()
+            max = `max=${inventory.results[0].stock}`
+            console.log(max, "maximum", inventory.results[0].stock)
+          }
           detail_table += `
             <tr id="${detail.id}-${detail.product_detail.id}">
               <th scope="row" class="px-6 py-4  font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -76,7 +84,7 @@ const sales = async (role, page) => {
 
               <td>
                 <div class="pr-1 w-full relative flex justify-end items-center">
-                  <input type="number" min="1" oninput="debounceUpdateProduct(this, ${detail.id}, '${detail.id}-${detail.product_detail.id}', '${sale.id}-sale-items-price', ${sale.id})" value="${detail.quantity}"
+                  <input type="number" step="0.01" min="1" ${max} oninput="debounceUpdateProduct(this, ${detail.id}, '${detail.id}-${detail.product_detail.id}', '${sale.id}-sale-items-price', ${sale.id}, '${max}')" value="${detail.quantity}"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                   placeholder="1" />
                 </div>
@@ -94,7 +102,8 @@ const sales = async (role, page) => {
           </tr>
           `;
         }
-      });
+      };
+
       detail_dropdown += `
             </ul>
         </div>`;
@@ -658,7 +667,7 @@ const cancelCart = async (cart_id) => {
             DisplayMessage("Couldn't delete cart. Try again", "error");
             return;
           }
-          window.location.reload();
+          LoadTab('sales');
           DisplayMessage("Sale canceled", "info");
 
       } catch (error) {
@@ -685,7 +694,7 @@ const deleteCart = async (cart_id) => {
             DisplayMessage("Couldn't delete cart. Try again", "error");
             return;
           }
-          window.location.reload();
+          LoadTab('sales');
           DisplayMessage("Cart Deleted", "info");
 
       } catch (error) {
@@ -738,7 +747,7 @@ const finalizeSale = async (cart_id, payment_id) => {
 
   let receipt = await receipt_response.json();
 
-  window.location.reload();
+  LoadTab('sales');
   download_receipt(receipt.id)
   DisplayMessage("Sale completed", "info");
 
@@ -762,7 +771,8 @@ const searchProduct = async (search_modal, cart_id) => {
 
     if (input_value.length >= 3) {
       try {
-        const response = await fetch(`/api/shelf/inventories/?search=${input_value}`)
+        let warehoue_id = localStorage.getItem("warehouse_id")
+        const response = await fetch(`/api/shelf/inventories/?search=${input_value}&warehouse=${warehoue_id}`)
         if (!response.ok) {
           return;
         }
@@ -787,7 +797,7 @@ const searchProduct = async (search_modal, cart_id) => {
                 <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
 
                   <dt class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <div class="flex items-center mr-3">
+                    <div class="flex items-center">
                         ${image}
                         <div class="text-base font-semibold">${item.product_detail.name}</div>
                     </div>
@@ -813,6 +823,7 @@ const searchProduct = async (search_modal, cart_id) => {
       product_list.innerHTML = ""; // Clear the list if input length is less than 3
     }
 }
+
 const addProduct = async (cart_id, product_id, table_id, price_id) => {
     const table = document.getElementById(table_id);
     const price = document.getElementById(price_id);
@@ -822,7 +833,14 @@ const addProduct = async (cart_id, product_id, table_id, price_id) => {
       DisplayMessage("Couldn't get cart. Try again", "error");
       return;
     }
-    /* /api/shelf/inventories/?search=1 */
+    let cart = await confirm_sale_response.json()
+    let max = ""
+    const stock_response = await fetch(`/api/shelf/inventories/?product=${product_id}&warehouse=${cart.warehouse}`)
+    if (stock_response.ok) {
+      const inventory = await stock_response.json()
+      max = `max=${inventory.results[0].stock}`
+      console.log(max, "maximum add", inventory.results[0].stock)
+    }
 
     const response = await fetch(`/api/sale/detail/`, {
         method: 'POST',
@@ -858,7 +876,7 @@ const addProduct = async (cart_id, product_id, table_id, price_id) => {
 
         <td>
           <div class="pr-1 w-full relative flex justify-end items-center">
-            <input type="number" min="1" oninput="updateProduct(this, ${data.id}, '${data.id}-${data.product_detail.id}', '${price_id}', '${cart_id}')" value="${data.quantity}"
+            <input type="number" step="0.01" min="1" ${max} oninput="updateProduct(this, ${data.id}, '${data.id}-${data.product_detail.id}', '${price_id}', '${cart_id}', '${max}')" value="${data.quantity}"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
             placeholder="1" />
           </div>
@@ -888,11 +906,11 @@ const addProduct = async (cart_id, product_id, table_id, price_id) => {
     price.innerText = `#${parseFloat(total_price).toFixed(2)}`;
 };
 let debounceUpdateTimeout;
-const debounceUpdateProduct = (quantity, sale_detail_id, row_id, price_id, cart_id) => {
+const debounceUpdateProduct = (quantity, sale_detail_id, row_id, price_id, cart_id, max) => {
   clearTimeout(debounceUpdateTimeout);
-  debounceUpdateTimeout = setTimeout(() => updateProduct(quantity, sale_detail_id, row_id, price_id, cart_id), 1000);
+  debounceUpdateTimeout = setTimeout(() => updateProduct(quantity, sale_detail_id, row_id, price_id, cart_id, max), 1000);
 }
-const updateProduct = async (quantity, sale_detail_id, row_id, price_id, cart_id) => {
+const updateProduct = async (quantity, sale_detail_id, row_id, price_id, cart_id, max) => {
   const row = document.getElementById(row_id);
   const price = document.getElementById(price_id);
   const qty = quantity.value;
@@ -900,6 +918,11 @@ const updateProduct = async (quantity, sale_detail_id, row_id, price_id, cart_id
     const confirm_sale_response = await fetch(`/api/sale/cart/${cart_id}`)
     if (!confirm_sale_response.ok) {
       DisplayMessage("Couldn't get cart. Try again", "error");
+      return;
+    }
+
+    if (quantity > Number(max.split('=')[1])) {
+      DisplayMessage("Not enough in stock", "error");
       return;
     }
 
@@ -918,6 +941,7 @@ const updateProduct = async (quantity, sale_detail_id, row_id, price_id, cart_id
     }
 
     const data = await response.json();
+    console.log(max, "maximum update")
 
     row.innerHTML =`
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -933,7 +957,7 @@ const updateProduct = async (quantity, sale_detail_id, row_id, price_id, cart_id
 
         <td>
           <div class="pr-1 w-full relative flex justify-end items-center">
-            <input type="number" min="1" oninput="debounceUpdateProduct(this, ${data.id}, '${data.id}-${data.product_detail.id}', '${price_id}', '${cart_id}')" value="${data.quantity}"
+            <input type="number" step="0.01" min="1" ${max} oninput="debounceUpdateProduct(this, ${data.id}, '${data.id}-${data.product_detail.id}', '${price_id}', '${cart_id}', ${max})" value="${data.quantity}"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
             placeholder="1" />
           </div>

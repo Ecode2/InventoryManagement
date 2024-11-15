@@ -29,17 +29,23 @@ admin.site.login = secure_admin_login(admin.site.login)
 
 urlpatterns = [
     path('home/', include("home.urls")),
+
     path("accounts/", include("allauth.urls")),
     path("admin/", admin.site.urls),
     path("i18n/", include("django.conf.urls.i18n")),
+
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
     path('no_permission/', views.no_permission, name='no_permission'),
+    path("api/notification/", include("django_notification.api.routers.notification")),
+
+    path("api/accounts/", include("accounts.urls")),
     path("api/shelf/", include("products.urls")),
     path("api/manage/", include("management.urls")),
     path("api/sale/", include("sales.urls")),
-    path("api/role/", views.user_role, name="role"),
+
     path('', include("dashboard.urls")),
     #path('', include('pwa.urls')),
 ]

@@ -15,7 +15,7 @@ class CustomUserCreationForm(UserCreationForm):
     fields, plus a repeated password."""
     class Meta:
         model = User
-        fields = ('role',)
+        fields = ('role', 'phone_number', 'store',)
 
 class CustomUserChangeForm(UserChangeForm):
     """A form for updating users. Includes all the fields on
@@ -24,7 +24,7 @@ class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ('role',)
+        fields = ('role', 'phone_number', 'store',)
 
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
@@ -38,7 +38,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_staff', 'role', 'is_active')
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'role')}),  # Add custom fields here
+        ('Personal info', {'fields': ('first_name', 'last_name', 'role', 'phone_number', 'store')}),  # Add custom fields here
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -46,7 +46,8 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'role', 'password1', 'password2')}
+            'fields': ('username', 'email', 'role', ' phone_number', 'store', 'password1', 'password2')
+                       }
         ),
     )
     search_fields = ('email', 'username',)

@@ -17,7 +17,6 @@ from .serializers import (DeliverySerializer, DeliveryDetailSerializer,
                           SalesReceiptSerializer, DeliveryReceiptSerializer)
 
 
-
 # Create your views here.
 class SalesDetailViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = SalesDetail.objects.all()
@@ -47,6 +46,11 @@ class SaleViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
+    
+
+    def perform_create(self, serializer):
+        serializer.validated_data["staff"] = self.request.user
+        return super().perform_create(serializer)
 
 class DeliveryDetailViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = DeliveryDetail.objects.all()
@@ -71,6 +75,10 @@ class DeliveryViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
+    
+    def perform_create(self, serializer):
+        serializer.validated_data["staff"] = self.request.user
+        return super().perform_create(serializer)
 
 class OrderDetailViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     queryset = OrderDetail.objects.all()
@@ -95,6 +103,10 @@ class OrderViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
+    
+    def perform_create(self, serializer):
+        serializer.validated_data["staff"] = self.request.user
+        return super().perform_create(serializer)
 
 
 ## TODO: integrate the GeneratePDF class to the post request of the receipt viewset
@@ -116,15 +128,11 @@ class SalesReceiptViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
 
     @action(detail=True, methods=['get'], permission_classes=[IsAdminOrStaff])
     def generate_pdf(self, request, pk=None):
+        
         receipt = self.get_object()
         template = get_template('dashboard/components/receipt_template.html')
-        context = {
-            'receipt_id': receipt.id,
-            'date': receipt.created_at,
-            'customer_name': receipt.sale.customer_name,
-            'amount': receipt.amount,
-            **receipt.get_receipt_data()
-        }
+        context = receipt.get_receipt_data()
+        
         html = template.render(context)
         pdf = HTML(string=html).write_pdf()
 
@@ -164,34 +172,8 @@ class DeliveryReceiptViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
     
 
 def receipt_view(request):
-    data = {
-        'from_name': 'John Smith',
-        'from_address': '4490 Oak Drive',
-        'from_city': 'Albany, NY 12210',
-        'receipt_number': 'INT-001',
-        'receipt_date': '11/02/2019',
-        'po_number': '2412/2019',
-        'due_date': '26/02/2019',
-        'bill_to_name': 'Jessie M Horne',
-        'bill_to_address': '4312 Wood Road',
-        'bill_to_city': 'New York, NY 10031',
-        'ship_to_name': 'Jessie M Horne',
-        'ship_to_address': '2019 Redbud Drive',
-        'ship_to_city': 'New York, NY 10011',
-        'items': [
-            {'qty': 1, 'description': 'Front and rear brake cables', 'unit_price': 100.00, 'amount': 100.00},
-            {'qty': 2, 'description': 'New set of pedal arms', 'unit_price': 25.00, 'amount': 50.00},
-            {'qty': 3, 'description': 'Labor 3hrs', 'unit_price': 15.00, 'amount': 45.00},
-        ],
-        'subtotal': 195.00,
-        'tax_rate': 0.05,
-        'tax_amount': 9.75,
-        'total': 204.75,
-        'terms_conditions': 'Payment is due within 15 days',
-        'bank_name': 'Name of Bank',
-        'account_number': '1234567890',
-        'routing_number': '098765432'
-    }
+    receipt = SalesReceipt.objects.first()
+    data = receipt.get_receipt_data()
     return render(request, 'dashboard/components/receipt_template.html', data)
 
 

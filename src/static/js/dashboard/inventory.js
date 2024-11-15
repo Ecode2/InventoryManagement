@@ -1,13 +1,13 @@
 const inventories = async (role, page) => {
     if (!page) {
-        if (role == "admin") {
-                page = "/api/shelf/inventories/"
-            }
         let warehouse_id = localStorage.getItem("warehouse_id");
         if (warehouse_id) {
             page = `/api/shelf/inventories?warehouse=${warehouse_id}`;
         } else {
             page = `/api/shelf/inventories`;
+        }
+        if (role == "admin") {
+            page = "/api/shelf/inventories/"
         }
 
         /* http://api.example.org/inventories/?cost_price_range_min=100&cost_price_range_max=200
@@ -17,6 +17,7 @@ const inventories = async (role, page) => {
             http://api.example.org/inventories/?min_stock_gte=10&max_stock_lte=50&cost_price_range_min=100&cost_price_range_max=200
          */
     }
+    console.log(page)
 
     try {
         
@@ -291,19 +292,19 @@ const inventories = async (role, page) => {
                                 </div>
                                 <div>
                                     <label for="item-weight" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item Weight (kg)</label>
-                                    <input type="number" name="item-weight" id="item-weight" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="12" placeholder="Ex. 12" required="">
+                                    <input type="number" step="0.01" name="item-weight" id="item-weight" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="12" placeholder="Ex. 12" required="">
                                 </div>
                                 <div>
                                     <label for="length" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Length (cm)</label>
-                                    <input type="number" name="length" id="lenght" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="105" placeholder="Ex. 105" required="">
+                                    <input type="number" step="0.01" name="length" id="lenght" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="105" placeholder="Ex. 105" required="">
                                 </div>
                                 <div>
                                     <label for="breadth" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Breadth (cm)</label>
-                                    <input type="number" name="breadth" id="breadth" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="15" placeholder="Ex. 15" required="">
+                                    <input type="number" step="0.01" name="breadth" id="breadth" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="15" placeholder="Ex. 15" required="">
                                 </div>
                                 <div>
                                     <label for="width" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Width (cm)</label>
-                                    <input type="number" name="width" id="width" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="23" placeholder="Ex. 23" required="">
+                                    <input type="number" step="0.01" name="width" id="width" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="23" placeholder="Ex. 23" required="">
                                 </div>
                             </div>
                         </div>
@@ -345,7 +346,7 @@ const inventories = async (role, page) => {
                                     <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this product?</h3>
+                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to Remove this Product from the Inventory?</h3>
                                     <button data-modal-toggle="delete-modal-${inventory.id}" type="button"  onclick="deleteInventory('${role}', ${inventory.id})"
                                         class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
                                         Yes, I'm sure
@@ -711,6 +712,8 @@ const load_inventory = async (role, page) => {
   
       pagination_section.innerHTML = "";
       pagination_section.innerHTML = paginator
+
+      initializeFlowbite();
   
     }catch {
       console.log("error")
@@ -723,163 +726,41 @@ event.preventDefault(); // Prevent the default form submission behavior
 func(...args); // Call the specified function with the provided arguments
 } */
 
-const createProduct = async (product_data) => {
-
-    let request_data = {
-        "name": product_data.name,
-        "description": product_data.description ? product_data.description!=""? product_data.description : null : null,
-        "cost_price": product_data.cost_price,
-        "selling_price": product_data.selling_price,
-        "category_ids": product_data.category,
-        "weight": product_data.weight ? product_data.weight!=""? product_data.weight : null : null,
-        "height": product_data.width ? product_data.width!=""? product_data.width : null : null,
-        "width": product_data.length ? product_data.length!=""? product_data.length : null : null
-    }
-
-    if (product_data.recorder_quantity && parseInt(product_data.recorder_quantity) >= 1) {
-        request_data.recorder_quantity = product_data.recorder_quantity;
-        request_data.recorder_quantity_name = product_data.recorder_quantity_name;
-    }
-
-    try {
-        const response = await fetch("/api/shelf/products/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify(request_data),
-        });
-
-        if (!response.ok) {
-            return null;
-        }
-
-        const data = await response.json();
-        if (!data) {
-            return null;
-        }
-
-        if (product_data.files) {
-            for (file of product_data.files) {
-                try {
-                    let file_form = new FormData();
-                    file_form.append("product", data.id)
-                    file_form.append("file", file)
-
-                    await fetch("/api/shelf/product-files/", {
-                        method: "POST",
-                        headers: {
-                            'X-CSRFToken': getCookie('csrftoken')
-                        },
-                        body: file_form,
-                    });
-
-                }catch {
-                    continue
-                }
-            }
-        }
-
-        return data;
-
-    } catch (error) {
-        return null;
-    }
-}
 
 const createInventory = async () => {
 console.log("starting")
 
-    const name = document.getElementById("create_name").value;
-    const category_list = document.getElementById("category_checkbox_list");
-    const cost_price = document.getElementById("create_cost_price").value;
-    const selling_price = document.getElementById("create_selling_price").value;
-    const weight = document.getElementById("create_weight").value;
-    const height = document.getElementById("create_height").value;
-    const width = document.getElementById("create_width").value;
-    const description = document.getElementById("create_description").value;
-    const recorder_quantity = document.getElementById("create_recorder_quantity").value
-    const recorder_quantity_name = document.getElementById("create_recorder_quantity_name").value
+    const product = document.getElementById("product_info").value;
     const stock = document.getElementById("create_stock").value;
     const min_stock = document.getElementById("create_min_stock").value;
     const max_stock = document.getElementById("create_max_stock").value;
     const alert_level = document.getElementById("create_alert_level").value;
     const warehouse = document.getElementById("create_warehouse").value;
-    const file_input = document.getElementById('create-dropzone-file').files;
 
-    const top_msg = document.getElementById("top_error");
-    const bottom_msg = document.getElementById("bottom_error");
+    const top_msg = document.getElementById("top_inventory_error");
+    const bottom_msg = document.getElementById("bottom_inventory_error");
 
     top_msg.innerHTML = "";
     bottom_msg.innerHTML = "";
     top_msg.classList.remove("hidden");
     bottom_msg.classList.remove("hidden");
     
-
-    if (!name || !selling_price) {
-        let message = DisplayMessage("Name and Price required", "error");
+    if (!product || product == "") {
+        let message = DisplayMessage("Select a product", "error");
+        
         top_msg.innerHTML = message.outerHTML;
         bottom_msg.innerHTML = message.outerHTML;
 
         setTimeout(() => {
             top_msg.classList.add("hidden");
             bottom_msg.classList.add("hidden");
-        }, 4000);
+            }, 4000);
         return;
+
     }
-    if (!stock) {
+
+    if (!stock || stock == "" || stock <= 0) {
         let message = DisplayMessage("Set stock Level", "error");
-        
-        top_msg.innerHTML = message.outerHTML;
-        bottom_msg.innerHTML = message.outerHTML;
-
-        setTimeout(() => {
-            top_msg.classList.add("hidden");
-            bottom_msg.classList.add("hidden");
-            }, 4000);
-        return;
-    }
-
-    let categories = category_list.querySelectorAll("input[type='checkbox']:checked");
-    if (categories.length == 0) {
-        let message = DisplayMessage("Select at least one category", "error");
-        
-        top_msg.innerHTML = message.outerHTML;
-        bottom_msg.innerHTML = message.outerHTML;
-
-        setTimeout(() => {
-            top_msg.classList.add("hidden");
-            bottom_msg.classList.add("hidden");
-            }, 4000);
-        return;
-    }
-
-    let category_ids = []
-    for (category of categories) {
-        category_ids.push(category.value);
-    }
-
-    product_data = {
-        name: name,
-        category: category_ids, 
-        cost_price: cost_price, 
-        selling_price: selling_price, 
-        weight: weight,
-        height: height,
-        width: width,
-        description: description, 
-        files: file_input
-    }
-
-    if (recorder_quantity && recorder_quantity != 0) {
-        product_data.recorder_quantity = recorder_quantity;
-        product_data.recorder_quantity_name = recorder_quantity_name;
-    }
-
-    const product_response = await createProduct(product_data);
-    if (!product_response) {
-        let message = DisplayMessage("Couldn't create product", "error");
         
         top_msg.innerHTML = message.outerHTML;
         bottom_msg.innerHTML = message.outerHTML;
@@ -893,7 +774,7 @@ console.log("starting")
 
     try {
         let inventory_data = {
-            "product": product_response.id,
+            "product": product,
             "stock": stock,
             "warehouse": warehouse
         }
@@ -938,7 +819,7 @@ console.log("starting")
             return;
         }
 
-        let modal_btn = document.getElementById("close_create_modal");
+        let modal_btn = document.getElementById("close_create_inventory_modal");
         modal_btn.click();
 
         DisplayMessage("Inventory created successfully", "success");
@@ -964,6 +845,87 @@ console.log("starting")
 
 }
 
+let debounceProductInventoryTimeout;
+const debounceSearchProductInventory = (search_modal) => {
+  clearTimeout(debounceProductInventoryTimeout);
+  debounceProductInventoryTimeout = setTimeout(() => searchProductInventory(search_modal), 1000);
+}
+const searchProductInventory = async (search_modal) => {
+    const product_list = document.getElementById(`${search_modal}_list`)
+    const product_input = document.getElementById(`${search_modal}_search`)
+    const input_value = product_input.value;
+
+    if (input_value.length >= 3) {
+      try {
+        const response = await fetch(`/api/shelf/products/?search=${input_value}`)
+        if (!response.ok) {
+          return;
+        }
+        const data = await response.json()
+        const results = data.results;
+
+        let search_results = "";
+
+        for (product of results) {
+          const files = product.files.map((file) => file.file);
+          img_url = files.length ? files[0] : "";
+          image = `<img src="${img_url}" alt="${product.name}-Image" class="h-8 w-auto mr-3">`;
+
+          let product_detail = {
+            "id": product.id,
+            "name": product.name,
+            "selling_price": product.selling_price,
+            "recorder_quantity": product.recorder_quantity,
+            "recorder_quantity_name": product.recorder_quantity_name
+          }
+          
+          search_results += `
+            <li>
+              <div onclick='addProductInventory(${JSON.stringify(product_detail)}, "product_info")'
+                class="flex items-center ps-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
+
+                  <dt class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <div class="flex items-center">
+                        ${image}
+                        <div class="text-base font-semibold">${product.name}</div>
+                    </div>
+                  </dt>
+
+                  <dd class="text-lg sm:text-sm font-bold text-gray-900 dark:text-white">#${product.selling_price}</dd>
+                </dl>
+              </div>
+            </li>
+          `;
+        }
+
+        product_list.innerHTML = search_results;
+
+      }catch(error) {
+        console.log("error", error)
+        return;
+      }
+    } else {
+      console.log("blank")
+      product_list.innerHTML = ""; // Clear the list if input length is less than 3
+    }
+}
+
+const addProductInventory = async (product_info_str, product_container) => {
+
+    const product_info = product_info_str;
+    const container = document.getElementById(product_container)
+
+    console.log(product_info.image)
+
+    container.innerHTML = `
+            <option value="${product_info.id}" selected="">
+                <span>${product_info.name}</span>
+                <span>#${product_info.selling_price} for ${product_info.recorder_quantity} ${product_info.recorder_quantity_name}</span>
+            </option>
+        `;
+}
+
 /* const editInventory = async (event, id) => {} */
 const deleteInventory = async (role, inventory_id) => {
     try {
@@ -972,32 +934,15 @@ const deleteInventory = async (role, inventory_id) => {
             DisplayMessage("Couldn't identify inventory", "error")
             return
         }
-
-        const data = await response.json()
-
-        /* for (file of data.product_detail.files) {
-            try {
-                await fetch(`/api/shelf/product-files/${file.id}/`, {
-                    method: "DELETE",
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken')
-                    }
-                })
-            }catch{
-                continue
-            }
-        } */
         
-        await fetch(`/api/shelf/products/${data.product}/`, {
+        await fetch(`/api/shelf/inventories/${inventory_id}/`, {
             method: "DELETE",
             headers: {
                 'X-CSRFToken': getCookie('csrftoken')
             }
         })
 
-        console.log("deleting")
         load_inventory(role)
-
 
     }catch(error) {
         DisplayMessage("Couldn't identify inventory", "error")
@@ -1005,7 +950,7 @@ const deleteInventory = async (role, inventory_id) => {
     }
 }
 
- /*add_product_btn(role)*/
+ /*add_inventory_btn(role)*/
 
 const get_warehouse = async () => {
     try {
@@ -1056,364 +1001,7 @@ const get_warehouse = async () => {
     }
 }
 
-const get_category = async () => {
-    let category_list = ""
-    try {
-        const response = await fetch("/api/shelf/categories/")
-        if (!response.ok) {
-            return `
-                <li>
-                    <div class="flex items-center">
-                    No category found 
-                    </div>
-                </li>`;
-        }
 
-        const data = await response.json();
-        if (!data || !data.results) {
-            return `
-                <li>
-                    <div class="flex items-center">
-                    No category found
-                    </div>
-                </li>`;
-        }
-
-        let categories = data.results
-
-        if (categories.length == 0) {
-            return `
-                <li>
-                    <div class="flex items-center">
-                    No category found
-                    </div>
-                </li>`;
-        }
-        category_list += `
-                    <li>
-                        <div class="flex items-center">
-                        <input id="checkbox-item-${categories[0].id}" type="checkbox" value="${categories[0].id}" checked class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                        <label for="checkbox-item-${categories[0].id}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${categories[0].name}</label>
-                        </div>
-                    </li>`
-
-        for (const category of categories.slice(1)) {
-            category_list += `
-                    <li>
-                        <div class="flex items-center">
-                        <input id="checkbox-item-${category.id}" type="checkbox" value="${category.id}" class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                        <label for="checkbox-item-${category.id}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${category.name}</label>
-                        </div>
-                    </li>`;
-        }
-        return category_list
-
-    }catch(error) {
-        return `
-        <li>
-            <div class="flex items-center">
-            An error occured
-            </div>
-        </li>`;
-        }
-}
-
-const create_category = async () => {
-    const top_msg = document.getElementById("top_error");
-    const bottom_msg = document.getElementById("bottom_error");
-
-    top_msg.innerHTML = "";
-    bottom_msg.innerHTML = "";
-    top_msg.classList.remove("hidden");
-    bottom_msg.classList.remove("hidden");
-
-    let category_name = document.getElementById("new_category").value;
-    let category_list = document.getElementById("category_checkbox_list");
-
-    if (!category_name) {
-        let message = DisplayMessage("Category name required", "error");
-        top_msg.innerHTML = message.outerHTML;
-        bottom_msg.innerHTML = message.outerHTML;
-
-        setTimeout(() => {
-            top_msg.classList.add("hidden");
-            bottom_msg.classList.add("hidden");
-        }, 4000);
-        return null;
-    }
-    try {
-        const response = await fetch("/api/shelf/categories/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify({name: category_name}),
-        });
-
-        if (!response.ok) {
-            let message = DisplayMessage("Something Went Wrong", "error");
-            top_msg.innerHTML = message.outerHTML;
-            bottom_msg.innerHTML = message.outerHTML;
-
-            setTimeout(() => {
-                top_msg.classList.add("hidden");
-                bottom_msg.classList.add("hidden");
-            }, 4000);
-            return null;
-        }
-
-        const data = await response.json();
-        if (!data) {
-            let message = DisplayMessage("Something Went Wrong", "error");
-            top_msg.innerHTML = message.outerHTML;
-            bottom_msg.innerHTML = message.outerHTML;
-
-            setTimeout(() => {
-                top_msg.classList.add("hidden");
-                bottom_msg.classList.add("hidden");
-            }, 4000);
-            return null;
-        }
-
-        let category_item = `
-                    <div class="flex flex-col justify-between space-y-2">
-                        <div class="relative max-w-fit">
-                            <input type="text" id="input-category-search" oninput="debounceSearchCategory()"
-                            class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                            placeholder="Search Category">
-                        </div>
-                        <div class="flex md:justify-between md:items-center md:flex-row flex-col justify-center items-center space-x-0 space-y-1 md:space-y-0 md:space-x-4">
-                            <input type="text" id="new_category"
-                                class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                                placeholder="New Category">
-                            <button type="button" id="createCategoryButton" onclick="create_category()"
-                            class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                                Create
-                            </button>
-                        </div>
-                    </div>`;
-        category_list.innerHTML = category_item;
-
-        let categories = await get_category();
-        category_list.innerHTML += categories;
-
-        return data;
-
-
-    } catch (error) {
-        let message = DisplayMessage("Something Went Wrong", "error");
-        top_msg.innerHTML = message.outerHTML;
-        bottom_msg.innerHTML = message.outerHTML;
-
-        setTimeout(() => {
-            top_msg.classList.add("hidden");
-            bottom_msg.classList.add("hidden");
-        }, 4000);
-        return null;
-    }
-}
-
-let debounceCategoryTimeout;
-const debounceSearchCategory = (search_modal) => {
-  clearTimeout(debounceCategoryTimeout);
-  debounceCategoryTimeout = setTimeout(() => search_category(search_modal), 1000);
-}
-const search_category = async (search_modal) => {
-    const category_list = document.getElementById(`category_checkbox_list`);
-    const category_name = document.getElementById(`input-category-search`).value;
-
-    const top_msg = document.getElementById("top_error");
-    const bottom_msg = document.getElementById("bottom_error");
-
-    top_msg.innerHTML = "";
-    bottom_msg.innerHTML = "";
-    top_msg.classList.remove("hidden");
-    bottom_msg.classList.remove("hidden");
-
-    if (category_name.length >= 3) {
-      try {
-        const response = await fetch(`/api/shelf/categories/?search=${category_name}`)
-        if (!response.ok) {
-            let message = DisplayMessage("An error occurred", "error");
-            top_msg.innerHTML = message.outerHTML;
-            bottom_msg.innerHTML = message.outerHTML;
-
-            setTimeout(() => {
-                top_msg.classList.add("hidden");
-                bottom_msg.classList.add("hidden");
-            }, 4000);
-            return;
-        }
-        const data = await response.json()
-        const results = data.results;
-
-        let search_results = `
-            <div class="flex flex-col justify-between space-y-2">
-                <div class="relative max-w-fit">
-                    <input type="text" id="input-category-search" oninput="debounceSearchCategory()"
-                    class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                    placeholder="Search Category">
-                </div>
-                <div class="flex md:justify-between md:items-center md:flex-row flex-col justify-center items-center space-x-0 space-y-1 md:space-y-0 md:space-x-4">
-                    <input type="text" id="new_category"
-                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                        placeholder="New Category">
-                    <button type="button" id="createCategoryButton" onclick="create_category()"
-                    class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                        Create
-                    </button>
-                </div>
-            </div>
-            <li>
-                <div class="flex items-center">
-                <input id="checkbox-item-${results[0].id}" type="checkbox" value="${results[0].id}" checked class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                <label for="checkbox-item-${results[0].id}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${results[0].name}</label>
-                </div>
-            </li>`;
-
-        for (category of results.slice(1)) {
-          search_results += `
-            <li>
-                <div class="flex items-center">
-                <input id="checkbox-item-${category.id}" type="checkbox" value="${category.id}" class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                <label for="checkbox-item-${category.id}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${category.name}</label>
-                </div>
-            </li>`;
-        }
-
-        category_list.innerHTML = search_results;
-
-      }catch(error) {
-        console.log("sometsvrvhing")
-        let categories = await get_category();
-        category_list.innerHTML = `
-        <div class="flex flex-col justify-between space-y-2">
-                <div class="relative max-w-fit">
-                    <input type="text" id="input-category-search" oninput="debounceSearchCategory()"
-                    class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                    placeholder="Search Category">
-                </div>
-                <div class="flex md:justify-between md:items-center md:flex-row flex-col justify-center items-center space-x-0 space-y-1 md:space-y-0 md:space-x-4">
-                    <input type="text" id="new_category"
-                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                        placeholder="New Category">
-                    <button type="button" id="createCategoryButton" onclick="create_category()"
-                    class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                        Create
-                    </button>
-                </div>
-            </div>`;
-        category_list.innerHTML += categories;
-      }
-    } else {
-        console.log("something")
-        let categories = await get_category();
-        category_list.innerHTML = `
-        <div class="flex flex-col justify-between space-y-2">
-                <div class="relative max-w-fit">
-                    <input type="text" id="input-category-search" oninput="debounceSearchCategory()"
-                    class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                    placeholder="Search Category">
-                </div>
-                <div class="flex md:justify-between md:items-center md:flex-row flex-col justify-center items-center space-x-0 space-y-1 md:space-y-0 md:space-x-4">
-                    <input type="text" id="new_category"
-                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                        placeholder="New Category">
-                    <button type="button" id="createCategoryButton" onclick="create_category()"
-                    class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                        Create
-                    </button>
-                </div>
-            </div>`;
-        category_list.innerHTML += categories;
-    }
-}
-
-const select_image = async (event, img_container) => {
-    const fileInput = event.target;
-    const selectedImagesContainer = document.getElementById(img_container);
-
-    // Clear previous content
-    selectedImagesContainer.innerHTML = '';
-
-    const files = fileInput.files;
-    if (files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-            const fileName = files[i].name;
-            const fileItem = document.createElement('p');
-            fileItem.className = 'text-sm text-gray-500 dark:text-gray-400';
-            fileItem.textContent = fileName;
-            selectedImagesContainer.appendChild(fileItem);
-            console.log("uploaded")
-        }
-    } else {
-        const noFilesMessage = document.createElement('p');
-        noFilesMessage.className = 'text-sm text-gray-500 dark:text-gray-400';
-        noFilesMessage.textContent = 'No files selected';
-        selectedImagesContainer.appendChild(noFilesMessage);
-    };
-}
-
-const delete_image = async (role, img_id, image_container) => {
-    if (role != "admin") {
-        DisplayMessage("Unauthorised to perform this action", "error")
-            return
-    }
-
-    try {
-        const response = await fetch(`/api/shelf/product-files/${img_id}/`)
-        if (!response.ok){
-            DisplayMessage("Image not found", "error")
-            return
-        }
-
-        const data = await response.json()
-
-        await fetch(`/api/shelf/product-files/${img_id}/`, {
-            method: "DELETE",
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken')
-            }
-        })
-
-        const product_response = await fetch(`/api/shelf/products/${data.product}/`)
-        if (!product_response.ok){
-            return;}
-        const product_data = await product_response.json()
-
-        let product_files = product_data.files.map((file) => file.file);
-        const imageContainer = document.getElementById(image_container)
-
-        imageContainer.innerHTML = product_files.length ? `
-        <div class="relative p-2 bg-gray-100 rounded-lg w-fit sm:h-36 dark:bg-gray-700">
-            <img src="${product_files[0]}" class="h-full w-full" alt="${product_data.name}-Image">
-            <button type="button" class="absolute text-red-600 dark:text-red-500 hover:text-red-500 dark:hover:text-red-400 bottom-1 left-1">
-                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                </svg>
-                <span class="sr-only">Remove image</span>
-            </button>
-        </div>` : '';
-
-        for (let file of product_files.slice(1)){
-            imageContainer.innerHTML += `
-                <div class="relative p-2 bg-gray-100 rounded-lg w-fit sm:h-36 dark:bg-gray-700">
-                    <img src="${file}" class="h-full w-full" alt="${product_data.name}-Image">
-                    <button type="button" class="absolute text-red-600 dark:text-red-500 hover:text-red-500 dark:hover:text-red-400 bottom-1 left-1">
-                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="sr-only">Remove image</span>
-                    </button>
-                </div>`
-        }
-
-    }catch(error) {
-        DisplayMessage("Something went wrong", "error")
-        return;
-    }
-}
 
 async function InventoryPage(role) {
     
@@ -1430,17 +1018,16 @@ async function InventoryPage(role) {
         count = response.count;
     }
 
-    let categories = await get_category()
 
-    let add_product_btn = role == "admin" ? `
+    let add_inventory_btn = role == "admin" ? `
         <button type="button" id="createProductButton" data-modal-toggle="createProductModal" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
             <svg class="h-3.5 w-3.5 mr-1.5 -ml-1" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
             </svg>
-            Add product
+            New Inventory
         </button>` : ``;
 
-    let add_product_modal = role == "admin" ? `
+    let add_inventory_modal = role == "admin" ? `
         <!-- End block -->
         <div id="createProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] md:h-full">
             <div class="relative p-4 w-full max-w-3xl h-full md:h-auto">
@@ -1449,7 +1036,7 @@ async function InventoryPage(role) {
                     <!-- Modal header -->
                     <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Add Product</h3>
-                        <button id="close_create_modal" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="createProductModal">
+                        <button id="close_create_inventory_modal" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="createProductModal">
                             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
@@ -1459,141 +1046,75 @@ async function InventoryPage(role) {
                     <!-- Modal body -->
                     <div>
                         <div class="grid gap-4 mb-4 sm:grid-cols-2">
-                            <div id="top_error" class="sm:col-span-2">
+                            <div id="top_inventory_error" class="sm:col-span-2">
                                 
                             </div>
-                            <div>
-                                <label for="create_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
-                                <input type="text" name="create_name" id="create_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
-                            </div>
-                            <div>
-                                <label for="category_checkbox_button" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
-                                <button id="category_checkbox_button" data-dropdown-toggle="category_checkbox" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 flex justify-between w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" type="button">
-                                    Select category
-                                    <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                    </svg>
-                                </button>
+                            <div class="grid gap-4 sm:col-span-2 md:gap-6 sm:grid-cols-3">
+                                <div class="col-span-2">
+                                    <label for="product_info" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
+                                    <select id="product_info" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        <option selected="">
+                                            <span>----</span>
+                                            <span>select product</span>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="category_product_button" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Search</label>
+                                    <button id="category_product_button" data-dropdown-toggle="category_product" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 flex justify-between w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" type="button">
+                                        Search Product
+                                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                        </svg>
+                                    </button>
 
-                                <!-- Dropdown menu -->
-                                <div id="category_checkbox" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
-                                    
-                                    <ul id="category_checkbox_list" class="p-3 space-y-3 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="category_checkbox_button">
-                                        <div class="flex flex-col justify-between space-y-2">
-                                            <div class="relative max-w-fit">
-                                                <input type="text" id="input-category-search" oninput="debounceSearchCategory()"
-                                                class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                                                placeholder="Search Category">
+                                    <!-- Dropdown menu -->
+                                    <div id="category_product" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">                                    
+                                        <div class="p-3">
+                                            <label for="create_inventory_search" class="sr-only">Search</label>
+                                            <div class="relative">
+                                                <input type="text" id="create_inventory_search" oninput="debounceSearchProductInventory('create_inventory')"
+                                                class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Search Product">
                                             </div>
-                                            <div class="flex md:justify-between md:items-center md:flex-row flex-col justify-center items-center space-x-0 space-y-1 md:space-y-0 md:space-x-4">
-                                                <input type="text" id="new_category"
-                                                    class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                                                    placeholder="New Category">
-                                                <button type="button" id="createCategoryButton" onclick="create_category()"
-                                                class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                                                    Create
-                                                </button>
                                             </div>
-                                        </div>
-                                        ${categories}
-                                    </ul>
+                                            <ul id="create_inventory_list" style="z-index:9999;" class=" max-h-48 h-auto px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="category_product_button">
+                                            
+                                            </ul>
+                                        </div>   
+                                    </div>                             
                                 </div>
-                            </div>
-                            <div>
-                                <label for="create_cost_price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cost Price</label>
-                                <input type="number" name="create_cost_price" id="create_cost_price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="#2000" required="">
-                            </div>
-                            <div>
-                                <label for="create_selling_price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Selling Price</label>
-                                <input type="number" name="create_selling_price" id="create_selling_price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="#3000" required="">
-                            </div>
-                            <div class="grid gap-4 sm:col-span-2 md:gap-6 sm:grid-cols-4">
-                                <div>
-                                    <label for="create_weight" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product weight (kg)</label>
-                                    <input type="number" name="create_weight" id="create_weight" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="12">
-                                </div>
-                                <div>
-                                    <label for="create_height" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Height (cm)</label>
-                                    <input type="number" name="create_height" id="create_height" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="15">
-                                </div>
-                                <div>
-                                    <label for="create_width" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Width (cm)</label>
-                                    <input type="number" name="create_width" id="create_width" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="23">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label for="create_recorder_quantity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity per Price</label>
-                                <input type="number" name="create_recorder_quantity" id="create_recorder_quantity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="23">
-                            </div>
-                            <div>
-                                <label for="create_recorder_quantity_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Per Quantity Name</label>
-                                <select id="create_recorder_quantity_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                    <option value="Piece" selected="">Piece</option>
-                                    <option value="Pack">Pack</option>
-                                    <option value="Dozen">Dozen</option>
-                                    <option value="Trowser">Trowser</option>
-                                    <option value="Yard">Yard</option>
-                                </select>
-                            </div>
-
-                            <div class="sm:col-span-2">
-                                <label for="create_description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                                <textarea id="create_description" rows="4" 
-                                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                                    placeholder="Write product description here"></textarea>
                             </div>
                         </div>
                         <div class="mb-4 space-y-4 sm:flex sm:space-y-0">
-                            <div class="grid gap-4 sm:col-span-2 md:gap-6 sm:grid-cols-4">
+                            <div class="grid gap-4 w-full sm:col-span-3 md:gap-6 sm:grid-cols-2">
                                 <div>
                                     <label for="create_stock" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Stock</label>
-                                    <input type="number" name="create_stock" id="create_stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="12"  required="">
+                                    <input type="number" step="0.01" name="create_stock" id="create_stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="12"  required="">
                                 </div>
                                 <div>
                                     <label for="create_min_stock" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Min level</label>
-                                    <input type="number" name="create_min_stock" id="create_min_stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="105">
+                                    <input type="number" step="0.01" name="create_min_stock" id="create_min_stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="105">
                                 </div>
                                 <div>
                                     <label for="create_max_stock" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Max level</label>
-                                    <input type="number" name="create_max_stock" id="create_max_stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="15">
+                                    <input type="number" step="0.01" name="create_max_stock" id="create_max_stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="15">
                                 </div>
                                 <div>
                                     <label for="create_alert_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alert Level</label>
-                                    <input type="number" name="create_alert_level" id="create_alert_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="23">
+                                    <input type="number" step="0.01" name="create_alert_level" id="create_alert_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="23">
                                 </div>
                             </div>
                         </div>
                         <div class="mb-4">
                             ${await get_warehouse()}
                         </div>
-                        <div class="mb-4">
-                            <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Images</span>
-                            <div class="flex justify-center items-center w-full">
-                                <label for="create-dropzone-file" class="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                    <div class="flex flex-col justify-center items-center pt-5 pb-6">
-                                        <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                        </svg>
-                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                            <span class="font-semibold">Click to upload</span> or drag and drop
-                                        </p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                                    </div>
-                                    <input id="create-dropzone-file" onchange="select_image(event, 'create-selected-images')" type="file" class="hidden" multiple>
-                                    <div id="create-selected-images" class="flex flex-wrap justify-center space-x-2 items-center w-full">
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Selected files will appear here</p>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-                        <div id="bottom_error" class="sm:col-span-2">
+                        <div id="bottom_inventory_error" class="sm:col-span-2">
                             
                         </div>
                         <div class="items-center justify-evenly space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
                             <button type="submit" onclick="createInventory()"
                                 class="w-full sm:w-auto justify-center text-white inline-flex bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                Add product
+                                Add inventory
                             </button>
                             <button data-modal-toggle="createProductModal" type="button" class="w-full justify-center sm:w-auto text-gray-500 inline-flex items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
                                 <svg class="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -1627,7 +1148,7 @@ async function InventoryPage(role) {
                                 <span class="sr-only">More info</span>
                             </button>
                             <div id="results-tooltip" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                                Showing 50 of ${count} results
+                                Showing 50 of ${count} Items
                                 <div class="tooltip-arrow" data-popper-arrow=""></div>
                             </div>
                         </div>
@@ -1656,7 +1177,7 @@ async function InventoryPage(role) {
                             </form>
                         </div>
                         <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                            ${add_product_btn}
+                            ${add_inventory_btn}
                             <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown" class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">
                                 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-4 w-4 mr-1.5 -ml-1 text-gray-400" viewbox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
@@ -1823,10 +1344,11 @@ async function InventoryPage(role) {
                 </div>
             </div>
         </section>
-        ${add_product_modal}
+        ${add_inventory_modal}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
         `;
 }
 
-// TODO: re route an inventory detail request to the profile page
+// implement only inventory create, update, delete and separate them from the product crud
+
 window.InventoryPage = InventoryPage;

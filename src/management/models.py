@@ -11,6 +11,8 @@ class Location(models.Model):
 
 class Warehouse(models.Model):
     name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=100, null=True, blank=True)
+    email = models.EmailField(max_length=100, null=True, blank=True)
     is_refrigerated = models.BooleanField(default=False, null=True, blank=True)
 
     address = models.CharField(max_length=200)

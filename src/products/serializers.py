@@ -75,34 +75,34 @@ class InventorySerializer(serializers.ModelSerializer):
             'average_sales_month'
         ]
 
-    def get_product_detail(self, obj):
+    def get_product_detail(self, obj) -> dict:
         product_details = ProductSerializer(obj.product).data
         return product_details
     
-    def get_warehouse_detail(self, obj):
+    def get_warehouse_detail(self, obj) -> dict:
         warehouse_details = WarehouseSerializer(obj.warehouse).data
         return warehouse_details
 
-    def get_sales_day(self, obj):
+    def get_sales_day(self, obj) -> int | float:
         sales_data = obj.get_sales_data()
         return sales_data.get('sales_day') or 0
 
-    def get_sales_month(self, obj):
+    def get_sales_month(self, obj) -> int | float:
         sales_data = obj.get_sales_data()
         return sales_data.get('sales_month') or 0
 
-    def get_total_sales(self, obj):
+    def get_total_sales(self, obj) -> int | float:
         sales_data = obj.get_sales_data()
         return sales_data.get('total_sales') or 0
 
-    def get_revenue(self, obj):
+    def get_revenue(self, obj) -> int | float:
         sales_data = obj.get_sales_data()
         return sales_data.get('revenue') or 0.0
 
-    def get_average_sales_day(self, obj):
+    def get_average_sales_day(self, obj) -> int | float:
         sales_data = obj.get_sales_data()
         return sales_data.get('average_sales_day') or 0.0
 
-    def get_average_sales_month(self, obj):
+    def get_average_sales_month(self, obj) -> int | float:
         sales_data = obj.get_sales_data()
         return sales_data.get('average_sales_month') or 0.0

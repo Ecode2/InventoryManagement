@@ -8,13 +8,18 @@ class SalesDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = SalesDetail
         fields = ["id", "sale", "product", "quantity", "unit_price", "bulk_price", "product_detail", "created_at"]
+        read_only_fields = ['id']
 
-    def get_product_detail(self, obj):
+    def get_product_detail(self, obj) -> dict:
         serialized_data = ProductSerializer(obj.product).data
         return serialized_data
     
     def create(self, validated_data):
         sales_detail = SalesDetail(**validated_data)
+        if sales_detail.quantity <= 0:
+            #raise serializers.ValidationError("Quantity must be greater than zero")
+            sales_detail.quantity = 1
+
         if not sales_detail.unit_price:
             sales_detail.unit_price = sales_detail.product.selling_price
         sales_detail.bulk_price = sales_detail.unit_price * sales_detail.quantity
@@ -29,15 +34,15 @@ class SalesDetailSerializer(serializers.ModelSerializer):
         return instance
 
 class SaleSerializer(serializers.ModelSerializer):
-    #sales_details = SalesDetailSerializer(many=True, read_only=True)
+    staff = serializers.StringRelatedField()
     sales_details = serializers.SerializerMethodField()
 
     class Meta:
         model = Sale
-        fields = ['id', "sale_uuid", "warehouse", "customer", "customer_name", "payment_method", "sales_details", "status", "created_at"]
-        read_only_fields = ["id", "created_at"]
+        fields = ['id', "sale_uuid", "warehouse", "customer", "staff", "customer_name", "payment_method", "sales_details", "status", "created_at"]
+        read_only_fields = ["id", "sale_uuid", "staff" "created_at"]
 
-    def get_sales_details(self, obj):
+    def get_sales_details(self, obj) -> dict:
         sales_data = SalesDetail.objects.filter(sale=obj)
         serialized_data = SalesDetailSerializer(sales_data, many=True).data
         return serialized_data
@@ -48,11 +53,13 @@ class DeliveryDetailSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class DeliverySerializer(serializers.ModelSerializer):
+    staff = serializers.StringRelatedField()
     delivery_details = DeliveryDetailSerializer(many=True, read_only=True)
 
     class Meta:
         model = Delivery
-        fields = ['id', "warehouse", "customer", "customer_name", "expected_delivery_date", "actual_delivery_date", "delivery_details"]
+        fields = ['id', "delivery_uuid", "warehouse", "customer", "staff", "customer_name", "expected_delivery_date", "actual_delivery_date", "delivery_details"]
+        read_only_fields = ['id', "delivery_uuid", 'staff']
 
 class OrderDetailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -60,25 +67,36 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class OrderSerializer(serializers.ModelSerializer):
+    staff = serializers.StringRelatedField()
     order_details = OrderDetailSerializer(many=True, read_only=True)
 
     class Meta:
         model = Order
-        fields = fields = ['id', "warehouse", "provider", "expected_delivery_date", "actual_delivery_date", "order_details"]
+        fields = fields = ['id', "order_uuid", "warehouse", "provider", "staff", "expected_delivery_date", "actual_delivery_date", "order_details"]
+        read_only_fields = ['id', "order_uuid", 'staff']
 
 class SalesReceiptSerializer(serializers.ModelSerializer):
+    staff = serializers.StringRelatedField()
     sales = serializers.SerializerMethodField()
     class Meta:
         model = SalesReceipt
-        fields = ["id", "sale", "amount", "payment_method", "created_at", "sales"]
-        read_only_fields = ["id", "created_at"]
+        fields = ["id", "receipt_uuid", "sale", "staff", "amount", "payment_method", "created_at", "sales"]
+        read_only_fields = ["id", "receipt_uuid", "staff", "created_at"]
         
-    def get_sales(self, obj):
+    def get_sales(self, obj) -> dict:
         sales_data = Sale.objects.get(id=obj.sale.id)
         serialized_data = SaleSerializer(sales_data).data
         return serialized_data
 
 class DeliveryReceiptSerializer(serializers.ModelSerializer):
+    staff = serializers.StringRelatedField()
+    deliveries = serializers.SerializerMethodField()
     class Meta:
         model = DeliveryReceipt
-        fields = "__all__"
+        fields = ["id", "receipt_uuid", "delivery", "staff", "amount", "payment_method", "created_at", "deliveries"]
+        read_only_fields = ["id", "receipt_uuid", "staff", "created_at"]
+
+    def get_deliveries(self, obj) -> dict:
+        delivery_data = Delivery.objects.get(id=obj.delivery.id)
+        serialized_data = DeliverySerializer(delivery_data).data
+        return serialized_data

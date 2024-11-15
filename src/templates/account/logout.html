@@ -20,7 +20,7 @@
                         {% trans 'Are you sure you want to sign out?' %}
                     </p>
                     {% url 'account_logout' as action_url %}
-                    <form class="space-y-4 md:space-y-6" method="post" action="{{ action_url }}">
+                    <form id="logout_form" class="space-y-4 md:space-y-6" method="post" action="{{ action_url }}">
                         {% csrf_token %}
                         {{ redirect_field }}
                         <div class="flex justify-between items-center">
@@ -34,14 +34,5 @@
         </div>
     </section>
 
-    <script>
-        // Post a message to the parent window indicating logout success
-        window.addEventListener('DOMContentLoaded', (event) => {
-            const form = document.querySelector('form');
-            form.addEventListener('submit', () => {
-                window.parent.postMessage('logoutSuccess', '*');
-            });
-        });
-    </script>
 
 {% endblock content %}
