@@ -19,3 +19,4 @@ drf-extensions
 weasyprint
 dj-notification-api
 pip-tools
+django-backblaze-b2

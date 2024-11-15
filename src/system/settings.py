@@ -28,6 +28,7 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+print(config("DEBUG", cast=bool))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if config("DEBUG", default=False, cast=bool) == False:
@@ -54,6 +55,7 @@ if config("DEBUG", default=False, cast=bool) == False:
     SECURE_BROWSER_XSS_FILTER=True
 
     X_FRAME_OPTIONS='SAMEORIGIN'
+    print("production \n\n")
 
 else:
     DEBUG = True
@@ -178,6 +180,7 @@ DEFAULT_FROM_EMAIL = 'alayaabubakar14@gmail.com'
 
 from .helpers.db import database
 DATABASES = database
+print(DATABASES, "\n\n\n")  
 
 # settings.py
 import logging
@@ -327,9 +330,9 @@ SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+#ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+#ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 USE_I18N = True
 
@@ -342,9 +345,35 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 
+from .helpers.env import config
+
 if not DEBUG:
-    from .helpers.storage import *
-    #STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    print("cloud storage", "\n\n\n")
+
+    #STATICFILES_DIRS = [BASE_DIR / "static",]
+
+    AWS_ACCESS_KEY_ID = config("B2_ACCESS_KEY_ID", default=None)
+    AWS_SECRET_ACCESS_KEY = config("B2_SECRET_ACCESS_KEY", default=None)
+    AWS_STORAGE_BUCKET_NAME = config("B2_STORAGE_BUCKET_NAME", default="production-bucket")
+    AWS_S3_REGION_NAME = 'us-east-005'
+    #AWS_DEFAULT_ACL = "public-read"
+
+    AWS_S3_ENDPOINT = f's3.{AWS_S3_REGION_NAME}.backblazeb2.com'
+    AWS_S3_ENDPOINT_URL = f'https://{AWS_S3_ENDPOINT}'
+
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+
+    AWS_LOCATION = 'static'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT}/"
+
+    STATIC_ROOT = f"static/"
+    #MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT}/media/'
+
+    DEFAULT_FILE_STORAGE = 'system.storage_backends.MediaStorage'
+
 else:
 
     STATIC_URL = "static/"
