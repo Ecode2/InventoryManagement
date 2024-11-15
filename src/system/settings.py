@@ -29,7 +29,7 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-print("DEBUG \n\n\n", os.getenv("DEBUG"))
+print("\n\n\n DEBUG \n\n\n", os.getenv("DEBUG"), "\n\n\n")
 print(config("DEBUG", cast=bool))
 
 # SECURITY WARNING: don't run with debug turned on in production!
