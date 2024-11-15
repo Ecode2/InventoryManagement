@@ -78,7 +78,7 @@ djangorestframework==3.15.2
     # via
     #   -r src/requirements/requirements.in
     #   dj-notification-api
-    #   drf-extensions
+    #   ttps://drf-extensions
     #   drf-spectacular
 drf-extensions==0.7.1
     # via -r src/requirements/requirements.in
