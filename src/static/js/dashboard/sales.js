@@ -667,7 +667,8 @@ const cancelCart = async (cart_id) => {
             DisplayMessage("Couldn't delete cart. Try again", "error");
             return;
           }
-          LoadTab('sales');
+          //LoadTab('sales');
+          window.location.reload()
           DisplayMessage("Sale canceled", "info");
 
       } catch (error) {
@@ -694,7 +695,8 @@ const deleteCart = async (cart_id) => {
             DisplayMessage("Couldn't delete cart. Try again", "error");
             return;
           }
-          LoadTab('sales');
+          //LoadTab('sales');
+          window.location.reload()
           DisplayMessage("Cart Deleted", "info");
 
       } catch (error) {
@@ -748,6 +750,7 @@ const finalizeSale = async (cart_id, payment_id) => {
   let receipt = await receipt_response.json();
 
   LoadTab('sales');
+  //window.location.reload()
   download_receipt(receipt.id)
   DisplayMessage("Sale completed", "info");
 
@@ -921,7 +924,11 @@ const updateProduct = async (quantity, sale_detail_id, row_id, price_id, cart_id
       return;
     }
 
-    if (quantity > Number(max.split('=')[1])) {
+    let max_str = String(max);
+    const max_val = Number(max_str.match(/\d+/)[0]);
+    console.log(max_val, qty)
+
+    if (max_val && qty > max_val) {
       DisplayMessage("Not enough in stock", "error");
       return;
     }

@@ -1295,7 +1295,7 @@ async function ProductPage(role) {
                                 <label for="create_selling_price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Selling Price</label>
                                 <input type="number" name="create_selling_price" id="create_selling_price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="#3000" required="">
                             </div>
-                            <div class="grid gap-4 sm:col-span-2 md:gap-6 sm:grid-cols-4">
+                            <div class="grid gap-4 sm:col-span-2 md:gap-6 sm:grid-cols-3">
                                 <div>
                                     <label for="create_weight" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product weight (kg)</label>
                                     <input type="number" step="0.01" name="create_weight" id="create_weight" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="12">
@@ -1463,7 +1463,7 @@ async function ProductPage(role) {
             </div>
           </div>
         </div>
-        <div id="product_section" class="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 2xl:grid-cols-4">
+        <div id="product_section" class="mb-4 grid gap-4 h-[60vh] overflow-y-auto sm:grid-cols-2 md:mb-8 lg:grid-cols-3 2xl:grid-cols-4">
           ${html}
         </div>
 

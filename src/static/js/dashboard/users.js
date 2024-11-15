@@ -126,6 +126,9 @@ const users = async (role, page) => {
         let username_value = user.username ? `value="${user.username}"` : '';
         let phone_value = user.phone_number ? `value="${user.phone_number}"` : '';
 
+        let daily_sale = user.sales_data.daily_sales ? `${user.sales_data.daily_sales}` : 0
+        let daily_revenue = user.sales_data.daily_revenue ? `${user.sales_data.daily_revenue}` : 0.00
+        console.log(daily_revenue, daily_sale, user, "ecevrfdc")
 
         html += `
           <tr id="accordion-flush-${user.id}-heading" class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -154,9 +157,9 @@ const users = async (role, page) => {
                   ${user_role}
               </td>
               <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">${user_active}</td>
-              <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">${user.daily_sales ?? 0}</td>
+              <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">${daily_sale}</td>
               <td class="px-4 py-3 font-medium ">                    
-                  #${data.daily_revenue ?? 0.00}
+                  #${daily_revenue}
               </td>
           </tr>
           <tr id="accordion-flush-${user.id}-body" class="hidden" aria-labelledby="accordion-flush-${user.id}-heading">
@@ -535,6 +538,26 @@ const load_users = async (role, page) => {
   }
 };
 
+let debounceUserTimeout;
+const debounceGetUser = (search_input, role) => {
+  clearTimeout(debounceUserTimeout);
+  debounceUserTimeout = setTimeout(
+    () => getUser(search_input, role),
+    1000
+  );
+};
+const getUser = async (search_input, role) => {
+  const input_value = search_input.value;
+
+  if (input_value.length >= 3) {
+    // search for the item
+    load_users(role, `/api/accounts/users/?search=${input_value}`);
+  } else {
+    // load the normal page if input length is less than 3
+    load_users(role);
+  }
+};
+
 
 async function UserPage(role) {
 
@@ -587,7 +610,7 @@ async function UserPage(role) {
                               <path fill-rule="evenodd" clip-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
                           </svg>
                       </div>
-                      <input type="text" id="simple-search" placeholder="Search for user" required="" oninput="debounceGetUser(this, '{role}')"
+                      <input type="text" id="simple-search" placeholder="Search for user" required="" oninput="debounceGetUser(this, '${role}')"
                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                   </div>
               </form>

@@ -1,30 +1,25 @@
 from .env import config
 
-AWS_ACCESS_KEY_ID=config("AWS_ACCESS_KEY_ID", default=None)
-AWS_SECRET_ACCESS_KEY=config("AWS_SECRET_ACCESS_KEY", default=None)
-AWS_S3_SIGNATURE_VERSION="s3v4"
-AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME", default="micro-ecommerce")
-AWS_S3_ENDPOINT_URL=f"https://{AWS_STORAGE_BUCKET_NAME}.us-east-1.linodeobjects.com"
+# Backblaze B2 configuration for production
+B2_ACCESS_KEY_ID = config("B2_ACCESS_KEY_ID", default=None)
+B2_SECRET_ACCESS_KEY = config("B2_SECRET_ACCESS_KEY", default=None)
+B2_STORAGE_BUCKET_NAME = config("B2_STORAGE_BUCKET_NAME", default="production-bucket")
+B2_S3_ENDPOINT_URL = f"https://s3.us-east-005.backblazeb2.com"
 
-AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID", default=None)
-AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY", default=None)
-AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME", default="inventory-manager")
-AWS_S3_REGION_NAME = 'us-east-1'  # e.g. 'us-east-1'
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-#AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_REGION_NAME}.s3.amazonaws.com'
+AWS_ACCESS_KEY_ID = B2_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY = B2_SECRET_ACCESS_KEY
+AWS_STORAGE_BUCKET_NAME = B2_STORAGE_BUCKET_NAME
+AWS_S3_ENDPOINT_URL = B2_S3_ENDPOINT_URL
 
-AWS_DEFAULT_ACL="public-read"
-AWS_S3_USE_SSL=True
+AWS_S3_REGION_NAME = 'us-east-005'  # or the appropriate region
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.us-east-005.backblazeb2.com'
+AWS_DEFAULT_ACL = "public-read"
+AWS_S3_USE_SSL = True
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 MEDIA_ROOT = 'media/'
 
-STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 STATIC_ROOT = "static/"
-
-""" 
-    STATIC_ROOT = BASE_DIR / 'staticfiles'
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-"""

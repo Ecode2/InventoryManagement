@@ -3,12 +3,17 @@ gunicorn
 psycopg2-binary
 python-decouple
 dj-database-url
+whitenoise
 requests
 Pillow
 django-allauth
 django-allauth-ui
+django-crispy-forms
+django-widget-tweaks
+slippers
 django-pwa
 django-admin-interface
+django-redis
 django-filter
 djangorestframework
 drf-spectacular
@@ -17,5 +22,7 @@ django-storages
 boto3
 drf-extensions
 weasyprint
+django-compressor
 dj-notification-api
+django-csp
 pip-tools

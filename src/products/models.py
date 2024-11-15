@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models import Sum, F
 from django.utils.timezone import now, timedelta
 from django.db.models.functions import TruncMonth, TruncDay
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 import uuid
 
 from sales.models import SalesDetail
@@ -61,6 +63,10 @@ class ProductFile(models.Model):
 
     def __str__(self):
         return f'{self.product.name} - {self.file.name}'
+    
+@receiver(post_delete, sender=ProductFile)
+def delete_file_from_s3(sender, instance, **kwargs):
+    instance.file.delete(False)
 
 
 class Inventory(models.Model):

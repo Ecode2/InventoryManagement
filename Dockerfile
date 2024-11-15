@@ -1,36 +1,54 @@
-# Use the official Python 3.12 image as a base image
+# Use an official Python runtime as a parent image
 FROM python:3.12-slim
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpango1.0-0 \
+    libcairo2 \
+    libgdk-pixbuf2.0-0 \
+    libffi-dev \
+    libjpeg-dev \
+    zlib1g-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    libmagic1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install WeasyPrint dependencies
+RUN apt-get update && apt-get install -y \
+    fonts-liberation \
+    libjpeg62-turbo \
+    libpango1.0-0 \
+    libgdk-pixbuf2.0-0 \
+    libpangoft2-1.0-0 \
+    libpangocairo-1.0-0 \
+    libgobject-2.0-0 \
+    && apt-get clean
 
 # Create and set the working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+# Copy the requirements file into the container
+COPY src/requirements.txt /app/src/
 
-# Install dependencies
-COPY src/requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r src/requirements.txt
 
-COPY rav.YAML /app/
-RUN rav run vendor_pull
+# Copy the current directory contents into the container at /app
+COPY . /app/
 
-# Copy the Django project code into the container
-COPY src /app/src
-
-# Set the working directory to the Django project root
-WORKDIR /app/src
-
-# Run migrations and collectstatic (optional for production)
-RUN rav run vendor_pull
+# Pre-start commands
+#RUN python src/manage.py vendor_pull
+#RUN python src/manage.py makemigrations
 RUN python src/manage.py migrate
 RUN python src/manage.py collectstatic --noinput
 
-# Start the Django server
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "system.wsgi:application"]
+# Expose the port the app runs on
+EXPOSE 8000
+
+# Run the WSGI server
+CMD ["gunicorn", "--chdir", "src", "system.wsgi:application", "--bind", "0.0.0.0:8000"]

@@ -53,12 +53,13 @@ if config("DEBUG", default=False, cast=bool) == False:
 
     SECURE_BROWSER_XSS_FILTER=True
 
-    X_FRAME_OPTIONS='DENY'
+    X_FRAME_OPTIONS='SAMEORIGIN'
 
 else:
     DEBUG = True
-    ALLOWED_HOSTS = [] #["2c50-2a09-bac5-4dd3-d2-00-15-378.ngrok-free.app"]
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1'] #["2c50-2a09-bac5-4dd3-d2-00-15-378.ngrok-free.app"]
     #CSRF_TRUSTED_ORIGINS = ["https://2c50-2a09-bac5-4dd3-d2-00-15-378.ngrok-free.app"]
+    X_FRAME_OPTIONS='SAMEORIGIN'
 
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 
@@ -90,8 +91,8 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "drf_spectacular_sidecar",
     "django_notification",
-    "whitenoise.runserver_nostatic",
-    "widget_tweaks",
+    #"whitenoise.runserver_nostatic",
+    #"widget_tweaks",
     #"slippers",
     'storages',
     #'compressor',
@@ -107,11 +108,15 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    #"system.middleware.AllowIframeFromSameOrigin",
+    #"csp.middleware.CSPMiddleware",
 
     # Third-party middleware
     "allauth.account.middleware.AccountMiddleware",
     'allauth.usersessions.middleware.UserSessionsMiddleware',
 ]
+
+#CSP_FRAME_ANCESTORS = ["'self'"]
 
 ROOT_URLCONF = "system.urls"
 
@@ -145,10 +150,10 @@ AUTHENTICATION_BACKENDS = [
 USERSESSIONS_ADAPTER = "allauth.usersessions.adapter.DefaultUserSessionsAdapter"
 USERSESSIONS_TRACK_ACTIVITY = True
 
-LOGIN_URL = '/home/'
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'  # Redirect after login
-LOGOUT_REDIRECT_URL = '/home/'      # Redirect after logout
-ACCOUNT_LOGOUT_REDIRECT_URL = '/home/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'      # Redirect after logout
+ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 WSGI_APPLICATION = "system.wsgi.application"
 
@@ -341,6 +346,7 @@ if not DEBUG:
     from .helpers.storage import *
     #STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 else:
+
     STATIC_URL = "static/"
     MEDIA_URL = 'media/'
     STATICFILES_DIRS = [BASE_DIR / "static"]
@@ -364,7 +370,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 
-""" PWA_SERVICE_WORKER_PATH = BASE_DIR / "static/js/serviceworker.js"
+PWA_SERVICE_WORKER_PATH = BASE_DIR / "static/js/serviceworker.js"
 
 PWA_APP_NAME = 'Inventory Management System'
 PWA_APP_DESCRIPTION = "Inventory Management System"
@@ -377,61 +383,210 @@ PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = 'default'
 PWA_APP_ICONS = [
     {
-    "src": "/static/images/manifest-icon-192.maskable.png",
+    "src": "src/static/images/manifest-icon-192.maskable.png",
     "sizes": "192x192",
     "type": "image/png",
     "purpose": "any"
-    },
-    {
-    "src": "/static/images/manifest-icon-192.maskable.png",
+  },
+  {
+    "src": "src/static/images/manifest-icon-192.maskable.png",
     "sizes": "192x192",
     "type": "image/png",
     "purpose": "maskable"
-    },
-    {
-    "src": "/static/images/manifest-icon-512.maskable.png",
+  },
+  {
+    "src": "src/static/images/manifest-icon-512.maskable.png",
     "sizes": "512x512",
     "type": "image/png",
     "purpose": "any"
-    },
-    {
-    "src": "/static/images/manifest-icon-512.maskable.png",
+  },
+  {
+    "src": "src/static/images/manifest-icon-512.maskable.png",
     "sizes": "512x512",
     "type": "image/png",
     "purpose": "maskable"
-    }
+  }
 ]
 PWA_APP_ICONS_APPLE = [
     {
-    "src": "/static/images/manifest-icon-192.maskable.png",
+    "src": "static/images/manifest-icon-192.maskable.png",
     "sizes": "192x192",
     "type": "image/png",
     "purpose": "any"
-    },
-    {
-    "src": "/static/images/manifest-icon-192.maskable.png",
+  },
+  {
+    "src": "static/images/manifest-icon-192.maskable.png",
     "sizes": "192x192",
     "type": "image/png",
     "purpose": "maskable"
-    },
-    {
-    "src": "/static/images/manifest-icon-512.maskable.png",
+  },
+  {
+    "src": "static/images/manifest-icon-512.maskable.png",
     "sizes": "512x512",
     "type": "image/png",
     "purpose": "any"
-    },
-    {
-    "src": "/static/images/manifest-icon-512.maskable.png",
+  },
+  {
+    "src": "static/images/manifest-icon-512.maskable.png",
     "sizes": "512x512",
     "type": "image/png",
     "purpose": "maskable"
-    }
+  }
 ]
 PWA_APP_SPLASH_SCREEN = [
-    {
-        'src': '/static/images/apple-icon-180.png',
-        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+
+    { 
+        'src': 'static/images/apple-splash-2048-2732.jpg',
+        'media': '(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2732-2048.jpg',
+        'media': '(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1668-2388.jpg',
+        'media': '(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2388-1668.jpg',
+        'media': '(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1536-2048.jpg',
+        'media': '(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2048-1536.jpg',
+        'media': '(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1488-2266.jpg',
+        'media': '(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2266-1488.jpg',
+        'media': '(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1640-2360.jpg',
+        'media': '(device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2360-1640.jpg',
+        'media': '(device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1668-2224.jpg',
+        'media': '(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2224-1668.jpg',
+        'media': '(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1620-2160.jpg',
+        'media': '(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2160-1620.jpg',
+        'media': '(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1320-2868.jpg',
+        'media': '(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2868-1320.jpg',
+        'media': '(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1206-2622.jpg',
+        'media': '(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2622-1206.jpg',
+        'media': '(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1290-2796.jpg',
+        'media': '(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2796-1290.jpg',
+        'media': '(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1179-2556.jpg',
+        'media': '(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2556-1179.jpg',
+        'media': '(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1284-2778.jpg',
+        'media': '(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2778-1284.jpg',
+        'media': '(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1170-2532.jpg',
+        'media': '(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2532-1170.jpg',
+        'media': '(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1125-2436.jpg',
+        'media': '(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2436-1125.jpg',
+        'media': '(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1242-2688.jpg',
+        'media': '(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2688-1242.jpg',
+        'media': '(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-828-1792.jpg',
+        'media': '(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1792-828.jpg',
+        'media': '(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1242-2208.jpg',
+        'media': '(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-2208-1242.jpg',
+        'media': '(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-750-1334.jpg',
+        'media': '(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1334-750.jpg',
+        'media': '(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)'
+    },
+    { 
+        'src': 'static/images/apple-splash-640-1136.jpg',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
+    },
+    { 
+        'src': 'static/images/apple-splash-1136-640.jpg',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)'
     }
 ]
 PWA_APP_DIR = 'ltr'
-PWA_APP_LANG = 'en-US' """
+PWA_APP_LANG = 'en-US'

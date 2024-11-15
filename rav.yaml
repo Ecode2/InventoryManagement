@@ -7,6 +7,10 @@ scripts:
     - env/bin/pip-compile src/requirements/requirements.in -o src/requirements.txt
     - env/bin/python -m pip install -r src/requirements.txt
     - npm install
+  install:
+    - env/bin/pip-compile src/requirements/requirements.in -o src/requirements.txt
+    - env/bin/python -m pip install -r src/requirements.txt
+
   win_installs:
     - pip-compile src/requirements/requirements.in -o src/requirements.txt
     - python -m pip install -r src/requirements.txt
