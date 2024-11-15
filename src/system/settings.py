@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from decouple import config, Csv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +29,7 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+print("DEBUG \n\n\n", os.getenv("DEBUG"))
 print(config("DEBUG", cast=bool))
 
 # SECURITY WARNING: don't run with debug turned on in production!
