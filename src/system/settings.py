@@ -96,7 +96,7 @@ INSTALLED_APPS = [
     #"slippers",
     'storages',
     #'compressor',
-    #"pwa",
+    "pwa",
 
 ]
 

@@ -47,7 +47,7 @@ urlpatterns = [
     path("api/sale/", include("sales.urls")),
 
     path('', include("dashboard.urls")),
-    #path('', include('pwa.urls')),
+    path('', include('pwa.urls')),
 ]
 
 if settings.DEBUG:

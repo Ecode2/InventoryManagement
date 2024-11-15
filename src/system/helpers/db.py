@@ -18,7 +18,7 @@ def get_database_url(BASE_DIR:Path, DEBUG:bool, DATABASE_URL)->dict:
             }
         
         """ return {
-            'default': dj_database_url.config(default=DATABASE_URL,
+            'default': dj_database_url.config(default="postgresql://default:HePa1sdgW7vM@ep-young-smoke-a4l644r7.us-east-1.aws.neon.tech:5432/inventory_manager?sslmode=require",
                                           conn_max_age=600,
                                           ssl_require=True,
                                           conn_health_checks=True)
