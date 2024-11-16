@@ -168,7 +168,8 @@ SILENCED_SYSTEM_CHECKS = ["security.W019"]
 ALLAUTH_UI_THEME = "light"
 
 # For development (console backend)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'alayaabubakar14@gmail.com'
 EMAIL_HOST_PASSWORD = 'skxo qsnb ohlq uela'
