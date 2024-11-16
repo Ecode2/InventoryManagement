@@ -352,7 +352,7 @@ from decouple import config
 if not DEBUG:
     print("cloud storage", "\n\n\n")
     STATIC_URL = "/static/"
-    STATIC_ROOT = BASE_DIR / 'staticfiles'
+    STATIC_ROOT = BASE_DIR.parent / 'staticfiles'
     print(STATIC_URL, STATIC_ROOT, "\n\n\n")
     #STATICFILES_DIRS = [BASE_DIR / "static",]
 
