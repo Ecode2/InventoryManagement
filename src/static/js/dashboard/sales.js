@@ -174,7 +174,7 @@ const sales = async (role, page) => {
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Name:</dt>
                 <p class="text-base whitespace-nowrap text-gray-900 dark:text-white">${sale.customer_name.capitalize()}</p>
               </dl>
-              <button data-modal-target="${sale.sale_uuid.substring(0, 8)}-detail-modal" data-modal-toggle="${sale.sale_uuid.substring(0, 8)}-detail-modal"
+              <button  data-modal-target="${sale.sale_uuid.substring(0, 8)}-detail-modal" data-modal-toggle="${sale.sale_uuid.substring(0, 8)}-detail-modal"
                class="w-full inline-flex justify-center rounded-md  border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 md:w-auto">
               View details
               </button>
@@ -1053,7 +1053,7 @@ async function SalesPage(role, warehouse_id) {
         <div class="gap-4 sm:flex sm:items-center sm:justify-between">
           <h2 class="text-lg font-semibold text-gray-900 dark:text-white sm:text-xl">Sales</h2>
 
-          <button type="button" id="createSaleButton" data-modal-toggle="createSaleModal" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+          <button type="button" id="createSaleButton" data-modal-target="createSaleModal" data-modal-toggle="createSaleModal" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
               <svg class="h-3.5 w-3.5 mr-1.5 -ml-1" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
               </svg>
