@@ -417,10 +417,10 @@ def print_directory_structure(startpath):
             print(f'{subindent}{f}')
 
 print("Project Directory Structure:")
-print_directory_structure(BASE_DIR)
+#print_directory_structure(BASE_DIR)
 
 print("\nStatic Files Directory Structure:")
-print_directory_structure(STATIC_ROOT)
+#print_directory_structure(STATIC_ROOT)
 
 
 
