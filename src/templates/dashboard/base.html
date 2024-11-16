@@ -127,6 +127,28 @@
                 }
             }, false);
 
+
+            // Callback function to execute when mutations are observed
+            const callback = function(mutationsList, observer) {
+                for (let mutation of mutationsList) {
+                if (mutation.type === 'childList') {
+                    initializeFlowbite();  // Call your custom function here
+                    console.log("reinitialized")
+                    break;  // Exit the loop once we handle the change
+                }
+                }
+            };
+        
+            // Create an observer instance linked to the callback function
+            const observer = new MutationObserver(callback);
+        
+            // Select the node to observe and specify which DOM mutations to observe
+            const targetNode = document.getElementById('root');
+            const config = { childList: true, subtree: true };
+        
+            // Start observing the target node for configured mutations
+            observer.observe(targetNode, config);
+
         </script>
         <script src="{% static 'js/dashboard/overview.js' %}"></script>
         <script src="{% static 'js/dashboard/sales.js' %}"></script>

@@ -1376,7 +1376,7 @@ async function ProductPage(role) {
   return `<section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-12">
       <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <!-- Heading & Filters -->
-        <div class="mb-4 items-end justify-between space-y-4 sm:flex sm:space-y-0 md:mb-8">
+        <div class="justify-between space-y-4 sm:flex sm:space-y-0 md:mb-8">
           <div>
             <nav class="flex" aria-label="Breadcrumb">
               <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -1399,10 +1399,10 @@ async function ProductPage(role) {
                 </li>
               </ol>
             </nav>
-            <div class="grid space-x-0 md:space-x-2 grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 ">
-                <div>
+            <div class="flex flex-col space-y-4 md:space-y-0 md:space-x-4 md:items-end md:flex-row">
+                <div class="flex flex-col w-full md:w-fit justify-end items-end">
                   <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Products</h2>
-                  <form class="flex items-center">
+                  <div class="flex items-end h-fit w-full md:w-fit">
                       <label for="simple-search" class="sr-only">Search</label>
                       <div class="relative w-full">
                           <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -1413,9 +1413,9 @@ async function ProductPage(role) {
                           <input type="text" id="simple-search" placeholder="Search for products" required="" oninput="debounceGetProduct(this, '${role}')"
                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                       </div>
-                  </form>
+                  </div>
                 </div>
-                <div class="flex items-end">
+                <div class="flex items-end h-fit w-full md:w-fit">
                   ${add_product_btn}
                 </div>
             </div>
