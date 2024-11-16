@@ -214,8 +214,10 @@ const LoadTab = async (tab) => {
     }
     
     await LoadPage();
+    initializeFlowbite();
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
     await LoadPage();
+    initializeFlowbite();
 });
