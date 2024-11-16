@@ -57,7 +57,6 @@ if config("DEBUG", default=False, cast=bool) == False:
     SECURE_BROWSER_XSS_FILTER=True
 
     X_FRAME_OPTIONS='SAMEORIGIN'
-    print("production \n\n")
 
 else:
     DEBUG = True
@@ -95,7 +94,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "drf_spectacular_sidecar",
     "django_notification",
-    #"whitenoise.runserver_nostatic",
+    "whitenoise.runserver_nostatic",
     #"widget_tweaks",
     #"slippers",
     'storages',
@@ -367,14 +366,19 @@ if not DEBUG:
         'CacheControl': 'max-age=86400',
     }
 
-    AWS_LOCATION = 'static'
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT}/"
-
-    STATIC_ROOT = f"static/"
-    #MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT}/media/'
-
+    #AWS_LOCATION = 'static'
     DEFAULT_FILE_STORAGE = 'system.storage_backends.MediaStorage'
+
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+    
+    #STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT}/"
+
+    STATIC_URL = "static/"
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+    #DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    #STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 else:
 
