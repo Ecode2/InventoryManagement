@@ -94,10 +94,12 @@ async function LoadPage() {
 
                     root.innerHTML = data;
                     initializeFlowbite();
+                    console.log("flowbite reinitalized")
 
                 }else {
                     root.innerHTML = result;
                     initializeFlowbite();
+                    console.log("flowbite reinitalized")
                 }
 
             }catch(error) {
