@@ -11,8 +11,8 @@ class Command(BaseCommand):
             'rm -rf src/static/vendor',
             'mkdir -p src/static/vendor/htmx/',
             'mkdir -p src/static/vendor/flowbite/',
-            'curl -L https://unpkg.com/htmx.org@1.8.2 -o ./src/static/vendor/htmx/htmx.min.js',
-            'curl -L https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js -o ./src/static/vendor/flowbite/flowbite.min.js'
+            'curl -L https://unpkg.com/htmx.org@1.8.2 -o ./static/vendor/htmx/htmx.min.js',
+            'curl -L https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js -o ./static/vendor/flowbite/flowbite.min.js'
         ]
 
         # Execute each command

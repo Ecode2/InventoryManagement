@@ -350,11 +350,11 @@ USE_TZ = True
 from decouple import config
 
 if not DEBUG:
-    print("cloud storage", "\n\n\n")
+
     STATIC_URL = "/static/"
-    STATIC_ROOT = BASE_DIR.parent / 'staticfiles'
-    print(STATIC_URL, STATIC_ROOT, "\n\n\n")
-    #STATICFILES_DIRS = [BASE_DIR / "static",]
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
+    STATICFILES_DIRS = [BASE_DIR / "static"]
+    print(STATIC_URL, STATICFILES_DIRS, STATIC_ROOT, BASE_DIR, "\n\n\n")
 
     AWS_ACCESS_KEY_ID = config("B2_ACCESS_KEY_ID", default=None)
     AWS_SECRET_ACCESS_KEY = config("B2_SECRET_ACCESS_KEY", default=None)
@@ -369,7 +369,7 @@ if not DEBUG:
         'CacheControl': 'max-age=86400',
     }
 
-    #AWS_LOCATION = 'static'
+    AWS_LOCATION = 'static'
     DEFAULT_FILE_STORAGE = 'system.storage_backends.MediaStorage'
 
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -384,7 +384,10 @@ else:
 
     STATIC_URL = "/static/"
     MEDIA_URL = 'media/'
+    STATIC_ROOT = BASE_DIR / "staticfiles"
     STATICFILES_DIRS = [BASE_DIR / "static"]
+    print(STATIC_URL, STATICFILES_DIRS, "\n\n\n")
+
 
     #COMPRESS_ROOT = BASE_DIR / 'static'
     #COMPRESS_ENABLED = True
