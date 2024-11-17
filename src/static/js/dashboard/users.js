@@ -379,13 +379,12 @@ const get_user_store = async (store_id, user_id) => {
       let warehouses = data.results
 
       if (warehouses.length == 0) {
-          DisplayMessage("No warehouse found", "error");
           return `
               <label for="user_${user_id}_store" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Store* </label>
               <select id="user_${user_id}_store" 
                 class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"> 
                 <option value="" selected="">
-                    <span>--- Assign Store</span>
+                    <span>----No Store Assigned----</span>
                 </option>`;
       }
 
