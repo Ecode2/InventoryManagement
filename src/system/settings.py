@@ -352,36 +352,54 @@ from decouple import config
 
 if not DEBUG:
 
-    STATIC_URL = "/static/"
-    STATIC_ROOT = BASE_DIR / 'staticfiles'
-    STATICFILES_DIRS = [BASE_DIR / "static"]
-    print(STATIC_URL, STATICFILES_DIRS, STATIC_ROOT, BASE_DIR, "\n\n\n")
+    if config("CPANEL", default=False, cast=bool):
 
-    AWS_ACCESS_KEY_ID = config("B2_ACCESS_KEY_ID", default=None)
-    AWS_SECRET_ACCESS_KEY = config("B2_SECRET_ACCESS_KEY", default=None)
-    AWS_STORAGE_BUCKET_NAME = config("B2_STORAGE_BUCKET_NAME", default="production-bucket")
-    AWS_S3_REGION_NAME = 'us-east-005'
-    #AWS_DEFAULT_ACL = "public-read"
+        STATIC_URL = "/static/"
+        MEDIA_URL = 'media/'
 
-    AWS_S3_ENDPOINT = f's3.{AWS_S3_REGION_NAME}.backblazeb2.com'
-    AWS_S3_ENDPOINT_URL = f'https://{AWS_S3_ENDPOINT}'
+        STATIC_ROOT = BASE_DIR.parent.parent / 'staticfiles'
+        MEDIA_ROOT = BASE_DIR.parent.parent / "media"
+        STATICFILES_DIRS = [BASE_DIR.parent.parent / "static"]
 
-    AWS_S3_OBJECT_PARAMETERS = {
-        'CacheControl': 'max-age=86400',
-    }
+        #STATICFILES_FINDERS = (
+        #    "django.contrib.staticfiles.finders.FileSystemFinder",
+        #    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+        #    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
+        #)
+        print(STATIC_URL, STATICFILES_DIRS, STATIC_ROOT, BASE_DIR, "\n\n\n")
 
-    AWS_LOCATION = 'static'
-    DEFAULT_FILE_STORAGE = 'system.storage_backends.MediaStorage'
+    else:
 
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+        STATIC_URL = "/static/"
+        STATIC_ROOT = BASE_DIR / 'staticfiles'
+        STATICFILES_DIRS = [BASE_DIR / "static"]
+        print(STATIC_URL, STATICFILES_DIRS, STATIC_ROOT, BASE_DIR, "\n\n\n")
 
-    #MEDIA_URL = 'media/'
-    #MEDIA_ROOT = BASE_DIR.parent / "media"
-    
-    #STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT}/
+        AWS_ACCESS_KEY_ID = config("B2_ACCESS_KEY_ID", default=None)
+        AWS_SECRET_ACCESS_KEY = config("B2_SECRET_ACCESS_KEY", default=None)
+        AWS_STORAGE_BUCKET_NAME = config("B2_STORAGE_BUCKET_NAME", default="production-bucket")
+        AWS_S3_REGION_NAME = 'us-east-005'
+        #AWS_DEFAULT_ACL = "public-read"
 
-    #DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    #STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+        AWS_S3_ENDPOINT = f's3.{AWS_S3_REGION_NAME}.backblazeb2.com'
+        AWS_S3_ENDPOINT_URL = f'https://{AWS_S3_ENDPOINT}'
+
+        AWS_S3_OBJECT_PARAMETERS = {
+            'CacheControl': 'max-age=86400',
+        }
+
+        AWS_LOCATION = 'static'
+        DEFAULT_FILE_STORAGE = 'system.storage_backends.MediaStorage'
+
+        STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+        #MEDIA_URL = 'media/'
+        #MEDIA_ROOT = BASE_DIR.parent / "media"
+        
+        #STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT}/
+
+        #DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+        #STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 else:
 
