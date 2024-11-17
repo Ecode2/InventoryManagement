@@ -58,6 +58,8 @@ if config("DEBUG", default=False, cast=bool) == False:
 
     X_FRAME_OPTIONS='SAMEORIGIN'
 
+    print("\n\n",  ALLOWED_HOSTS, CSRF_TRUSTED_ORIGINS, "\n\n\n")
+
 else:
     DEBUG = True
     ALLOWED_HOSTS = ['localhost', '127.0.0.1'] #["2c50-2a09-bac5-4dd3-d2-00-15-378.ngrok-free.app"]
