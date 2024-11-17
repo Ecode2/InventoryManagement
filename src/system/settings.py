@@ -38,7 +38,7 @@ if config("DEBUG", default=False, cast=bool) == False:
     
     ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="", cast=Csv())
 
-    CSRF_TRUSTED_ORIGINS = [config("CSRF_TRUSTED_ORIGINS", default="", cast=str)]
+    CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())
 
     SECURE_SSL_REDIRECT=False
 
@@ -375,6 +375,8 @@ if not DEBUG:
 
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+    #MEDIA_URL = 'media/'
+    #MEDIA_ROOT = BASE_DIR.parent / "media"
     
     #STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT}/
 
