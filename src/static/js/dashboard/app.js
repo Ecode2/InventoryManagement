@@ -16,7 +16,7 @@ const GetRole = async () => {
     try {
         const response = await fetch("/api/accounts/actions/role/");
         if (!response.ok) {
-            window.location.href = "/home";
+            window.location.href = "/accounts/";
         }
         const data = await response.json();
         return data.role;

@@ -83,8 +83,6 @@ class InventoryViewSet(viewsets.ModelViewSet): #CacheResponseMixin,
         return [permission() for permission in permission_classes]
 
 
-
-
 """ @action(detail=False, methods=['get', 'post'])
     def custom_method(self, request):
         # Your custom method logic here

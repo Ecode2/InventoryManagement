@@ -90,6 +90,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'allauth',
     'allauth.account',
+    "allauth.headless",
     "allauth.usersessions",
     "rest_framework",
     "django_filters",
@@ -161,7 +162,18 @@ LOGIN_REDIRECT_URL = '/'  # Redirect after login
 LOGOUT_REDIRECT_URL = '/accounts/login/'      # Redirect after logout
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 
+
 WSGI_APPLICATION = "system.wsgi.application"
+
+
+HEADLESS_ONLY = True
+HEADLESS_FRONTEND_URLS = {
+    "account_confirm_email": "/account/verify-email/{key}",
+    "account_reset_password": "/account/password/reset",
+    "account_reset_password_from_key": "/account/password/reset/key/{key}",
+    "account_signup": "/account/signup",
+    "socialaccount_login_error": "/account/provider/callback",
+}
 
 
 #X_FRAME_OPTIONS = "SAMEORIGIN"
@@ -182,8 +194,7 @@ else:
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 from .helpers.db import database
-DATABASES = database
-print(DATABASES, "\n\n\n")  
+DATABASES = database 
 
 # settings.py
 import logging
