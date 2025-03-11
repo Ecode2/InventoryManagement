@@ -10,30 +10,39 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
-from decouple import config, Csv
+
 import os
+import logging
+from pathlib import Path
+from dotenv import load_dotenv
+from decouple import config, Csv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(override=True)
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s %(levelname)s %(message)s',
+)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY", default=None, cast=str)
+SECRET_KEY = config("SECRET_KEY", default="django-insecure-(q3)w+fzzwwc616scd%9q*iuwfnkd6jec8n24y*!51gx*tt4z0", cast=str)
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
-print("\n\n\n DEBUG \n\n\n", os.getenv("DEBUG"), "\n\n\n")
-print(config("DEBUG", cast=bool))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if config("DEBUG", default=False, cast=bool) == False:
+if config("DEBUG", default=True, cast=bool) == False:
     DEBUG = config("DEBUG", default=False, cast=bool)
     
     ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="", cast=Csv())
@@ -58,12 +67,9 @@ if config("DEBUG", default=False, cast=bool) == False:
 
     X_FRAME_OPTIONS='SAMEORIGIN'
 
-    print("\n\n",  ALLOWED_HOSTS, CSRF_TRUSTED_ORIGINS, "\n\n\n")
-
 else:
     DEBUG = True
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1'] #["2c50-2a09-bac5-4dd3-d2-00-15-378.ngrok-free.app"]
-    #CSRF_TRUSTED_ORIGINS = ["https://2c50-2a09-bac5-4dd3-d2-00-15-378.ngrok-free.app"]
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
     X_FRAME_OPTIONS='SAMEORIGIN'
 
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True
@@ -79,13 +85,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'django.contrib.humanize',
-    "core",
-    "home",
-    "dashboard",
-    'accounts',
-    "products",
-    "management",
-    "sales",
 
     # Third-party apps
     'allauth',
@@ -97,12 +96,16 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "drf_spectacular_sidecar",
     "django_notification",
-    "whitenoise.runserver_nostatic",
-    #"widget_tweaks",
-    #"slippers",
     'storages',
-    #'compressor',
     "pwa",
+
+    # Local apps
+    "core",
+    "dashboard",
+    'accounts',
+    "products",
+    "management",
+    "sales",
 
 ]
 
@@ -115,15 +118,12 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    #"system.middleware.AllowIframeFromSameOrigin",
-    #"csp.middleware.CSPMiddleware",
 
     # Third-party middleware
     "allauth.account.middleware.AccountMiddleware",
     'allauth.usersessions.middleware.UserSessionsMiddleware',
 ]
 
-#CSP_FRAME_ANCESTORS = ["'self'"]
 
 ROOT_URLCONF = "system.urls"
 
@@ -154,6 +154,7 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by email
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
 USERSESSIONS_ADAPTER = "allauth.usersessions.adapter.DefaultUserSessionsAdapter"
 USERSESSIONS_TRACK_ACTIVITY = True
 
@@ -178,8 +179,7 @@ HEADLESS_FRONTEND_URLS = {
 
 #X_FRAME_OPTIONS = "SAMEORIGIN"
 SILENCED_SYSTEM_CHECKS = ["security.W019"]
-
-ALLAUTH_UI_THEME = "light"
+ALLAUTH_UI_THEME = "dark"
 
 # For development (console backend)
 if DEBUG:
@@ -196,14 +196,6 @@ else:
 from .helpers.db import database
 DATABASES = database 
 
-# settings.py
-import logging
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s %(levelname)s %(message)s',
-)
-
 
 
 REST_FRAMEWORK = {
@@ -215,10 +207,10 @@ REST_FRAMEWORK = {
         "core.permissions.IsAdminOrStaff",
     ],
     "DEFAULT_FILTER_BACKENDS": ['django_filters.rest_framework.DjangoFilterBackend',
-                                 'rest_framework.filters.OrderingFilter',
-                                 'rest_framework.filters.SearchFilter'],
+                                'rest_framework.filters.OrderingFilter',
+                                'rest_framework.filters.SearchFilter'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 50,
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
@@ -344,9 +336,9 @@ SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-#ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
-#ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 USE_I18N = True
 
@@ -358,101 +350,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STATIC_URL = "/static/"
+MEDIA_URL = 'media/'
 
-from decouple import config
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+MEDIA_ROOT = BASE_DIR / "media"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
-if not DEBUG:
+#STORAGES = {
+#    "staticfiles": {
+#        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+#    },
+#}
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-    if config("CPANEL", default=False, cast=bool):
-
-        STATIC_URL = "/static/"
-        MEDIA_URL = 'media/'
-
-        STATIC_ROOT = BASE_DIR.parent.parent / 'staticfiles'
-        MEDIA_ROOT = BASE_DIR.parent.parent / "media"
-        STATICFILES_DIRS = [BASE_DIR.parent.parent / "static"]
-
-        #STATICFILES_FINDERS = (
-        #    "django.contrib.staticfiles.finders.FileSystemFinder",
-        #    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-        #    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
-        #)
-        print(STATIC_URL, STATICFILES_DIRS, STATIC_ROOT, BASE_DIR, "\n\n\n")
-
-    else:
-
-        STATIC_URL = "/static/"
-        STATIC_ROOT = BASE_DIR / 'staticfiles'
-        STATICFILES_DIRS = [BASE_DIR / "static"]
-        print(STATIC_URL, STATICFILES_DIRS, STATIC_ROOT, BASE_DIR, "\n\n\n")
-
-        AWS_ACCESS_KEY_ID = config("B2_ACCESS_KEY_ID", default=None)
-        AWS_SECRET_ACCESS_KEY = config("B2_SECRET_ACCESS_KEY", default=None)
-        AWS_STORAGE_BUCKET_NAME = config("B2_STORAGE_BUCKET_NAME", default="production-bucket")
-        AWS_S3_REGION_NAME = 'us-east-005'
-        #AWS_DEFAULT_ACL = "public-read"
-
-        AWS_S3_ENDPOINT = f's3.{AWS_S3_REGION_NAME}.backblazeb2.com'
-        AWS_S3_ENDPOINT_URL = f'https://{AWS_S3_ENDPOINT}'
-
-        AWS_S3_OBJECT_PARAMETERS = {
-            'CacheControl': 'max-age=86400',
-        }
-
-        AWS_LOCATION = 'static'
-        DEFAULT_FILE_STORAGE = 'system.storage_backends.MediaStorage'
-
-        STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-        #MEDIA_URL = 'media/'
-        #MEDIA_ROOT = BASE_DIR.parent / "media"
-        
-        #STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT}/
-
-        #DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-        #STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-else:
-
-    STATIC_URL = "/static/"
-    MEDIA_URL = 'media/'
-    STATIC_ROOT = BASE_DIR / "staticfiles"
-    STATICFILES_DIRS = [BASE_DIR / "static"]
-    print(STATIC_URL, STATICFILES_DIRS, "\n\n\n")
-
-
-    #COMPRESS_ROOT = BASE_DIR / 'static'
-    #COMPRESS_ENABLED = True
-    
-    STATICFILES_FINDERS = (
-        #'compressor.finders.CompressorFinder',
-        "django.contrib.staticfiles.finders.FileSystemFinder",
-        "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-        # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
-    )
-
-    MEDIA_ROOT = BASE_DIR.parent / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-def print_directory_structure(startpath):
-    startpath = str(startpath)
-    for root, dirs, files in os.walk(startpath):
-        level = root.replace(startpath, '').count(os.sep)
-        indent = ' ' * 4 * (level)
-        print(f'{indent}{os.path.basename(root)}/')
-        subindent = ' ' * 4 * (level + 1)
-        for f in files:
-            print(f'{subindent}{f}')
-
-print("Project Directory Structure:")
-#print_directory_structure(BASE_DIR)
-
-print("\nStatic Files Directory Structure:")
-#print_directory_structure(STATIC_ROOT)
 
 
 
@@ -473,25 +389,25 @@ PWA_APP_ICONS = [
     "sizes": "192x192",
     "type": "image/png",
     "purpose": "any"
-  },
-  {
+    },
+    {
     "src": "src/static/images/manifest-icon-192.maskable.png",
     "sizes": "192x192",
     "type": "image/png",
     "purpose": "maskable"
-  },
-  {
+    },
+    {
     "src": "src/static/images/manifest-icon-512.maskable.png",
     "sizes": "512x512",
     "type": "image/png",
     "purpose": "any"
-  },
-  {
+    },
+    {
     "src": "src/static/images/manifest-icon-512.maskable.png",
     "sizes": "512x512",
     "type": "image/png",
     "purpose": "maskable"
-  }
+    }
 ]
 PWA_APP_ICONS_APPLE = [
     {
@@ -499,25 +415,25 @@ PWA_APP_ICONS_APPLE = [
     "sizes": "192x192",
     "type": "image/png",
     "purpose": "any"
-  },
-  {
+    },
+    {
     "src": "static/images/manifest-icon-192.maskable.png",
     "sizes": "192x192",
     "type": "image/png",
     "purpose": "maskable"
-  },
-  {
+    },
+    {
     "src": "static/images/manifest-icon-512.maskable.png",
     "sizes": "512x512",
     "type": "image/png",
     "purpose": "any"
-  },
-  {
+    },
+    {
     "src": "static/images/manifest-icon-512.maskable.png",
     "sizes": "512x512",
     "type": "image/png",
     "purpose": "maskable"
-  }
+    }
 ]
 PWA_APP_SPLASH_SCREEN = [
 

@@ -20,10 +20,10 @@ def get_database_url(BASE_DIR:Path, DEBUG:bool, DATABASE_URL)->dict:
     
     return {
         'default': dj_database_url.config(default=DATABASE_URL,
-                                          conn_max_age=600,
-                                          ssl_require=True,
-                                          conn_health_checks=True)
+                                        conn_max_age=600,
+                                        ssl_require=True,
+                                        conn_health_checks=True)
     }
 
 
-database = get_database_url(BASE_DIR, config("DEBUG", default=True, cast=bool), config("DATABASE_URL", cast=str))
+database = get_database_url(BASE_DIR, config("DEBUG", default=True, cast=bool), config("DATABASE_URL", default='', cast=str))

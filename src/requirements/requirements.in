@@ -14,9 +14,9 @@ djangorestframework
 drf-spectacular
 drf-spectacular-sidecar
 django-storages
-boto3
 drf-extensions
 weasyprint
 dj-notification-api
 pip-tools
-django-backblaze-b2
+python-dotenv
+whitenoise

@@ -3,19 +3,19 @@ scripts:
   migrate: cd src && python manage.py migrate
   freeze: env/bin/python -m pip freeze
   watch: npx tailwindcss -i ./src/static/tailwind/tailwind-input.css -o ./src/static/css/output.css --watch
+  
   installs:
     - env/bin/pip-compile src/requirements/requirements.in -o src/requirements.txt
     - env/bin/python -m pip install -r src/requirements.txt
     - npm install
-  install:
-    - env/bin/pip-compile src/requirements/requirements.in -o src/requirements.txt
-    - env/bin/python -m pip install -r src/requirements.txt
 
   win_installs:
     - pip-compile src/requirements/requirements.in -o src/requirements.txt
     - python -m pip install -r src/requirements.txt
     - npm install
+
   win_freeze: python -m pip freeze
+
   vendor_pull:
     - rm -rf src/static/vendor
     - mkdir -p src/static/vendor/htmx/

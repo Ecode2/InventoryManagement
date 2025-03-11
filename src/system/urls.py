@@ -28,9 +28,7 @@ admin.autodiscover()
 admin.site.login = secure_admin_login(admin.site.login)
 
 urlpatterns = [
-    #path('home/', include("home.urls")),
-
-    path("accounts/", include("allauth.urls")),
+    path('accounts/', include('allauth.urls')),
     path("admin/", admin.site.urls),
     path("i18n/", include("django.conf.urls.i18n")),
 

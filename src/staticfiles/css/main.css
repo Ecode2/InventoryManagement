@@ -1,0 +1,27 @@
+@media (min-width: 768px) {
+    .width-md {
+      width: 300px;
+    }
+  }
+
+.height-overflow {
+    height: 50vh;
+}
+
+.z-9999 {
+    z-index: 9999;
+}
+
+
+.green-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(4 108 78 / var(--tw-bg-opacity));
+}
+.red-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(200 30 30 / var(--tw-bg-opacity));
+}
+.yellow-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(180 83 9 / var(--tw-bg-opacity));
+}
