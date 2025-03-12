@@ -3,7 +3,7 @@
 set -o errexit
 
 # Install dependencies
-cd /src
+cd src
 pip install -r requirements.txt
 
 # Apply database migrations
