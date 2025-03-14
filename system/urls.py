@@ -28,8 +28,10 @@ admin.autodiscover()
 admin.site.login = secure_admin_login(admin.site.login)
 
 urlpatterns = [
-    path('accounts/', include('allauth.urls')),
+    
+    path("home/", include("home.urls")),
     path("admin/", admin.site.urls),
+    path('accounts/', include('allauth.urls')),
     path("i18n/", include("django.conf.urls.i18n")),
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

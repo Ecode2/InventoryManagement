@@ -13,7 +13,7 @@ django-filter
 djangorestframework
 drf-spectacular
 drf-spectacular-sidecar
-django-storages
+django-extensions
 drf-extensions
 weasyprint
 dj-notification-api

@@ -15,8 +15,13 @@ def  admin_staff_role(role):
     def decorator(view_func):
         @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
-            if request.user.is_authenticated and request.user.role in ["admin", "staff"]:
-                return view_func(request, *args, **kwargs)
-            return redirect('no_permission')  # Redirect to a no-permission page
+            if request.user.is_authenticated:
+                if request.user.role in ["admin", "staff"]:
+                    return view_func(request, *args, **kwargs)
+                else:
+                    return redirect('home')
+
+            #return redirect('no_permission')
+            return redirect('home')
         return _wrapped_view
     return decorator

@@ -80,6 +80,12 @@ INSTALLED_APPS = [
     "colorfield",
     "django.contrib.admin",
     "django.contrib.auth",
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    "allauth.usersessions",
+
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
@@ -87,16 +93,12 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     # Third-party apps
-    'allauth',
-    'allauth.account',
-    "allauth.headless",
-    "allauth.usersessions",
     "rest_framework",
     "django_filters",
     "drf_spectacular",
     "drf_spectacular_sidecar",
     "django_notification",
-    'storages',
+    'django_extensions',
     "pwa",
 
     # Local apps
@@ -106,6 +108,7 @@ INSTALLED_APPS = [
     "products",
     "management",
     "sales",
+    "home",
 
 ]
 
@@ -151,7 +154,6 @@ AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
 
-    # `allauth` specific authentication methods, such as login by email
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
@@ -167,14 +169,14 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 WSGI_APPLICATION = "system.wsgi.application"
 
 
-HEADLESS_ONLY = True
+""" HEADLESS_ONLY = True
 HEADLESS_FRONTEND_URLS = {
     "account_confirm_email": "/account/verify-email/{key}",
     "account_reset_password": "/account/password/reset",
     "account_reset_password_from_key": "/account/password/reset/key/{key}",
     "account_signup": "/account/signup",
     "socialaccount_login_error": "/account/provider/callback",
-}
+} """
 
 
 #X_FRAME_OPTIONS = "SAMEORIGIN"
@@ -330,8 +332,6 @@ LANGUAGES = [
     ("zh-hant", "Chinese (Traditional)"),
 ]
 
-SITE_ID = 1
-
 #ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
@@ -339,6 +339,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+SITE_ID = 1
 
 USE_I18N = True
 
